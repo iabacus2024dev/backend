@@ -1,6 +1,6 @@
 ---
-name: "\b이슈 템플릿"
-about: "\b이슈 템플릿"
+name: issue-template
+about: issue-template
 title: ''
 labels: ''
 assignees: ''
