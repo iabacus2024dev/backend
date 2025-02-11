@@ -1,0 +1,21 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    hikari:
+      driver-class-name: org.mariadb.jdbc.Driver
+      jdbc-url: ${DEV_DB_URL}
+      username: ${DEV_DB_USERNAME}
+      password: ${DEV_DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQLDialect
+      hibernate.connection.useUnicode: true
+      hibernate.connection.characterEncoding: UTF-8
+      hibernate.connection.charSet: UTF-8
