@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: local
+
+  config:
+    import:
+      - classpath:/common/common.yml
+      - optional:file:.env[.properties]
