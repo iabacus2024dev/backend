@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import kr.co.iabacus.sales.core.common.error.ErrorResponse;
-import kr.co.iabacus.sales.core.common.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import kr.co.iabacus.sales.core.common.error.ErrorResponse;
+import kr.co.iabacus.sales.core.common.error.exception.BusinessException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,9 +37,7 @@ public class GlobalExceptionHandler {
         log.error("handleBindException", e);
         List<FieldError> fieldErrors = e.getFieldErrors();
         ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, "validation error", request.getRequestURI());
-        for (FieldError fieldError : fieldErrors) {
-            errorResponse.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
-        }
+        fieldErrors.forEach(fieldError -> errorResponse.addValidation(fieldError.getField(), fieldError.getDefaultMessage()));
         return errorResponse;
     }
 
