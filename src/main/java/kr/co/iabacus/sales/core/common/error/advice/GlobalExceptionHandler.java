@@ -18,8 +18,10 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import kr.co.iabacus.sales.core.common.error.ErrorCode;
 import kr.co.iabacus.sales.core.common.error.ErrorResponse;
 import kr.co.iabacus.sales.core.common.error.exception.BusinessException;
+import kr.co.iabacus.sales.core.common.util.MessageUtil;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,7 +39,7 @@ public class GlobalExceptionHandler {
         log.error("handleBindException", e);
         List<FieldError> fieldErrors = e.getFieldErrors();
         ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, "validation error", request.getRequestURI());
-        fieldErrors.forEach(fieldError -> errorResponse.addValidation(fieldError.getField(), fieldError.getDefaultMessage()));
+        fieldErrors.forEach(fieldError -> errorResponse.addValidation(fieldError.getField(), MessageUtil.getMessage(fieldError)));
         return errorResponse;
     }
 
@@ -77,8 +79,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
         log.error("handleBusinessException", e);
-        ErrorResponse errorResponse = ErrorResponse.of(e.getHttpStatus(), e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(e.getHttpStatus()).body(errorResponse);
+        ErrorCode errorCode = e.getErrorCode();
+        ErrorResponse errorResponse = ErrorResponse.of(errorCode.getHttpStatus(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(errorResponse);
     }
 
     /**
