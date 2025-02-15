@@ -1,19 +1,18 @@
 package kr.co.iabacus.sales.core.common.error.exception;
 
-import org.springframework.http.HttpStatus;
-
 import lombok.Getter;
+
+import kr.co.iabacus.sales.core.common.error.ErrorCode;
+import kr.co.iabacus.sales.core.common.util.MessageUtil;
 
 @Getter
 public class BusinessException extends RuntimeException {
 
-    private final HttpStatus httpStatus;
-    private final String message;
+    private final ErrorCode errorCode;
 
-    public BusinessException(HttpStatus httpStatus, String message) {
-        super(message);
-        this.httpStatus = httpStatus;
-        this.message = message;
+    public BusinessException(ErrorCode errorCode, Object... args) {
+        super(MessageUtil.getMessage(errorCode.getCode(), args));
+        this.errorCode = errorCode;
     }
 
 }
