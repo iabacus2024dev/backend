@@ -1,5 +1,7 @@
 package kr.co.iabacus.sales.web.common;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Embeddable;
 
 import lombok.AccessLevel;
@@ -11,14 +13,22 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Ratio {
 
-    private double rate;
+    private BigDecimal rate;
+
+    private Ratio(BigDecimal rate) {
+        this.rate = rate;
+    }
 
     public static Ratio valueOf(double rate) {
+        return new Ratio(BigDecimal.valueOf(rate));
+    }
+
+    public static Ratio valueOf(BigDecimal rate) {
         return new Ratio(rate);
     }
 
-    private Ratio(double rate) {
-        this.rate = rate;
+    public Money of(Money price) {
+        return price.multiply(rate);
     }
 
 }

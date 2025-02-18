@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 public class Money {
 
     public static final Money ZERO = Money.wons(0);
+
     private BigDecimal amount;
 
     private Money(BigDecimal amount) {
@@ -43,8 +44,12 @@ public class Money {
         return new Money(this.amount.subtract(amount.amount));
     }
 
-    public Money times(double percent) {
+    public Money multiply(double percent) {
         return new Money(this.amount.multiply(BigDecimal.valueOf(percent)));
+    }
+
+    public Money multiply(BigDecimal percent) {
+        return new Money(this.amount.multiply(percent));
     }
 
     public Money divide(double divisor) {
