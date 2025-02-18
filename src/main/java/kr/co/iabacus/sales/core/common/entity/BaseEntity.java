@@ -33,4 +33,15 @@ public abstract class BaseEntity {
     @LastModifiedDate
     private LocalDateTime modifiedDateTime;
 
+    @Column(name = "IS_ACTIVATED")
+    private Boolean isActivated = true;
+
+    @Column(name = "INACTIVATED_DATE_TIME")
+    private LocalDateTime inactivatedDateTime;
+
+    public void inactivate(LocalDateTime inactivatedDateTime) {
+        this.isActivated = false;
+        this.inactivatedDateTime = inactivatedDateTime;
+    }
+
 }
