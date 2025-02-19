@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,8 +25,6 @@ import lombok.NoArgsConstructor;
 import kr.co.iabacus.sales.core.common.entity.BaseEntity;
 import kr.co.iabacus.sales.web.common.Money;
 import kr.co.iabacus.sales.web.common.Phone;
-import kr.co.iabacus.sales.web.common.converter.MoneyConverter;
-import kr.co.iabacus.sales.web.common.converter.PhoneConverter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -77,12 +75,10 @@ public class Project extends BaseEntity {
     @Column(name = "PROJECT_ORDERING_COMPANY")
     private String orderingCompany;
 
-    @Convert(converter = MoneyConverter.class)
-    @Column(name = "PROJECT_EXPECTED_AMOUNT", precision = 10, scale = 0)
+    @AttributeOverride(name = "amount", column = @Column(name = "PROJECT_EXPECTED_AMOUNT", precision = 10, scale = 0))
     private Money expectedAmount;
 
-    @Convert(converter = MoneyConverter.class)
-    @Column(name = "PROJECT_ACTUAL_AMOUNT", precision = 10, scale = 0)
+    @AttributeOverride(name = "amount", column = @Column(name = "PROJECT_ACTUAL_AMOUNT", precision = 10, scale = 0))
     private Money actualAmount;
 
     @Column(name = "PROJECT_MAIN_COMPANY_REP")
@@ -91,12 +87,10 @@ public class Project extends BaseEntity {
     @Column(name = "PROJECT_ORDERING_COMPANY_REP")
     private String orderingCompanyRep;
 
-    @Convert(converter = PhoneConverter.class)
-    @Column(name = "PROJECT_MAIN_COMPANY_REP_PHONE")
+    @AttributeOverride(name = "number", column = @Column(name = "PROJECT_MAIN_COMPANY_REP_PHONE"))
     private Phone mainCompanyRepPhone;
 
-    @Convert(converter = PhoneConverter.class)
-    @Column(name = "PROJECT_ORDERING_COMPANY_REP_PHONE")
+    @AttributeOverride(name = "number", column = @Column(name = "PROJECT_ORDERING_COMPANY_REP_PHONE"))
     private Phone orderingCompanyRepPhone;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
