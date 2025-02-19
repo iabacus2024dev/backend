@@ -2,7 +2,6 @@ package kr.co.iabacus.sales.web.partners.domain;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,8 +20,6 @@ import kr.co.iabacus.sales.core.common.entity.BaseEntity;
 import kr.co.iabacus.sales.web.common.Address;
 import kr.co.iabacus.sales.web.common.Phone;
 import kr.co.iabacus.sales.web.common.Ratio;
-import kr.co.iabacus.sales.web.common.converter.PhoneConverter;
-import kr.co.iabacus.sales.web.common.converter.RatioConverter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -44,14 +41,12 @@ public class Partners extends BaseEntity {
     @Column(name = "PARTNERS_SALES_REP_NAME")
     private String salesRepName;
 
-    @Convert(converter = PhoneConverter.class)
     @Column(name = "PARTNERS_SALES_REP_PHONE")
     private Phone salesRepPhone;
 
     @Column(name = "PARTNERS_SALES_REP_EMAIL")
     private String salesRepEmail;
 
-    @Convert(converter = RatioConverter.class)
     @Column(name = "PARTNERS_COMMISSION_RATE")
     private Ratio commissionRate;
 

@@ -3,8 +3,8 @@ package kr.co.iabacus.sales.web.project.domain;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,8 +22,6 @@ import lombok.NoArgsConstructor;
 import kr.co.iabacus.sales.core.common.entity.BaseEntity;
 import kr.co.iabacus.sales.web.common.Money;
 import kr.co.iabacus.sales.web.common.Ratio;
-import kr.co.iabacus.sales.web.common.converter.MoneyConverter;
-import kr.co.iabacus.sales.web.common.converter.RatioConverter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -54,20 +52,16 @@ public class ContractMember extends BaseEntity {
     @Column(name = "CONTRACT_MEMBER_ACTUAL_END_DATE")
     private LocalDate actualEndDate;
 
-    @Convert(converter = MoneyConverter.class)
-    @Column(name = "CONTRACT_MEMBER_UNIT_PRICE", precision = 10, scale = 0)
+    @AttributeOverride(name = "amount", column = @Column(name = "CONTRACT_MEMBER_UNIT_PRICE", precision = 10, scale = 0))
     private Money unitPrice;
 
-    @Convert(converter = MoneyConverter.class)
-    @Column(name = "CONTRACT_MEMBER_COST", precision = 10, scale = 0)
+    @AttributeOverride(name = "amount", column = @Column(name = "CONTRACT_MEMBER_COST", precision = 10, scale = 0))
     private Money cost;
 
-    @Convert(converter = RatioConverter.class)
-    @Column(name = "CONTRACT_MEMBER_SGAE_RATE", precision = 5, scale = 4)
+    @AttributeOverride(name = "rate", column = @Column(name = "CONTRACT_MEMBER_SGAE_RATE", precision = 5, scale = 4))
     private Ratio sgaeRate;
 
-    @Convert(converter = RatioConverter.class)
-    @Column(name = "CONTRACT_MEMBER_OVERHEAD_COST_RATE", precision = 5, scale = 4)
+    @AttributeOverride(name = "rate", column = @Column(name = "CONTRACT_MEMBER_OVERHEAD_COST_RATE", precision = 5, scale = 4))
     private Ratio overheadCostRate;
 
     @Builder

@@ -15,7 +15,15 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorCode {
 
     // MEMBER
-    MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "member.not.found");
+    MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "member.not.found"),
+
+    // PASSWORD
+    PASSWORD_SAME(HttpStatus.UNAUTHORIZED, "password.same"),
+    PASSWORD_LENGTH(HttpStatus.UNAUTHORIZED, "password.length"),
+    PASSWORD_UPPERCASE(HttpStatus.UNAUTHORIZED, "password.uppercase"),
+    PASSWORD_LOWERCASE(HttpStatus.UNAUTHORIZED, "password.lowercase"),
+    PASSWORD_SPECIAL_CHARACTER(HttpStatus.UNAUTHORIZED, "password.special.character"),
+    PASSWORD_CONFIRM(HttpStatus.UNAUTHORIZED, "password.confirm");
 
     private final HttpStatus httpStatus;
     private final String code;

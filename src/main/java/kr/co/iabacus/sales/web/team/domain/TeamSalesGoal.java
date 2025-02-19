@@ -1,7 +1,7 @@
 package kr.co.iabacus.sales.web.team.domain;
 
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +17,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import kr.co.iabacus.sales.web.common.Money;
-import kr.co.iabacus.sales.web.common.converter.MoneyConverter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,8 +33,7 @@ public class TeamSalesGoal {
     @ManyToOne(fetch = FetchType.LAZY)
     private Team team;
 
-    @Convert(converter = MoneyConverter.class)
-    @Column(name = "TEAM_SALES_GOAL_AMOUNT", precision = 15, scale = 0)
+    @AttributeOverride(name = "amount", column = @Column(name = "TEAM_SALES_GOAL_AMOUNT", precision = 15, scale = 0))
     private Money amount;
 
     @Column(name = "TEAM_SALES_GOAL_YEAR")

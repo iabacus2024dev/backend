@@ -2,8 +2,8 @@ package kr.co.iabacus.sales.web.member.domain;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,8 +21,6 @@ import lombok.NoArgsConstructor;
 import kr.co.iabacus.sales.core.common.entity.BaseEntity;
 import kr.co.iabacus.sales.web.common.Money;
 import kr.co.iabacus.sales.web.common.Phone;
-import kr.co.iabacus.sales.web.common.converter.MoneyConverter;
-import kr.co.iabacus.sales.web.common.converter.PhoneConverter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -53,8 +51,7 @@ public class Member extends BaseEntity {
     @Column(name = "MEMBER_PASSWORD")
     private String password;
 
-    @Convert(converter = PhoneConverter.class)
-    @Column(name = "MEMBER_PHONE")
+    @AttributeOverride(name = "number", column = @Column(name = "MEMBER_PHONE"))
     private Phone phone;
 
     @Column(name = "MEMBER_BIRTH_DATE")
@@ -75,12 +72,10 @@ public class Member extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Classification type;
 
-    @Convert(converter = MoneyConverter.class)
-    @Column(name = "MEMBER_SALARY", precision = 10, scale = 0)
+    @AttributeOverride(name = "amount", column = @Column(name = "MEMBER_SALARY", precision = 10, scale = 0))
     private Money salary;
 
-    @Convert(converter = MoneyConverter.class)
-    @Column(name = "MEMBER_MONTHLY_PAY", precision = 10, scale = 0)
+    @AttributeOverride(name = "amount", column = @Column(name = "MEMBER_MONTHLY_PAY", precision = 10, scale = 0))
     private Money monthlyPay;
 
     @Column(name = "MEMBER_COMMENT")
@@ -118,6 +113,10 @@ public class Member extends BaseEntity {
         this.password = password;
         this.loginFailCount = 0;
         this.isLocked = false;
+    }
+
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
     }
 
 }
