@@ -41,13 +41,13 @@ public class Partners extends BaseEntity {
     @Column(name = "PARTNERS_SALES_REP_NAME")
     private String salesRepName;
 
-    @Column(name = "PARTNERS_SALES_REP_PHONE")
+    @AttributeOverride(name = "number", column = @Column(name = "PARTNERS_SALES_REP_PHONE"))
     private Phone salesRepPhone;
 
     @Column(name = "PARTNERS_SALES_REP_EMAIL")
     private String salesRepEmail;
 
-    @Column(name = "PARTNERS_COMMISSION_RATE")
+    @AttributeOverride(name = "rate", column = @Column(name = "PARTNERS_COMMISSION_RATE"))
     private Ratio commissionRate;
 
     @Embedded
