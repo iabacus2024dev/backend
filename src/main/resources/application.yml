@@ -5,4 +5,6 @@ spring:
   config:
     import:
       - classpath:/common/common.yml
+      - classpath:/common/mail.yml
+      - classpath:/common/auth.yml
       - optional:file:.env[.properties]
