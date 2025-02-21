@@ -1,0 +1,3 @@
+password:
+  initialize:
+    url: http://localhost:5173/auths/initialize
