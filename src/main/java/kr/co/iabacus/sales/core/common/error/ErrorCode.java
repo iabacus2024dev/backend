@@ -18,16 +18,17 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "member.not.found"),
 
     // AUTH
-    PASSWORD_SAME(HttpStatus.UNAUTHORIZED, "password.same"),
-    PASSWORD_LENGTH(HttpStatus.UNAUTHORIZED, "password.length"),
-    PASSWORD_UPPERCASE(HttpStatus.UNAUTHORIZED, "password.uppercase"),
-    PASSWORD_LOWERCASE(HttpStatus.UNAUTHORIZED, "password.lowercase"),
-    PASSWORD_SPECIAL_CHARACTER(HttpStatus.UNAUTHORIZED, "password.special.character"),
-    PASSWORD_CONFIRM(HttpStatus.UNAUTHORIZED, "password.confirm"),
+    PASSWORD_SAME(HttpStatus.BAD_REQUEST, "password.same"),
+    PASSWORD_LENGTH(HttpStatus.BAD_REQUEST, "password.length"),
+    PASSWORD_UPPERCASE(HttpStatus.BAD_REQUEST, "password.uppercase"),
+    PASSWORD_LOWERCASE(HttpStatus.BAD_REQUEST, "password.lowercase"),
+    PASSWORD_SPECIAL_CHARACTER(HttpStatus.BAD_REQUEST, "password.special.character"),
+    PASSWORD_CONFIRM(HttpStatus.BAD_REQUEST, "password.confirm"),
+    INITIALIZE_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "initialize.token.not.found"),
+    MEMBER_ALREADY_REGISTERED(HttpStatus.CONFLICT, "member.already.registered"),
 
     // MAIL
-    MAIL_SEND_FAIL(HttpStatus.BAD_REQUEST, "mail.send.fail"),
-    ;
+    MAIL_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "mail.send.fail");
 
     private final HttpStatus httpStatus;
     private final String code;
