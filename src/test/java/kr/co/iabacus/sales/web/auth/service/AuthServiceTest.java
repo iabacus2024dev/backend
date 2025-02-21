@@ -13,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.iabacus.sales.core.common.error.exception.BusinessException;
 import kr.co.iabacus.sales.web.auth.domain.Auth;
 import kr.co.iabacus.sales.web.auth.dto.MemberRegisterRequest;
 import kr.co.iabacus.sales.web.auth.dto.PasswordInitializeRequest;
@@ -63,6 +64,27 @@ class AuthServiceTest {
 
         // then
         assertThat(auths.getEmail()).isEqualTo(email);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 구성원을 회원으로 등록하면 에러가 발생한다.")
+    void registerMember_memberNotFound() {
+        // given
+        memberRepository.save(Member.builder()
+            .name("박상철")
+            .email("example@exmple.com")
+            .build());
+
+        // when
+        MemberRegisterRequest request = MemberRegisterRequest.builder()
+            .name("박상철")
+            .email("another@exmple.com")
+            .build();
+
+        // then
+        assertThatThrownBy(() -> authService.registerMember(request))
+            .isInstanceOf(BusinessException.class)
+            .hasMessage("구성원을 찾을 수 없습니다.");
     }
 
     @Test
