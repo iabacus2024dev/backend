@@ -28,7 +28,8 @@ public enum ErrorCode {
     MEMBER_ALREADY_REGISTERED(HttpStatus.CONFLICT, "member.already.registered"),
 
     // MAIL
-    MAIL_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "mail.send.fail");
+    MAIL_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "mail.send.fail"),
+    INVALID_EMAIL_DOMAIN(HttpStatus.BAD_REQUEST, "invalid.email.domain");
 
     private final HttpStatus httpStatus;
     private final String code;
