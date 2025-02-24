@@ -82,8 +82,8 @@ class AuthRepositoryTest {
     @DisplayName("해당 이메일의 인증정보 모두 삭제")
     void deleteByEmail() {
         // given
-        String email = "example@example.com";
-        String anotherEmail = "another@example.com";
+        String email = "example@iabacus.co.kr";
+        String anotherEmail = "another@iabacus.co.kr";
 
         Auth auth1 = Auth.create(email, 30);
         Auth auth2 = Auth.create(email, 10);
@@ -98,9 +98,25 @@ class AuthRepositoryTest {
         assertThat(authRepository.findByEmail(anotherEmail)).isPresent();
     }
 
+    @Test
+    @DisplayName("만료일시가 지난 인증정보 삭제")
+    void deleteByExpiredDateTimeBefore() {
+        // given
+        LocalDateTime createdDateTime = LocalDateTime.of(2025, 1, 1, 0, 0, 0);
+        Auth auth = createAuth("token", createdDateTime, createdDateTime.plusMinutes(30));
+        authRepository.save(auth);
+
+        // when
+        LocalDateTime currentDateTime = LocalDateTime.of(2025, 1, 1, 0, 31, 0);
+        authRepository.deleteExpiredAuth(currentDateTime);
+
+        // then
+        assertThat(authRepository.findAll()).isEmpty();
+    }
+
     private Auth createAuth(String token, LocalDateTime createdDateTime, LocalDateTime expiredDateTime) {
         return Auth.builder()
-            .email("email@example.com")
+            .email("email@iabacus.co.kr")
             .token(token)
             .createdDateTime(createdDateTime)
             .expiredDateTime(expiredDateTime)
