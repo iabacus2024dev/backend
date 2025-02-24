@@ -1,5 +1,7 @@
 package kr.co.iabacus.sales.web.member.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +37,8 @@ public class MemberService {
     }
 
     private String getTeamName(Long teamId) {
-        return teamRepository.findById(teamId)
+        return Optional.ofNullable(teamId)
+            .flatMap(teamRepository::findById)
             .map(Team::getName)
             .orElse(null);
     }
