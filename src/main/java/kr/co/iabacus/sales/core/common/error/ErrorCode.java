@@ -26,6 +26,7 @@ public enum ErrorCode {
     PASSWORD_CONFIRM(HttpStatus.BAD_REQUEST, "password.confirm"),
     INITIALIZE_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "initialize.token.not.found"),
     MEMBER_ALREADY_REGISTERED(HttpStatus.CONFLICT, "member.already.registered"),
+    MEMBER_NOT_REGISTERED(HttpStatus.BAD_REQUEST, "member.not.registered"),
 
     // MAIL
     MAIL_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "mail.send.fail"),

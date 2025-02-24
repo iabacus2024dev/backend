@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import kr.co.iabacus.sales.web.auth.dto.MemberRegisterRequest;
 import kr.co.iabacus.sales.web.auth.dto.PasswordChangeRequest;
+import kr.co.iabacus.sales.web.auth.dto.PasswordFindRequest;
 import kr.co.iabacus.sales.web.auth.dto.PasswordInitializeRequest;
 import kr.co.iabacus.sales.web.auth.service.AuthService;
 
@@ -37,6 +38,12 @@ public class AuthController {
     @PatchMapping("/v1/auths/initialize")
     public ResponseEntity<Void> initializePassword(@Valid @RequestBody PasswordInitializeRequest request) {
         authService.initializePassword(request, LocalDateTime.now());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/v1/auths/find-password")
+    public ResponseEntity<Void> findPassword(@Valid @RequestBody PasswordFindRequest request) {
+        authService.findPassword(request);
         return ResponseEntity.ok().build();
     }
 
