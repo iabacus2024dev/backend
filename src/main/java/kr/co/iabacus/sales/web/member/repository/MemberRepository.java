@@ -20,7 +20,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
         "LEFT JOIN FETCH m.rank " +
         "LEFT JOIN FETCH m.grade " +
         "LEFT JOIN FETCH m.type " +
-        "WHERE m.id = :memberId AND m.isLocked = false")
+        "WHERE m.id = :memberId AND m.isActivated = true")
     Optional<Member> findMemberDetailById(@Param("memberId") Long memberId);
 
 }
