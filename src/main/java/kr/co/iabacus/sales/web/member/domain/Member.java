@@ -19,6 +19,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import kr.co.iabacus.sales.core.common.entity.BaseEntity;
+import kr.co.iabacus.sales.core.common.error.ErrorCode;
+import kr.co.iabacus.sales.core.common.error.exception.BusinessException;
 import kr.co.iabacus.sales.web.common.Money;
 import kr.co.iabacus.sales.web.common.Phone;
 
@@ -116,6 +118,9 @@ public class Member extends BaseEntity {
     }
 
     public void changePassword(String newPassword) {
+        if (this.password == null) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_REGISTERED);
+        }
         this.password = newPassword;
     }
 

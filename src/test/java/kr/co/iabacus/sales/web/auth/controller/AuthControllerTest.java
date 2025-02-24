@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.co.iabacus.sales.web.auth.dto.MemberRegisterRequest;
 import kr.co.iabacus.sales.web.auth.dto.PasswordChangeRequest;
+import kr.co.iabacus.sales.web.auth.dto.PasswordFindRequest;
 import kr.co.iabacus.sales.web.auth.dto.PasswordInitializeRequest;
 import kr.co.iabacus.sales.web.auth.service.AuthService;
 
@@ -38,7 +39,7 @@ class AuthControllerTest {
     void registerMember() throws Exception {
         MemberRegisterRequest request = MemberRegisterRequest.builder()
             .name("홍길동")
-            .email("example@example.com")
+            .email("example@iabacus.co.kr")
             .build();
 
         mockMvc.perform(post("/api/v1/auths/register")
@@ -94,6 +95,21 @@ class AuthControllerTest {
             .build();
 
         mockMvc.perform(patch("/api/v1/members/1/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andDo(print())
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("비밀번호 찾기 테스트")
+    void findPassword() throws Exception {
+        String email = "example@iabacus.co.kr";
+        PasswordFindRequest request = PasswordFindRequest.builder()
+            .email(email)
+            .build();
+
+        mockMvc.perform(post("/api/v1/auths/find-password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
             .andDo(print())

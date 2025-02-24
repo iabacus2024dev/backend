@@ -12,8 +12,10 @@ import kr.co.iabacus.sales.core.common.error.exception.BusinessException;
 import kr.co.iabacus.sales.web.auth.domain.Auth;
 import kr.co.iabacus.sales.web.auth.dto.MemberRegisterRequest;
 import kr.co.iabacus.sales.web.auth.dto.PasswordChangeRequest;
+import kr.co.iabacus.sales.web.auth.dto.PasswordFindRequest;
 import kr.co.iabacus.sales.web.auth.dto.PasswordInitializeRequest;
 import kr.co.iabacus.sales.web.auth.repository.AuthRepository;
+import kr.co.iabacus.sales.web.auth.validator.EmailValidator;
 import kr.co.iabacus.sales.web.auth.validator.PasswordValidator;
 import kr.co.iabacus.sales.web.auth.validator.RegisterValidator;
 import kr.co.iabacus.sales.web.mail.MailService;
@@ -32,12 +34,14 @@ public class AuthService {
     private final MailService mailService;
     private final PasswordValidator passwordValidator;
     private final RegisterValidator registerValidator;
+    private final EmailValidator emailValidator;
 
     @Transactional
     public void registerMember(MemberRegisterRequest request) {
+        emailValidator.validate(request.getEmail());
         Member member = memberRepository.findByEmailAndNameAndIsActivatedTrue(request.getEmail(), request.getName())
             .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
-        registerValidator.validation(member);
+        registerValidator.validateMemberAlreadyRegistered(member.getPassword());
 
         Auth auth = Auth.create(member.getEmail(), EXPIRED_MINUTES);
         authRepository.deleteByEmail(auth.getEmail());
@@ -72,6 +76,20 @@ public class AuthService {
         // TODO: 현재 비밀번호 검증
         // TODO: 비밀번호 암호화
         member.changePassword(request.getNewPassword());
+    }
+
+    @Transactional
+    public void findPassword(PasswordFindRequest request) {
+        emailValidator.validate(request.getEmail());
+        Member member = memberRepository.findByEmailAndIsActivatedTrue(request.getEmail())
+            .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+        registerValidator.validateMemberNotRegistered(member.getPassword());
+
+        Auth auth = Auth.create(member.getEmail(), EXPIRED_MINUTES);
+        authRepository.deleteByEmail(auth.getEmail());
+        authRepository.save(auth);
+
+        mailService.sendInitializePasswordLink(member.getEmail(), auth.getToken());
     }
 
 }
