@@ -30,7 +30,10 @@ public enum ErrorCode {
 
     // MAIL
     MAIL_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "mail.send.fail"),
-    INVALID_EMAIL_DOMAIN(HttpStatus.BAD_REQUEST, "invalid.email.domain");
+    INVALID_EMAIL_DOMAIN(HttpStatus.BAD_REQUEST, "invalid.email.domain"),
+
+    // PROJECT
+    PROJECT_NOT_FOUND(HttpStatus.BAD_REQUEST, "project.not.found");
 
     private final HttpStatus httpStatus;
     private final String code;
