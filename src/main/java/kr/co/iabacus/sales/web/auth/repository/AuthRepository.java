@@ -19,4 +19,8 @@ public interface AuthRepository extends JpaRepository<Auth, Long> {
     @Query("delete from Auth a where a.email = :email")
     void deleteByEmail(String email);
 
+    @Modifying
+    @Query("delete from Auth a where a.expiredDateTime < :currentDateTime")
+    void deleteExpiredAuth(LocalDateTime currentDateTime);
+
 }
