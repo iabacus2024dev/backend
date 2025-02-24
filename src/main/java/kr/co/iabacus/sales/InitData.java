@@ -23,7 +23,7 @@ public class InitData {
     public void memberInit() {
         Member member1 = Member.builder()
             .name("박상철")
-            .email("scpark0698@gmail.com")
+            .email("tkdcjf38@iabacus.co.kr")
             .build();
 
         Member member2 = Member.builder()
@@ -37,5 +37,5 @@ public class InitData {
             .build();
         memberRepository.saveAll(List.of(member1, member2, member3));
     }
-    
+
 }
