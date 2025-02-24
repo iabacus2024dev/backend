@@ -23,7 +23,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final TeamRepository teamRepository;
 
-    @Transactional(readOnly = true)
     public MemberDetailResponse getMemberDetail(Long memberId) {
         Member member = getActiveMemberById(memberId);
         String teamName = getTeamName(member.getTeamId());
