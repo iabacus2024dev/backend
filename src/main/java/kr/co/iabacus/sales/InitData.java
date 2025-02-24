@@ -20,7 +20,7 @@ public class InitData {
     private final MemberRepository memberRepository;
 
     @EventListener(ApplicationReadyEvent.class)
-    public void memberInit() {
+    public void initMember() {
         Member member1 = Member.builder()
             .name("박상철")
             .email("tkdcjf38@iabacus.co.kr")
