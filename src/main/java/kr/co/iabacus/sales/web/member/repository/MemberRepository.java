@@ -23,4 +23,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
         "WHERE m.id = :memberId AND m.isActivated = true")
     Optional<Member> findMemberDetailById(@Param("memberId") Long memberId);
 
+    Optional<Member> findByEmail(String email);
+
 }

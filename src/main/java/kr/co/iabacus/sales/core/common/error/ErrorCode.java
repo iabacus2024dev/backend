@@ -16,6 +16,7 @@ public enum ErrorCode {
 
     // MEMBER
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "member.not.found"),
+    MEMBER_EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "member.email.already.exists"),
 
     // AUTH
     PASSWORD_SAME(HttpStatus.BAD_REQUEST, "password.same"),
@@ -33,7 +34,13 @@ public enum ErrorCode {
     INVALID_EMAIL_DOMAIN(HttpStatus.BAD_REQUEST, "invalid.email.domain"),
 
     // PROJECT
-    PROJECT_NOT_FOUND(HttpStatus.BAD_REQUEST, "project.not.found");
+    PROJECT_NOT_FOUND(HttpStatus.BAD_REQUEST, "project.not.found"),
+
+    // CLASSIFICATION
+    CLASSIFICATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "classification.not.found"),
+
+    // TEAM
+    TEAM_NOT_FOUND(HttpStatus.BAD_REQUEST, "team.not.found");
 
     private final HttpStatus httpStatus;
     private final String code;
