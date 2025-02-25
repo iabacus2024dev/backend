@@ -33,7 +33,10 @@ public enum ErrorCode {
     INVALID_EMAIL_DOMAIN(HttpStatus.BAD_REQUEST, "invalid.email.domain"),
 
     // PROJECT
-    PROJECT_NOT_FOUND(HttpStatus.BAD_REQUEST, "project.not.found");
+    PROJECT_NOT_FOUND(HttpStatus.BAD_REQUEST, "project.not.found"),
+
+    // Contract
+    CONTRACT_NOT_FOUND(HttpStatus.BAD_REQUEST, "contract.not.found");
 
     private final HttpStatus httpStatus;
     private final String code;
