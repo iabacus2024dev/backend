@@ -70,7 +70,7 @@ INSERT INTO TB_PROJECT (
     500000000, 450000000,
     '메인 IT 회사', '김인철', '010-1234-5678',
     '윙윙 IT 회사', '박윙윙', '010-8765-4321',
-    'PROGRESS', 'SI',
+    'IN_PROGRESS', 'SI',
     TRUE, '2024-02-01 10:00:00', '2024-02-10 12:00:00',
     NULL, 'admin', NULL
 );
@@ -90,7 +90,7 @@ INSERT INTO TB_CONTRACT (
     'PRJ-20240225-001-CNT-001',
     '2024-02-01', '2025-02-01',
     '2024-02-05', '2025-01-28',
-    'INITIAL', 'PROGRESS',
+    'INITIAL', 'IN_PROGRESS',
     TRUE, '2024-02-01 10:00:00', '2024-02-10 12:00:00',
     NULL, 'admin', NULL
 ),
@@ -100,7 +100,7 @@ INSERT INTO TB_CONTRACT (
     'PRJ-20240225-001-CNT-002',
     '2024-03-01', '2025-04-01',
     NULL, NULL,
-    'CHANGE', 'RESERVE',
+    'CHANGED', 'RESERVED',
     TRUE, '2024-02-01 10:00:00', '2024-02-10 12:00:00',
     NULL, 'admin', NULL
 );
