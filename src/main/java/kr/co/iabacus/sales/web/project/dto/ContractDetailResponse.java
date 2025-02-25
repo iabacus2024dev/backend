@@ -25,6 +25,7 @@ public class ContractDetailResponse {
             .id(contract.getId())
             .startDate(contract.getStartDate())
             .endDate(contract.getEndDate())
+            .status(contract.getStatus())
             .actualStartDate(contract.getActualStartDate())
             .actualEndDate(contract.getActualEndDate())
             .build();
