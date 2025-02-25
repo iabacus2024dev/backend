@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum ProjectStatus {
-    PROGRESS("진행중"), COMPLETE("완료"), CANCEL("취소"), RESERVE("예약");
+    IN_PROGRESS("진행중"), COMPLETED("완료"), CANCELED("취소"), RESERVED("예약");
 
     private final String status;
 }

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum ContractType {
-    INITIAL("최초계약"), CHANGE("변경계약");
+    INITIAL("최초계약"), CHANGED("변경계약");
 
     private final String type;
 }

@@ -40,7 +40,10 @@ public enum ErrorCode {
     CLASSIFICATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "classification.not.found"),
 
     // TEAM
-    TEAM_NOT_FOUND(HttpStatus.BAD_REQUEST, "team.not.found");
+    TEAM_NOT_FOUND(HttpStatus.BAD_REQUEST, "team.not.found"),
+
+    // Contract
+    CONTRACT_NOT_FOUND(HttpStatus.BAD_REQUEST, "contract.not.found");
 
     private final HttpStatus httpStatus;
     private final String code;
