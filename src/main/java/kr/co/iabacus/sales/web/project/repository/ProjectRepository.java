@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import kr.co.iabacus.sales.web.project.domain.Project;
 
-public interface ProjectRepository extends JpaRepository<Project, UUID> {
+public interface ProjectRepository extends JpaRepository<Project, UUID>, ProjectRepositoryCustom {
 
     @Query("select p from Project p where p.isActivated = true")
     Page<Project> findProjectsIsActivatedTrue(Pageable pageable);
