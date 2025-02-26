@@ -46,6 +46,11 @@ public class ContractService {
         Contract contract = contractRepository.findById(contractId)
             .orElseThrow(() -> new BusinessException(ErrorCode.CONTRACT_NOT_FOUND));
 
+        /* 유효성 검사 */
+        if (!contract.getIsActivated()) {
+            throw new BusinessException(ErrorCode.CONTRACT_ALREADY_INACTIVATED);
+        }
+
         contract.inactivate(LocalDateTime.now());
         contractRepository.save(contract);
     }

@@ -43,7 +43,8 @@ public enum ErrorCode {
     TEAM_NOT_FOUND(HttpStatus.BAD_REQUEST, "team.not.found"),
 
     // Contract
-    CONTRACT_NOT_FOUND(HttpStatus.BAD_REQUEST, "contract.not.found");
+    CONTRACT_NOT_FOUND(HttpStatus.BAD_REQUEST, "contract.not.found"),
+    CONTRACT_ALREADY_INACTIVATED(HttpStatus.BAD_REQUEST, "contract.already.inactivated");
 
     private final HttpStatus httpStatus;
     private final String code;
