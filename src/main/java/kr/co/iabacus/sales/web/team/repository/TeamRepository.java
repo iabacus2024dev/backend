@@ -15,4 +15,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     Optional<Team> findByName(String name);
 
+    @Query("SELECT t FROM Team t WHERE t.isActivated = true")
+    List<Team> findAllIsActivatedTrue();
+
 }

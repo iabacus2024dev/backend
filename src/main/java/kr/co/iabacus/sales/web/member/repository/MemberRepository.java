@@ -1,5 +1,6 @@
 package kr.co.iabacus.sales.web.member.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,5 +25,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findMemberDetailById(@Param("memberId") Long memberId);
 
     Optional<Member> findByEmail(String email);
+
+    @Query("SELECT m " +
+        "FROM Member m " +
+        "LEFT JOIN FETCH m.grade " +
+        "WHERE m.isActivated = true")
+    List<Member> findMembersWithGrade();
 
 }
