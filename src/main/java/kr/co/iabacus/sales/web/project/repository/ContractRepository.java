@@ -1,5 +1,6 @@
 package kr.co.iabacus.sales.web.project.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -10,5 +11,7 @@ import kr.co.iabacus.sales.web.project.domain.Contract;
 public interface ContractRepository extends JpaRepository<Contract, UUID> {
 
     Optional<Contract> findById(UUID id);
+
+    List<Contract> findByProjectIdAndIsActivated(UUID projectId, Boolean isActivated);
 
 }

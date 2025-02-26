@@ -1,15 +1,20 @@
 package kr.co.iabacus.sales.web.project.controller;
 
-import kr.co.iabacus.sales.web.project.dto.ContractDetailResponse;
-import kr.co.iabacus.sales.web.project.service.ContractService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import kr.co.iabacus.sales.web.project.dto.ContractDetailResponse;
+import kr.co.iabacus.sales.web.project.dto.ContractResponse;
+import kr.co.iabacus.sales.web.project.service.ContractService;
 
 @Slf4j
 @RestController
@@ -22,6 +27,11 @@ public class ContractController {
     @GetMapping("/{contractId}")
     public ContractDetailResponse getContractDetail(@PathVariable("contractId") UUID contractId) {
         return contractService.getContractDetail(contractId);
+    }
+
+    @GetMapping
+    public List<ContractResponse> getContracts(@RequestParam UUID projectId) {
+        return contractService.getContracts(projectId);
     }
 
 }
