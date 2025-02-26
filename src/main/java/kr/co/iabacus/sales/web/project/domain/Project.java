@@ -25,7 +25,6 @@ import lombok.NoArgsConstructor;
 import kr.co.iabacus.sales.core.common.entity.BaseEntity;
 import kr.co.iabacus.sales.web.common.Money;
 import kr.co.iabacus.sales.web.common.Phone;
-import kr.co.iabacus.sales.web.project.dto.ProjectUpdateRequest;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -128,26 +127,6 @@ public class Project extends BaseEntity {
     public void addContract(Contract contract) {
         contracts.add(contract);
         contract.changeProject(this);
-    }
-
-    public void update(ProjectUpdateRequest request) {
-        this.teamId = request.getTeamId();
-        this.name = request.getName();
-        this.contractDate = request.getContractDate();
-        this.startDate = request.getStartDate();
-        this.endDate = request.getEndDate();
-        this.actualStartDate = request.getActualStartDate();
-        this.actualEndDate = request.getActualEndDate();
-        this.type = request.getType();
-        this.status = request.getStatus();
-        this.mainCompany = request.getMainCompany();
-        this.orderingCompany = request.getOrderingCompany();
-        this.expectedAmount = Money.wons(request.getExpectedAmount());
-        this.actualAmount = Money.wons(request.getActualAmount());
-        this.mainCompanyRep = request.getMainCompanyRep();
-        this.orderingCompanyRep = request.getOrderingCompanyRep();
-        this.mainCompanyRepPhone = request.getMainCompanyRepPhone();
-        this.orderingCompanyRepPhone = request.getOrderingCompanyRepPhone();
     }
 
 }
