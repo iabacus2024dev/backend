@@ -18,6 +18,9 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "member.not.found"),
     MEMBER_EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "member.email.already.exists"),
 
+    // PARTNERS
+    PARTNERS_NOT_FOUND(HttpStatus.BAD_REQUEST, "partners.not.found"),
+
     // AUTH
     PASSWORD_SAME(HttpStatus.BAD_REQUEST, "password.same"),
     PASSWORD_LENGTH(HttpStatus.BAD_REQUEST, "password.length"),
