@@ -14,15 +14,19 @@ import lombok.extern.slf4j.Slf4j;
 import kr.co.iabacus.sales.core.common.error.ErrorCode;
 import kr.co.iabacus.sales.core.common.error.exception.BusinessException;
 import kr.co.iabacus.sales.web.project.domain.Contract;
+import kr.co.iabacus.sales.web.project.domain.Project;
+import kr.co.iabacus.sales.web.project.dto.ContractCreateRequest;
 import kr.co.iabacus.sales.web.project.dto.ContractDetailResponse;
 import kr.co.iabacus.sales.web.project.dto.ContractResponse;
 import kr.co.iabacus.sales.web.project.repository.ContractRepository;
+import kr.co.iabacus.sales.web.project.repository.ProjectRepository;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ContractService {
 
+    private final ProjectRepository projectRepository;
     private final ContractRepository contractRepository;
 
     @Transactional(readOnly = true)
@@ -51,8 +55,25 @@ public class ContractService {
             throw new BusinessException(ErrorCode.CONTRACT_ALREADY_INACTIVATED);
         }
 
+        /* todo: 계약 구성원 함께 삭제 처리 */
+
         contract.inactivate(LocalDateTime.now());
         contractRepository.save(contract);
+    }
+
+    @Transactional
+    public void createContract(ContractCreateRequest request) {
+        Project project = projectRepository.findById(request.getProjectId())
+            .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+
+        Contract newContract = Contract.builder()
+            .project(project)
+            .code(request.getContractCode())
+            .startDate(request.getStartDate())
+            .endDate(request.getEndDate())
+            .build();
+
+        contractRepository.save(newContract);
     }
 
 }

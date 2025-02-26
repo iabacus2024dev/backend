@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import kr.co.iabacus.sales.web.project.dto.ContractCreateRequest;
 import kr.co.iabacus.sales.web.project.dto.ContractDetailResponse;
 import kr.co.iabacus.sales.web.project.dto.ContractResponse;
 import kr.co.iabacus.sales.web.project.service.ContractService;
@@ -38,6 +41,11 @@ public class ContractController {
     @DeleteMapping("/{contractId}")
     public void deleteContract(@PathVariable("contractId") UUID contractId) {
         contractService.deleteContract(contractId);
+    }
+
+    @PostMapping
+    public void createContract(@RequestBody ContractCreateRequest request) {
+        contractService.createContract(request);
     }
 
 }
