@@ -1,5 +1,6 @@
 package kr.co.iabacus.sales.web.project.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,6 +39,15 @@ public class ContractService {
             .stream()
             .map(ContractResponse::from)
             .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteContract(UUID contractId) {
+        Contract contract = contractRepository.findById(contractId)
+            .orElseThrow(() -> new BusinessException(ErrorCode.CONTRACT_NOT_FOUND));
+
+        contract.inactivate(LocalDateTime.now());
+        contractRepository.save(contract);
     }
 
 }
