@@ -11,7 +11,7 @@ import kr.co.iabacus.sales.web.project.domain.ContractStatus;
 
 @Getter
 @Builder
-public class ContractDetailResponse {
+public class ContractResponse {
 
     private UUID id;
     private String code;
@@ -21,8 +21,8 @@ public class ContractDetailResponse {
     private LocalDate actualStartDate;
     private LocalDate actualEndDate;
 
-    public static ContractDetailResponse from(Contract contract) {
-        return ContractDetailResponse.builder()
+    public static ContractResponse from(Contract contract) {
+        return ContractResponse.builder()
             .id(contract.getId())
             .code(contract.getCode())
             .startDate(contract.getStartDate())
