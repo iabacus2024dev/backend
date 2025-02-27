@@ -25,6 +25,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import kr.co.iabacus.sales.core.common.entity.BaseEntity;
+import kr.co.iabacus.sales.web.project.dto.ContractUpdateRequest;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -90,6 +91,14 @@ public class Contract extends BaseEntity {
 
     void changeProject(Project project) {
         this.project = project;
+    }
+
+    public void updateContract(ContractUpdateRequest request) {
+        this.startDate = request.getStartDate();
+        this.endDate = request.getEndDate();
+        this.status = request.getStatus();
+        this.actualStartDate = request.getActualStartDate();
+        this.actualEndDate = request.getActualEndDate();
     }
 
 }
