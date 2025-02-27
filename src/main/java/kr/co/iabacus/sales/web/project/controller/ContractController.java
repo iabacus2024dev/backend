@@ -50,9 +50,9 @@ public class ContractController {
         contractService.createContract(request);
     }
 
-    @PutMapping
-    public void updateContract(@RequestBody ContractUpdateRequest request) {
-        contractService.updateContract(request);
+    @PutMapping("/{contractId}")
+    public void updateContract(@PathVariable("contractId") UUID contractId, @RequestBody ContractUpdateRequest request) {
+        contractService.updateContract(contractId, request);
     }
 
 }

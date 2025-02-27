@@ -101,12 +101,12 @@ public class ContractService {
     }
 
     @Transactional
-    public void updateContract(ContractUpdateRequest request) {
-        Contract contract = contractRepository.findById(request.getContractId())
+    public void updateContract(UUID contractId, ContractUpdateRequest request) {
+        Contract contract = contractRepository.findById(contractId)
             .orElseThrow(() -> new BusinessException(ErrorCode.CONTRACT_NOT_FOUND));
 
         contract.updateContract(request);
-        
+
         contractRepository.save(contract);
     }
 
