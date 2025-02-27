@@ -15,9 +15,6 @@ public class ContractCreateRequest {
     @NotBlank
     private UUID projectId;
 
-    @NotBlank
-    private String contractCode;
-
     @NotNull
     private LocalDate startDate;
 
@@ -25,9 +22,8 @@ public class ContractCreateRequest {
     private LocalDate endDate;
 
     @Builder
-    public ContractCreateRequest(UUID projectId, String contractCode, LocalDate startDate, LocalDate endDate) {
+    public ContractCreateRequest(UUID projectId, LocalDate startDate, LocalDate endDate) {
         this.projectId = projectId;
-        this.contractCode = contractCode;
         this.startDate = startDate;
         this.endDate = endDate;
     }

@@ -19,4 +19,5 @@ public interface ProjectRepository extends JpaRepository<Project, UUID> {
     Page<Project> findProjectsIsActivatedTrue(Pageable pageable);
 
     Optional<Project> findByIdAndIsActivatedTrue(UUID id);
+
 }
