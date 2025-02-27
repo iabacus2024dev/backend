@@ -63,15 +63,30 @@ INSERT INTO TB_PROJECT (
 ) VALUES
 (
     '123e4567-e89b-12d3-a456-426614174000', -- 프로젝트 ID (UUID)
-     1, -- 팀 ID (UUID)
-    'PRJ-20240225-001', '스마트 계약 시스템 개발',
-    '2024-02-01', '2025-02-01', '2024-01-25',
-    '2024-02-05', '2025-01-28',
+     10, -- 팀 ID (UUID)
+    'C00081916', -- 프로젝트 코드
+    '통신CB 데이터 제공 시스템 구축',
+    '2024-01-01', '2024-01-31', '2023-12-31',
+    '2024-01-01', '2023-01-31',
     500000000, 450000000,
-    '메인 IT 회사', '김인철', '010-1234-5678',
-    '윙윙 IT 회사', '박윙윙', '010-8765-4321',
-    'IN_PROGRESS', 'SI',
-    TRUE, '2024-02-01 10:00:00', '2024-02-10 12:00:00',
+    '(주)엘지유플러스', '김유플', '010-1234-5678',
+    '(주)엘지유플러스', '김유플', '010-1234-5678',
+    'COMPLETED', 'SI',
+    TRUE, '2024-01-01 10:00:00', NULL,
+    NULL, 'admin', NULL
+),
+(
+    '721e4567-e89b-12d3-a456-005414174000', -- 프로젝트 ID (UUID)
+     9, -- 팀 ID (UUID)
+    'C00077740', -- 프로젝트 코드
+    '2024년 SM_고객 Innovation팀 CRM',
+    '2025-01-01', '2025-03-31', '2024-12-31',
+    '2025-01-01', '2025-03-31',
+    500000000, 450000000,
+    '(주)엘지유플러스', '김유플', '010-1234-5678',
+    '(주)엘지유플러스', '김유플', '010-1234-5678',
+    'IN_PROGRESS', 'SM',
+    TRUE, '2025-02-01 10:00:00', NULL,
     NULL, 'admin', NULL
 );
 
@@ -87,20 +102,61 @@ INSERT INTO TB_CONTRACT (
 (
     '550e8400-e29b-41d4-a716-446655440000', -- 계약 ID (UUID)
     '123e4567-e89b-12d3-a456-426614174000', -- 프로젝트 ID (UUID)
-    'PRJ-20240225-001-CNT-001',
-    '2024-02-01', '2025-02-01',
-    '2024-02-05', '2025-01-28',
-    'INITIAL', 'IN_PROGRESS',
-    TRUE, '2024-02-01 10:00:00', '2024-02-10 12:00:00',
+    'C00081916-1', -- 계약 코드(프로젝트코드-순번)
+    '2024-01-01', '2024-01-15',
+    '2024-01-01', '2024-01-15',
+    'INITIAL',
+    'COMPLETED',
+    TRUE, '2024-01-01 11:00:00', NULL,
     NULL, 'admin', NULL
 ),
 (
     '550e8400-e29b-41d4-a716-446655440001', -- 계약 ID (UUID)
     '123e4567-e89b-12d3-a456-426614174000', -- 프로젝트 ID (UUID)
-    'PRJ-20240225-001-CNT-002',
-    '2024-03-01', '2025-04-01',
-    NULL, NULL,
-    'CHANGED', 'RESERVED',
-    TRUE, '2024-02-01 10:00:00', '2024-02-10 12:00:00',
+    'C00081916-2', -- 계약 코드(프로젝트코드-순번)
+    '2024-01-16', '2024-01-30',
+    '2024-01-16', '2024-01-31',
+    'CHANGED',
+    'COMPLETED',
+    TRUE, '2024-01-15 11:00:00', NULL,
     NULL, 'admin', NULL
 );
+
+INSERT INTO TB_CONTRACT_MEMBER (
+    CONTRACT_MEMBER_ACTUAL_END_DATE,
+    CONTRACT_MEMBER_ACTUAL_START_DATE,
+    CONTRACT_MEMBER_COST,
+    CONTRACT_MEMBER_END_DATE,
+    CONTRACT_MEMBER_OVERHEAD_COST_RATE,
+    CONTRACT_MEMBER_SGAE_RATE,
+    CONTRACT_MEMBER_START_DATE,
+    CONTRACT_MEMBER_UNIT_PRICE,
+    IS_ACTIVATED,
+    CREATED_DATE_TIME,
+    INACTIVATED_DATE_TIME,
+    MEMBER_ID,
+    MODIFIED_DATE_TIME,
+    CONTRACT_ID,
+    ID,
+    CREATED_BY,
+    MODIFIED_BY
+) VALUES (
+    '2024-01-31',      -- CONTRACT_MEMBER_ACTUAL_END_DATE
+    '2024-01-01',      -- CONTRACT_MEMBER_ACTUAL_START_DATE
+    100000,            -- CONTRACT_MEMBER_COST
+    '2024-01-31',      -- CONTRACT_MEMBER_END_DATE
+    0.1,               -- CONTRACT_MEMBER_OVERHEAD_COST_RATE
+    0.05,              -- CONTRACT_MEMBER_SGAE_RATE
+    '2024-01-01',      -- CONTRACT_MEMBER_START_DATE
+    1000,              -- CONTRACT_MEMBER_UNIT_PRICE
+    TRUE,               -- IS_ACTIVATED (예: Y 또는 N)
+    '2024-01-01 11:01:00', -- CREATED_DATE_TIME
+    NULL,              -- INACTIVATED_DATE_TIME (비어 있을 경우 NULL)
+    1,                 -- MEMBER_ID
+    NULL, -- MODIFIED_DATE_TIME
+    '550e8400-e29b-41d4-a716-446655440000',                 -- CONTRACT_ID
+    '444e8400-e29b-41d4-b001-446655440000',                 -- ID (primary key)
+    'admin',           -- CREATED_BY
+    NULL           -- MODIFIED_BY
+);
+
