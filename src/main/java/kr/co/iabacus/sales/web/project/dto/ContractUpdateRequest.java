@@ -1,7 +1,9 @@
 package kr.co.iabacus.sales.web.project.dto;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import lombok.Builder;
@@ -11,6 +13,9 @@ import kr.co.iabacus.sales.web.project.domain.ContractStatus;
 
 @Data
 public class ContractUpdateRequest {
+
+    @NotBlank
+    private UUID contractId;
 
     @NotNull
     private LocalDate startDate;
@@ -28,7 +33,8 @@ public class ContractUpdateRequest {
     private LocalDate actualEndDate;
 
     @Builder
-    public ContractUpdateRequest(LocalDate startDate, LocalDate endDate, ContractStatus status, LocalDate actualStartDate, LocalDate actualEndDate) {
+    public ContractUpdateRequest(UUID contractId, LocalDate startDate, LocalDate endDate, ContractStatus status, LocalDate actualStartDate, LocalDate actualEndDate) {
+        this.contractId = contractId;
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;

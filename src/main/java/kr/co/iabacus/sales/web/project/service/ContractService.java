@@ -20,6 +20,7 @@ import kr.co.iabacus.sales.web.project.domain.Project;
 import kr.co.iabacus.sales.web.project.dto.ContractCreateRequest;
 import kr.co.iabacus.sales.web.project.dto.ContractDetailResponse;
 import kr.co.iabacus.sales.web.project.dto.ContractResponse;
+import kr.co.iabacus.sales.web.project.dto.ContractUpdateRequest;
 import kr.co.iabacus.sales.web.project.repository.ContractRepository;
 import kr.co.iabacus.sales.web.project.repository.ProjectRepository;
 
@@ -97,6 +98,16 @@ public class ContractService {
         String lastContractCode = contracts.get(0).getCode();
         int contractIndex = Integer.parseInt(lastContractCode.split("-")[1]);
         return projectCode + "-" + (++contractIndex);
+    }
+
+    @Transactional
+    public void updateContract(ContractUpdateRequest request) {
+        Contract contract = contractRepository.findById(request.getContractId())
+            .orElseThrow(() -> new BusinessException(ErrorCode.CONTRACT_NOT_FOUND));
+
+        contract.updateContract(request);
+        
+        contractRepository.save(contract);
     }
 
 }
