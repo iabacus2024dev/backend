@@ -6,9 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import kr.co.iabacus.sales.web.partners.domain.Partners;
 
-public interface PartnersRepository extends JpaRepository<Partners, Long> {
+public interface PartnersRepository extends JpaRepository<Partners, Long>, PartnersRepositoryCustom {
 
     Optional<Partners> findByIdAndIsActivatedTrue(Long partnersId);
 
-    // List<Partners> findByIsActivatedTrue();
 }
