@@ -1,5 +1,7 @@
 package kr.co.iabacus.sales.web.partners.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +12,7 @@ import kr.co.iabacus.sales.core.common.error.ErrorCode;
 import kr.co.iabacus.sales.core.common.error.exception.BusinessException;
 import kr.co.iabacus.sales.web.partners.domain.Partners;
 import kr.co.iabacus.sales.web.partners.dto.PartnersResponse;
+import kr.co.iabacus.sales.web.partners.dto.PartnersSearchCondition;
 import kr.co.iabacus.sales.web.partners.repository.PartnersRepository;
 
 @Slf4j
@@ -19,13 +22,11 @@ public class PartnersService {
 
     private final PartnersRepository partnersRepository;
 
-    // @Transactional(readOnly = true)
-    // public List<PartnersResponse> getPartners() {
-    //     return partnersRepository.findByIsActivatedTrue()
-    //         .stream()
-    //         .map(PartnersResponse::from)
-    //         .collect(Collectors.toList());
-    // }
+    @Transactional(readOnly = true)
+    public Page<PartnersResponse> searchPartners(PartnersSearchCondition condition, Pageable pageable) {
+        return partnersRepository.search(condition, pageable)
+            .map(PartnersResponse::from);
+    }
 
     @Transactional(readOnly = true)
     public PartnersResponse getPartnersDetail(Long partnersId) {
