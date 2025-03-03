@@ -1,5 +1,7 @@
 package kr.co.iabacus.sales.web.partners.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,6 +12,7 @@ import kr.co.iabacus.sales.web.partners.domain.PartnersGrade;
 @Getter
 public class PartnersSearchCondition {
 
+    @JsonDeserialize(using = EmptyStringToNullEnumDeserializer.class)
     private PartnersGrade grade;
     private String name;
     private String ceoName;
