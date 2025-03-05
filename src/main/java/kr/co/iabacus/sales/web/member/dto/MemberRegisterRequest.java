@@ -23,7 +23,7 @@ public class MemberRegisterRequest {
     private String name;
 
     @NotBlank
-    private String phoneNumber;
+    private String phone;
 
     @NotNull
     private LocalDate birthDate;
@@ -31,23 +31,21 @@ public class MemberRegisterRequest {
     private String rank;
     private String type;
     private String grade;
-    private String teamName;
 
     @NotNull
     private LocalDate joinDate;
     private Long salary;
     private Long monthlyPay;
 
-    public Member toEntity(Classification rank, Classification grade, Classification type, Team team) {
+    public Member toEntity(Classification rank, Classification grade, Classification type) {
         return Member.builder()
             .email(email)
             .name(name)
-            .phone(Phone.of(phoneNumber))
+            .phone(Phone.of(phone))
             .birthDate(birthDate)
             .rank(rank)
             .grade(grade)
             .type(type)
-            .teamId(team != null ? team.getId() : null)
             .joinDate(joinDate)
             .salary(handleMoney(salary))
             .monthlyPay(handleMoney(monthlyPay))
