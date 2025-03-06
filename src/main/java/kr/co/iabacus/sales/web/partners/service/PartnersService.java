@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import kr.co.iabacus.sales.core.common.error.ErrorCode;
 import kr.co.iabacus.sales.core.common.error.exception.BusinessException;
 import kr.co.iabacus.sales.web.partners.domain.Partners;
+import kr.co.iabacus.sales.web.partners.dto.PartnersCreateRequest;
 import kr.co.iabacus.sales.web.partners.dto.PartnersResponse;
 import kr.co.iabacus.sales.web.partners.dto.PartnersSearchCondition;
 import kr.co.iabacus.sales.web.partners.repository.PartnersRepository;
@@ -34,6 +35,18 @@ public class PartnersService {
             .orElseThrow(() -> new BusinessException(ErrorCode.PARTNERS_NOT_FOUND));
 
         return PartnersResponse.from(partners);
+    }
+
+    @Transactional
+    public void createPartners(PartnersCreateRequest request) {
+        validateDuplicateName(request.getName());
+        partnersRepository.save(request.toEntity());
+    }
+
+    private void validateDuplicateName(String name) {
+        if (partnersRepository.findByName(name).isPresent()) {
+            throw new BusinessException(ErrorCode.PARTNERS_NAME_ALREADY_EXISTS);
+        }
     }
 
 }
