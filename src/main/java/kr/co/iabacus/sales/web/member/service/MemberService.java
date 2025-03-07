@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -67,13 +68,11 @@ public class MemberService {
     public void registerMember(MemberRegisterRequest request) {
         validateDuplicateEmail(request.getEmail());
 
-        Classification rank = (request.getRank() != null) ? findClassification(ClassificationCode.R, request.getRank()) : null;
-        Classification grade = (request.getGrade() != null) ? findClassification(ClassificationCode.G, request.getGrade()) : null;
-        Classification type = (request.getType() != null) ? findClassification(ClassificationCode.T, request.getType()) : null;
+        Classification rank = (StringUtils.hasText(request.getRank())) ? findClassification(ClassificationCode.R, request.getRank()) : null;
+        Classification grade = (StringUtils.hasText(request.getGrade())) ? findClassification(ClassificationCode.G, request.getGrade()) : null;
+        Classification type = (StringUtils.hasText(request.getType())) ? findClassification(ClassificationCode.T, request.getType()) : null;
 
-        Team team = (request.getTeamName() != null) ? findTeam(request.getTeamName()) : null;
-
-        Member member = request.toEntity(rank, grade, type, team);
+        Member member = request.toEntity(rank, grade, type);
         memberRepository.save(member);
     }
 
@@ -89,11 +88,6 @@ public class MemberService {
             .filter(c -> c.getName().equals(name))
             .findFirst()
             .orElseThrow(() -> new BusinessException(ErrorCode.CLASSIFICATION_NOT_FOUND));
-    }
-
-    private Team findTeam(String teamName) {
-        return teamRepository.findByName(teamName)
-            .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_NOT_FOUND));
     }
 
 }
