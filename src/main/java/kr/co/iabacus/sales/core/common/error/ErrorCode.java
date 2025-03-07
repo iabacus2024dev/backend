@@ -49,7 +49,12 @@ public enum ErrorCode {
 
     // Contract
     CONTRACT_NOT_FOUND(HttpStatus.BAD_REQUEST, "contract.not.found"),
-    CONTRACT_ALREADY_INACTIVATED(HttpStatus.BAD_REQUEST, "contract.already.inactivated");
+    CONTRACT_ALREADY_INACTIVATED(HttpStatus.BAD_REQUEST, "contract.already.inactivated"),
+
+    // CONTRACTMEMBER
+    CONTRACTMEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "contractMember.not.found"),
+    CONTRACTMEMBER_ALREADY_INACTIVATED(HttpStatus.BAD_REQUEST, "contractMember.already.inactivated");
+
 
     private final HttpStatus httpStatus;
     private final String code;

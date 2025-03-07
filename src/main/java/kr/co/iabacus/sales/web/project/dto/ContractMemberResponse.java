@@ -16,7 +16,7 @@ import lombok.Getter;
 public class ContractMemberResponse {
     
     private String name;                // 이름
-    private Long memberId;              // 사용자ID
+    private String email;              // 사용자Email
     private Classification rank;        // 직원구분
     private String partners;            // 협력사명
     private LocalDate startDate;        // 계약시작일
@@ -30,7 +30,7 @@ public class ContractMemberResponse {
     public static ContractMemberResponse from(ContractMember contractMember, Member member, Partners partner){
         return ContractMemberResponse.builder()
             .name(member.getName())
-            .memberId(member.getId())
+            .email(member.getEmail())
             .rank(member.getRank())
             .partners(partner == null ? "null" : partner.getName())
             .startDate(contractMember.getStartDate())
