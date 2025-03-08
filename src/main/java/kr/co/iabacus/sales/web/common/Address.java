@@ -19,7 +19,7 @@ public class Address {
     private String zipcode;
 
     @Builder
-    private Address(String street, String detail, String zipcode) {
+    public Address(String street, String detail, String zipcode) {
         this.street = street;
         this.detail = detail;
         this.zipcode = zipcode;

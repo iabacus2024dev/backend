@@ -20,6 +20,7 @@ import kr.co.iabacus.sales.core.common.entity.BaseEntity;
 import kr.co.iabacus.sales.web.common.Address;
 import kr.co.iabacus.sales.web.common.Phone;
 import kr.co.iabacus.sales.web.common.Ratio;
+import kr.co.iabacus.sales.web.partners.dto.PartnersUpdateRequest;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -75,6 +76,18 @@ public class Partners extends BaseEntity {
         this.address = address;
         this.grade = grade;
         this.comment = comment;
+    }
+
+    public void updatePartners(PartnersUpdateRequest request) {
+        this.name = request.getName();
+        this.ceoName = request.getCeoName();
+        this.salesRepName = request.getSalesRepName();
+        this.salesRepPhone = Phone.of(request.getSalesRepPhone());
+        this.salesRepEmail = request.getSalesRepEmail();
+        this.grade = PartnersGrade.valueOf(request.getGrade());
+        this.commissionRate = Ratio.valueOf(request.getCommissionRate());
+        this.comment = request.getComment();
+        this.address = new Address(request.getZipcode(), request.getStreet(), request.getDetail());
     }
 
 }
