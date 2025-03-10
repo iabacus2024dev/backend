@@ -72,6 +72,12 @@ public class Project extends BaseEntity {
     @Column(name = "PROJECT_MAIN_COMPANY")
     private String mainCompany;
 
+    @Column(name = "PROJECT_PM_NAME")
+    private String pmName;
+
+    @AttributeOverride(name = "number", column = @Column(name = "PROJECT_PM_Phone"))
+    private Phone pmPhone;
+
     @Column(name = "PROJECT_ORDERING_COMPANY")
     private String orderingCompany;
 
@@ -100,7 +106,7 @@ public class Project extends BaseEntity {
     private Project(Long teamId, String code, String name, LocalDate contractDate, LocalDate startDate, LocalDate endDate,
                     LocalDate actualStartDate, LocalDate actualEndDate, ProjectType type, ProjectStatus status, String mainCompany,
                     String orderingCompany, Money expectedAmount, Money actualAmount, String mainCompanyRep, String orderingCompanyRep,
-                    Phone mainCompanyRepPhone, Phone orderingCompanyRepPhone, List<Contract> contracts) {
+                    Phone mainCompanyRepPhone, Phone orderingCompanyRepPhone, String pmName, Phone pmPhone, List<Contract> contracts) {
         this.teamId = teamId;
         this.code = code;
         this.name = name;
@@ -119,6 +125,8 @@ public class Project extends BaseEntity {
         this.orderingCompanyRep = orderingCompanyRep;
         this.mainCompanyRepPhone = mainCompanyRepPhone;
         this.orderingCompanyRepPhone = orderingCompanyRepPhone;
+        this.pmName = pmName;
+        this.pmPhone = pmPhone;
         if (contracts != null) {
             contracts.forEach(this::addContract);
         }
