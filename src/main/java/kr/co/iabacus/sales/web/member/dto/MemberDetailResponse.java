@@ -2,13 +2,13 @@ package kr.co.iabacus.sales.web.member.dto;
 
 import java.time.LocalDate;
 
+import lombok.Builder;
 import lombok.Data;
 
-import kr.co.iabacus.sales.web.common.Money;
-import kr.co.iabacus.sales.web.common.Phone;
-import kr.co.iabacus.sales.web.member.domain.Classification;
+import kr.co.iabacus.sales.web.member.domain.Member;
 
 @Data
+@Builder
 public class MemberDetailResponse {
 
     private final String email;
@@ -22,22 +22,25 @@ public class MemberDetailResponse {
     private final String teamName;
 
     private final LocalDate joinDate;
+    private final LocalDate quitDate;
     private final String salary;
     private final String monthlyPay;
 
-    public MemberDetailResponse(String email, String name, Phone phone, LocalDate birthDate, Classification rank, Classification type, Classification grade, String teamName
-        , LocalDate joinDate, Money salary, Money monthlyPay) {
-        this.email = email;
-        this.name = name;
-        this.phone = phone != null ? phone.getNumber() : null;
-        this.birthDate = birthDate;
-        this.rank = rank != null ? rank.getName() : null;
-        this.type = type != null ? type.getName() : null;
-        this.grade = grade != null ? grade.getName() : null;
-        this.teamName = teamName;
-        this.joinDate = joinDate;
-        this.salary = salary != null ? salary.getAmount().toString() : null;
-        this.monthlyPay = monthlyPay != null ? monthlyPay.getAmount().toString() : null;
+    public static MemberDetailResponse of(Member member, String teamName) {
+        return MemberDetailResponse.builder()
+            .email(member.getEmail())
+            .name(member.getName())
+            .phone(member.getPhone() != null ? member.getPhone().getNumber() : null)
+            .birthDate(member.getBirthDate())
+            .rank(member.getRank() != null ? member.getRank().getName() : null)
+            .type(member.getType() != null ? member.getType().getName() : null)
+            .grade(member.getGrade() != null ? member.getGrade().getName() : null)
+            .teamName(teamName)
+            .joinDate(member.getJoinDate())
+            .quitDate(member.getQuitDate() != null ? member.getQuitDate().toLocalDate() : null)
+            .salary(member.getSalary() != null ? member.getSalary().getAmount().toString() : null)
+            .monthlyPay(member.getMonthlyPay() != null ? member.getMonthlyPay().getAmount().toString() : null)
+            .build();
     }
 
 }
