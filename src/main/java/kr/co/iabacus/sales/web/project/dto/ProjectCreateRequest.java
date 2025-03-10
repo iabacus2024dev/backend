@@ -71,11 +71,17 @@ public class ProjectCreateRequest {
     @NotNull
     private Phone orderingCompanyRepPhone;
 
+    @NotNull
+    private String pmName;
+
+    @NotNull
+    private Phone pmPhone;
+
     @Builder
     public ProjectCreateRequest(Long teamId, String code, String name, LocalDate contractDate, LocalDate startDate, LocalDate endDate,
                                 LocalDate actualStartDate, LocalDate actualEndDate, ProjectType type, ProjectStatus status, String mainCompany,
                                 String orderingCompany, Long expectedAmount, Long actualAmount, String mainCompanyRep, String orderingCompanyRep,
-                                Phone mainCompanyRepPhone, Phone orderingCompanyRepPhone) {
+                                Phone mainCompanyRepPhone, Phone orderingCompanyRepPhone, String pmName, Phone pmPhone) {
         this.teamId = teamId;
         this.code = code;
         this.name = name;
@@ -94,6 +100,8 @@ public class ProjectCreateRequest {
         this.orderingCompanyRep = orderingCompanyRep;
         this.mainCompanyRepPhone = mainCompanyRepPhone;
         this.orderingCompanyRepPhone = orderingCompanyRepPhone;
+        this.pmName = pmName;
+        this.pmPhone = pmPhone;
     }
 
     public Project toEntity() {
@@ -116,6 +124,8 @@ public class ProjectCreateRequest {
             .orderingCompanyRep(orderingCompanyRep)
             .mainCompanyRepPhone(mainCompanyRepPhone)
             .orderingCompanyRepPhone(orderingCompanyRepPhone)
+            .pmName(pmName)
+            .pmPhone(pmPhone)
             .build();
     }
 
