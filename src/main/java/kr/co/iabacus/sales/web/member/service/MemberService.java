@@ -37,9 +37,9 @@ public class MemberService {
 
     public MemberDetailResponse getMemberDetail(Long memberId) {
         Member member = getActiveMemberById(memberId);
-        String teamName = getTeamName(member.getTeamId());
+        Team team = getTeamInfo(member.getTeamId());
 
-        return MemberDetailResponse.of(member, teamName);
+        return MemberDetailResponse.of(member, team);
     }
 
     private Member getActiveMemberById(Long memberId) {
@@ -47,10 +47,9 @@ public class MemberService {
             .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
-    private String getTeamName(Long teamId) {
+    private Team getTeamInfo(Long teamId) {
         return Optional.ofNullable(teamId)
             .flatMap(teamRepository::findById)
-            .map(Team::getName)
             .orElse(null);
     }
 
@@ -96,6 +95,13 @@ public class MemberService {
             boolean status = true; // ⚠️가동/비가동 상태 가져오기 (추후 구현)
             return MemberListResponse.of(member, resolvedTeamName, status);
         });
+    }
+
+    private String getTeamName(Long teamId) {
+        return Optional.ofNullable(teamId)
+            .flatMap(teamRepository::findById)
+            .map(Team::getName)
+            .orElse(null);
     }
 
     @Transactional

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import kr.co.iabacus.sales.web.member.domain.Member;
+import kr.co.iabacus.sales.web.team.domain.Team;
 
 @Data
 @Builder
@@ -19,6 +20,8 @@ public class MemberDetailResponse {
     private final String rank;
     private final String type;
     private final String grade;
+    private final String headquarters;
+    private final String managePart;
     private final String teamName;
 
     private final LocalDate joinDate;
@@ -26,7 +29,7 @@ public class MemberDetailResponse {
     private final String salary;
     private final String monthlyPay;
 
-    public static MemberDetailResponse of(Member member, String teamName) {
+    public static MemberDetailResponse of(Member member, Team team) {
         return MemberDetailResponse.builder()
             .email(member.getEmail())
             .name(member.getName())
@@ -35,7 +38,9 @@ public class MemberDetailResponse {
             .rank(member.getRank() != null ? member.getRank().getName() : null)
             .type(member.getType() != null ? member.getType().getName() : null)
             .grade(member.getGrade() != null ? member.getGrade().getName() : null)
-            .teamName(teamName)
+            .headquarters(team != null ? team.getHeadquarters() : null)
+            .managePart(team != null ? team.getManagePart() : null)
+            .teamName(team != null ? team.getName() : null)
             .joinDate(member.getJoinDate())
             .quitDate(member.getQuitDate() != null ? member.getQuitDate().toLocalDate() : null)
             .salary(member.getSalary() != null ? member.getSalary().getAmount().toString() : null)
