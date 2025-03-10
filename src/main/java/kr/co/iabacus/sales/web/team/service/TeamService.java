@@ -46,4 +46,17 @@ public class TeamService {
         }
     }
 
+
+    public List<String> getDistinctHeadquarters() {
+        return teamRepository.findDistinctHeadquarters();
+    }
+
+    public List<String> getDistinctManagePartsByHeadquarters(String headquarters) {
+        return teamRepository.findDistinctManagePartsByHeadquarters(headquarters);
+    }
+
+    public List<String> getTeamsByHeadquartersAndDepartment(String headquarters, String managePart) {
+        return teamRepository.findTeamNamesByHeadquartersAndManagePart(headquarters, managePart);
+    }
+
 }
