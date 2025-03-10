@@ -3,6 +3,8 @@ package kr.co.iabacus.sales.web.member.service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -15,7 +17,9 @@ import kr.co.iabacus.sales.web.member.domain.Classification;
 import kr.co.iabacus.sales.web.member.domain.ClassificationCode;
 import kr.co.iabacus.sales.web.member.domain.Member;
 import kr.co.iabacus.sales.web.member.dto.MemberDetailResponse;
+import kr.co.iabacus.sales.web.member.dto.MemberListResponse;
 import kr.co.iabacus.sales.web.member.dto.MemberRegisterRequest;
+import kr.co.iabacus.sales.web.member.dto.MemberSearchCondition;
 import kr.co.iabacus.sales.web.member.repository.ClassificationRepository;
 import kr.co.iabacus.sales.web.member.repository.MemberRepository;
 import kr.co.iabacus.sales.web.team.domain.Team;
@@ -98,5 +102,18 @@ public class MemberService {
         member.inactivate(LocalDateTime.now());
         memberRepository.save(member);
     }
+
+
+    public Page<MemberListResponse> getMembers(Pageable pageable, MemberSearchCondition condition) {
+        Page<Member> members = memberRepository.searchMembers(pageable, condition);
+
+        return members.map(member -> {
+            String resolvedTeamName = getTeamName(member.getTeamId());
+            boolean status = true; // ⚠️가동/비가동 상태 가져오기 (추후 구현)
+            return MemberListResponse.of(member, resolvedTeamName, status);
+        });
+    }
+
+
 
 }

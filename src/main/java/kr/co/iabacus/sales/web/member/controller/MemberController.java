@@ -2,9 +2,12 @@ package kr.co.iabacus.sales.web.member.controller;
 
 import jakarta.validation.Valid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +18,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import kr.co.iabacus.sales.web.member.dto.MemberDetailResponse;
+import kr.co.iabacus.sales.web.member.dto.MemberListResponse;
 import kr.co.iabacus.sales.web.member.dto.MemberRegisterRequest;
+import kr.co.iabacus.sales.web.member.dto.MemberSearchCondition;
 import kr.co.iabacus.sales.web.member.service.MemberService;
 
 @Slf4j
@@ -37,9 +42,16 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+
     @DeleteMapping("/{member-id}")
     public void deleteMember(@PathVariable("member-id") Long memberId) {
         memberService.deleteMember(memberId);
+    }
+
+    @GetMapping
+    public Page<MemberListResponse> getMembers(Pageable pageable, @ModelAttribute MemberSearchCondition condition) {
+        return memberService.getMembers(pageable, condition);
+
     }
 
 }

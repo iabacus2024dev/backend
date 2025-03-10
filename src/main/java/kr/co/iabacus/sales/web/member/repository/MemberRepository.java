@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import kr.co.iabacus.sales.web.member.domain.Member;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 
     Optional<Member> findByIdAndIsActivatedTrue(Long id);
 
