@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import kr.co.iabacus.sales.web.team.service.TeamService;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/teams")
+@RequestMapping("/api/v1")
 public class TeamController {
 
     private final TeamService teamService;
@@ -30,6 +31,25 @@ public class TeamController {
     @GetMapping("/tree-view")
     public ResponseEntity<Map<String, Map<String, List<TeamResponse>>>> getTeamTreeView() {
         return ResponseEntity.ok(teamService.getTeamTreeView());
+    }
+
+    @GetMapping("/headquarters")
+    public ResponseEntity<List<String>> getHeadquarters() {
+        List<String> headquartersList = teamService.getDistinctHeadquarters();
+        return ResponseEntity.ok(headquartersList);
+    }
+
+    @GetMapping("/manage-part")
+    public ResponseEntity<List<String>> getManagePart(@RequestParam String headquarters) {
+        List<String> managePartList = teamService.getDistinctManagePartsByHeadquarters(headquarters);
+        return ResponseEntity.ok(managePartList);
+    }
+
+    @GetMapping("/teams")
+    public ResponseEntity<List<String>> getTeams(@RequestParam String headquarters,
+                                               @RequestParam("manage-part") String managePart) {
+        List<String> teamList = teamService.getTeamsByHeadquartersAndDepartment(headquarters, managePart);
+        return ResponseEntity.ok(teamList);
     }
 
 }
