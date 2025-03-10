@@ -1,5 +1,6 @@
 package kr.co.iabacus.sales.web.member.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -94,6 +95,15 @@ public class MemberService {
             .orElseThrow(() -> new BusinessException(ErrorCode.CLASSIFICATION_NOT_FOUND));
     }
 
+    @Transactional
+    public void deleteMember(Long memberId) {
+        Member member = getActiveMemberById(memberId);
+
+        member.inactivate(LocalDateTime.now());
+        memberRepository.save(member);
+    }
+
+
     public Page<MemberListResponse> getMembers(Pageable pageable, MemberSearchCondition condition) {
         Page<Member> members = memberRepository.searchMembers(pageable, condition);
 
@@ -103,6 +113,7 @@ public class MemberService {
             return MemberListResponse.of(member, resolvedTeamName, status);
         });
     }
+
 
 
 }

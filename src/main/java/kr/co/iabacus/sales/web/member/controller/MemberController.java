@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,9 +42,16 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+
+    @DeleteMapping("/{member-id}")
+    public void deleteMember(@PathVariable("member-id") Long memberId) {
+        memberService.deleteMember(memberId);
+    }
+
     @GetMapping
     public Page<MemberListResponse> getMembers(Pageable pageable, @ModelAttribute MemberSearchCondition condition) {
         return memberService.getMembers(pageable, condition);
+
     }
 
 }
