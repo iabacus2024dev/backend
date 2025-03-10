@@ -109,6 +109,10 @@ public class MemberService {
         Member member = memberRepository.findMemberDetailById(request.getMemberId())
             .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
+        if (member.getQuitDate() != null) {
+            throw new BusinessException(ErrorCode.MEMBER_ALREADY_QUIT);
+        }
+
         member.quit();
     }
 

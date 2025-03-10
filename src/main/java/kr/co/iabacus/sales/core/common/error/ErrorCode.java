@@ -17,6 +17,7 @@ public enum ErrorCode {
     // MEMBER
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "member.not.found"),
     MEMBER_EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "member.email.already.exists"),
+    MEMBER_ALREADY_QUIT(HttpStatus.BAD_REQUEST, "member.already.quit"),
 
     // PARTNERS
     PARTNERS_NOT_FOUND(HttpStatus.BAD_REQUEST, "partners.not.found"),
@@ -54,7 +55,6 @@ public enum ErrorCode {
     // CONTRACTMEMBER
     CONTRACTMEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "contractMember.not.found"),
     CONTRACTMEMBER_ALREADY_INACTIVATED(HttpStatus.BAD_REQUEST, "contractMember.already.inactivated");
-
 
     private final HttpStatus httpStatus;
     private final String code;
