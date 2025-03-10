@@ -18,6 +18,7 @@ import kr.co.iabacus.sales.web.member.domain.ClassificationCode;
 import kr.co.iabacus.sales.web.member.domain.Member;
 import kr.co.iabacus.sales.web.member.dto.MemberDetailResponse;
 import kr.co.iabacus.sales.web.member.dto.MemberListResponse;
+import kr.co.iabacus.sales.web.member.dto.MemberQuitRequest;
 import kr.co.iabacus.sales.web.member.dto.MemberRegisterRequest;
 import kr.co.iabacus.sales.web.member.dto.MemberSearchCondition;
 import kr.co.iabacus.sales.web.member.repository.ClassificationRepository;
@@ -38,7 +39,7 @@ public class MemberService {
         Member member = getActiveMemberById(memberId);
         String teamName = getTeamName(member.getTeamId());
 
-        return createMemberDetailResponse(member, teamName);
+        return MemberDetailResponse.of(member, teamName);
     }
 
     private Member getActiveMemberById(Long memberId) {
@@ -51,22 +52,6 @@ public class MemberService {
             .flatMap(teamRepository::findById)
             .map(Team::getName)
             .orElse(null);
-    }
-
-    private MemberDetailResponse createMemberDetailResponse(Member member, String teamName) {
-        return new MemberDetailResponse(
-            member.getEmail(),
-            member.getName(),
-            member.getPhone(),
-            member.getBirthDate(),
-            member.getRank(),
-            member.getType(),
-            member.getGrade(),
-            teamName,
-            member.getJoinDate(),
-            member.getSalary(),
-            member.getMonthlyPay()
-        );
     }
 
     @Transactional
@@ -103,7 +88,6 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-
     public Page<MemberListResponse> getMembers(Pageable pageable, MemberSearchCondition condition) {
         Page<Member> members = memberRepository.searchMembers(pageable, condition);
 
@@ -114,6 +98,12 @@ public class MemberService {
         });
     }
 
+    @Transactional
+    public void quitMember(MemberQuitRequest request) {
+        Member member = memberRepository.findMemberDetailById(request.getMemberId())
+            .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
+        member.quit();
+    }
 
 }

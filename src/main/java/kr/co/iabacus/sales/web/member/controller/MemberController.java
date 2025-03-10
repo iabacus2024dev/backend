@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import kr.co.iabacus.sales.web.member.dto.MemberDetailResponse;
 import kr.co.iabacus.sales.web.member.dto.MemberListResponse;
+import kr.co.iabacus.sales.web.member.dto.MemberQuitRequest;
 import kr.co.iabacus.sales.web.member.dto.MemberRegisterRequest;
 import kr.co.iabacus.sales.web.member.dto.MemberSearchCondition;
 import kr.co.iabacus.sales.web.member.service.MemberService;
@@ -42,7 +43,6 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-
     @DeleteMapping("/{member-id}")
     public void deleteMember(@PathVariable("member-id") Long memberId) {
         memberService.deleteMember(memberId);
@@ -51,7 +51,13 @@ public class MemberController {
     @GetMapping
     public Page<MemberListResponse> getMembers(Pageable pageable, @ModelAttribute MemberSearchCondition condition) {
         return memberService.getMembers(pageable, condition);
+    }
 
+    @PostMapping("/quit")
+    public ResponseEntity<Void> quitMember(@RequestBody MemberQuitRequest memberQuitRequest) {
+        memberService.quitMember(memberQuitRequest);
+
+        return ResponseEntity.ok().build();
     }
 
 }
