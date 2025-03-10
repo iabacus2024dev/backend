@@ -14,6 +14,7 @@ import kr.co.iabacus.sales.web.partners.domain.Partners;
 import kr.co.iabacus.sales.web.partners.dto.PartnersCreateRequest;
 import kr.co.iabacus.sales.web.partners.dto.PartnersResponse;
 import kr.co.iabacus.sales.web.partners.dto.PartnersSearchCondition;
+import kr.co.iabacus.sales.web.partners.dto.PartnersUpdateRequest;
 import kr.co.iabacus.sales.web.partners.repository.PartnersRepository;
 
 @Slf4j
@@ -47,6 +48,16 @@ public class PartnersService {
         if (partnersRepository.findByName(name).isPresent()) {
             throw new BusinessException(ErrorCode.PARTNERS_NAME_ALREADY_EXISTS);
         }
+    }
+
+    @Transactional
+    public void updatePartners(Long partnersId, PartnersUpdateRequest request) {
+        Partners partners = partnersRepository.findByIdAndIsActivatedTrue(partnersId)
+            .orElseThrow(() -> new BusinessException(ErrorCode.PARTNERS_NOT_FOUND));
+
+        partners.updatePartners(request);
+
+        partnersRepository.save(partners);
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import kr.co.iabacus.sales.web.partners.dto.PartnersCreateRequest;
 import kr.co.iabacus.sales.web.partners.dto.PartnersResponse;
 import kr.co.iabacus.sales.web.partners.dto.PartnersSearchCondition;
+import kr.co.iabacus.sales.web.partners.dto.PartnersUpdateRequest;
 import kr.co.iabacus.sales.web.partners.service.PartnersService;
 
 @Slf4j
@@ -43,6 +45,11 @@ public class PartnersController {
     public ResponseEntity<Void> createPartner(@Valid @RequestBody PartnersCreateRequest request) {
         partnersService.createPartners(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PutMapping("/{partnersId}")
+    public void updatePartners(@PathVariable("partnersId") Long partnersId, @Valid @RequestBody PartnersUpdateRequest request) {
+        partnersService.updatePartners(partnersId, request);
     }
 
 }
