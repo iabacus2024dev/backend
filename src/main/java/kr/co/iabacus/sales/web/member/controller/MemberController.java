@@ -3,6 +3,7 @@ package kr.co.iabacus.sales.web.member.controller;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +35,11 @@ public class MemberController {
     public ResponseEntity<Void> registerMember(@RequestBody @Valid MemberRegisterRequest memberRegisterRequest) {
         memberService.registerMember(memberRegisterRequest);
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{member-id}")
+    public void deleteMember(@PathVariable("member-id") Long memberId) {
+        memberService.deleteMember(memberId);
     }
 
 }

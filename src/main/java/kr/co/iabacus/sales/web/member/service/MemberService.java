@@ -1,5 +1,6 @@
 package kr.co.iabacus.sales.web.member.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -88,6 +89,14 @@ public class MemberService {
             .filter(c -> c.getName().equals(name))
             .findFirst()
             .orElseThrow(() -> new BusinessException(ErrorCode.CLASSIFICATION_NOT_FOUND));
+    }
+
+    @Transactional
+    public void deleteMember(Long memberId) {
+        Member member = getActiveMemberById(memberId);
+
+        member.inactivate(LocalDateTime.now());
+        memberRepository.save(member);
     }
 
 }
