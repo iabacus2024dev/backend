@@ -22,7 +22,7 @@ public enum ErrorCode {
     // PARTNERS
     PARTNERS_NOT_FOUND(HttpStatus.BAD_REQUEST, "partners.not.found"),
     PARTNERS_NAME_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "partners.name.already.exists"),
-    INVALID_PARTNER_NAME(HttpStatus.BAD_REQUEST, "invalid.partner.name"),
+    PARTNERS_ALREADY_INACTIVATED(HttpStatus.BAD_REQUEST, "partners.already.inactivated"),
 
     // AUTH
     PASSWORD_SAME(HttpStatus.BAD_REQUEST, "password.same"),

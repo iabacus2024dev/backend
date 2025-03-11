@@ -1,5 +1,7 @@
 package kr.co.iabacus.sales.web.partners.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -57,6 +59,19 @@ public class PartnersService {
 
         partners.updatePartners(request);
 
+        partnersRepository.save(partners);
+    }
+
+    @Transactional
+    public void deletePartners(Long partnersId) {
+        Partners partners = partnersRepository.findByIdAndIsActivatedTrue(partnersId)
+            .orElseThrow(() -> new BusinessException(ErrorCode.PARTNERS_NOT_FOUND));
+
+        if (!partners.getIsActivated()) {
+            throw new BusinessException(ErrorCode.PARTNERS_ALREADY_INACTIVATED);
+        }
+
+        partners.inactivate(LocalDateTime.now());
         partnersRepository.save(partners);
     }
 
