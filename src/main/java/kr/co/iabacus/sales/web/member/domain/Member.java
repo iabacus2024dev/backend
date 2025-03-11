@@ -1,6 +1,7 @@
 package kr.co.iabacus.sales.web.member.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -62,6 +63,9 @@ public class Member extends BaseEntity {
     @Column(name = "MEMBER_JOIN_DATE")
     private LocalDate joinDate;
 
+    @Column(name = "MEMBER_QUIT_DATE")
+    private LocalDateTime quitDate;
+
     @JoinColumn(name = "MEMBER_RANK")
     @ManyToOne(fetch = FetchType.LAZY)
     private Classification rank;
@@ -90,7 +94,7 @@ public class Member extends BaseEntity {
     private Integer loginFailCount;
 
     @Builder
-    private Member(Long teamId, String name, String email, Phone phone, LocalDate birthDate, LocalDate joinDate, Classification rank,
+    private Member(Long teamId, String name, String email, Phone phone, LocalDate birthDate, LocalDate joinDate, LocalDateTime quitDate, Classification rank,
                    Classification grade, Money salary, Money monthlyPay, Long roleId, String comment, Classification type, Long partnersId) {
         this.teamId = teamId;
         this.name = name;
@@ -99,6 +103,7 @@ public class Member extends BaseEntity {
         this.phone = phone;
         this.birthDate = birthDate;
         this.joinDate = joinDate;
+        this.quitDate = quitDate;
         this.rank = rank;
         this.grade = grade;
         this.salary = salary;
@@ -122,6 +127,10 @@ public class Member extends BaseEntity {
             throw new BusinessException(ErrorCode.MEMBER_NOT_REGISTERED);
         }
         this.password = newPassword;
+    }
+
+    public void quit() {
+        this.quitDate = LocalDateTime.now();
     }
 
 }
