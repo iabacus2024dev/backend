@@ -52,4 +52,9 @@ public class PartnersController {
         partnersService.updatePartners(partnersId, request);
     }
 
+    @PostMapping("/{partnersId}")
+    public void deletePartners(@PathVariable("partnersId") Long partnersId) {
+        partnersService.deletePartners(partnersId);
+    }
+
 }

@@ -34,7 +34,8 @@ public class PartnersRepositoryImpl implements PartnersRepositoryCustom {
                 gradeContains(condition.getGrade()),
                 nameContains(condition.getName()),
                 ceoNameContains(condition.getCeoName()),
-                salesPerNameContains(condition.getSalesRepName())
+                salesPerNameContains(condition.getSalesRepName()),
+                partners.isActivated.isTrue()
             )
             .fetch();
 
@@ -45,7 +46,8 @@ public class PartnersRepositoryImpl implements PartnersRepositoryCustom {
                 gradeContains(condition.getGrade()),
                 nameContains(condition.getName()),
                 ceoNameContains(condition.getCeoName()),
-                salesPerNameContains(condition.getSalesRepName())
+                salesPerNameContains(condition.getSalesRepName()),
+                partners.isActivated.isTrue()
             );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
