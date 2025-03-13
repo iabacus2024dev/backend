@@ -16,7 +16,7 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-.DS_Store
+src/main/resources/env.properties
 
 ### IntelliJ IDEA ###
 .idea
@@ -26,8 +26,6 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-.env*
-spy.log
 
 ### NetBeans ###
 /nbproject/private/
@@ -38,3 +36,4 @@ spy.log
 
 ### VS Code ###
 .vscode/
+/spy.log
