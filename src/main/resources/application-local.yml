@@ -4,18 +4,19 @@ spring:
       on-profile: local
 
   datasource:
-    url: jdbc:h2:tcp://localhost/~/sales
     driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/sales
     username: sa
     password:
 
   jpa:
     hibernate:
       ddl-auto: create
-    defer-datasource-initialization: true
 
-  sql:
-    init:
-      mode: always
-      data-locations: classpath:/db/data.sql
-      encoding: utf-8
+  session:
+    jdbc:
+      initialize-schema: always
+
+logging:
+  level:
+    org.springframework.security: trace

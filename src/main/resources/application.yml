@@ -6,5 +6,6 @@ spring:
     import:
       - classpath:/common/common.yml
       - classpath:/common/mail.yml
-      - classpath:/common/auth.yml
-      - optional:file:.env[.properties]
+      - classpath:/common/swagger.yml
+      - classpath:/common/paging.yml
+      - classpath:env.properties

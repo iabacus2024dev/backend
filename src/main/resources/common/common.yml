@@ -12,6 +12,18 @@ spring:
       max-file-size: 10MB
       max-request-size: 100MB
 
+  session:
+    timeout: 10 # 24h
+
 logging:
   level:
     kr.co.iabacus.sales: debug
+
+base:
+  url: ${LOCAL_BASE_URL}
+
+server:
+  servlet:
+    session:
+      cookie:
+        max-age: 172800 # 48h
