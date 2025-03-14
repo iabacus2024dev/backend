@@ -71,6 +71,8 @@ public class Member extends BaseEntity {
 
     public void initializePassword(String encodePassword) {
         this.password = encodePassword;
+        loginFailCount = 0;
+        isLoginLocked = false;
     }
 
     public void changePassword(String newPassword) {
@@ -78,6 +80,8 @@ public class Member extends BaseEntity {
             throw new BusinessException(ErrorCode.MEMBER_NOT_REGISTERED);
         }
         this.password = newPassword;
+        loginFailCount = 0;
+        isLoginLocked = false;
     }
 
     public void failLogin() {
