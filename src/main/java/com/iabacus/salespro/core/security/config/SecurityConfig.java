@@ -6,24 +6,26 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -31,11 +33,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
+import com.iabacus.salespro.core.security.filter.CsrfCookieFilter;
 import com.iabacus.salespro.core.security.filter.CustomAuthFilter;
 import com.iabacus.salespro.core.security.handler.CustomAccessDeniedHandler;
 import com.iabacus.salespro.core.security.handler.CustomBasicAuthenticationEntryPoint;
 import com.iabacus.salespro.core.security.handler.CustomLoginFailHandler;
 import com.iabacus.salespro.core.security.handler.CustomLoginSuccessHandler;
+import com.iabacus.salespro.core.security.provider.CustomUserDetailsAuthenticationProvider;
 import com.iabacus.salespro.web.login.repository.LoginHistoryRepository;
 import com.iabacus.salespro.web.member.repository.MemberRepository;
 
@@ -55,6 +59,7 @@ public class SecurityConfig {
 
     private final MemberRepository memberRepository;
     private final LoginHistoryRepository loginHistoryRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Value("${base.url}")
     private String baseUrl;
@@ -86,17 +91,17 @@ public class SecurityConfig {
                 return config;
             }))
 
-            // .csrf(csrfConfig -> csrfConfig.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-            //     .ignoringRequestMatchers("/api/v1/auths/**", "/swagger-ui/**", "/api-docs/**")
-            //     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-            // .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-            .csrf(AbstractHttpConfigurer::disable)
+            .csrf(csrfConfig -> csrfConfig.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+                .ignoringRequestMatchers("/api/v1/auths/**", "/swagger-ui/**", "/api-docs/**")
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+            .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+            // .csrf(AbstractHttpConfigurer::disable)
 
             .addFilterBefore(abstractAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
 
             .logout(config -> config
                 .logoutUrl(LOGOUT_URI)
-                .deleteCookies("SESSION", "remember-me")
+                .deleteCookies("SESSION", "remember-me", "XSRF-TOKEN")
             )
 
             .exceptionHandling(e -> {
@@ -131,7 +136,7 @@ public class SecurityConfig {
     public AbstractAuthenticationProcessingFilter abstractAuthenticationProcessingFilter() {
         CustomAuthFilter filter = new CustomAuthFilter(LOGIN_URI, objectMapper);
         filter.setAuthenticationManager(authenticationManager());
-        filter.setAuthenticationSuccessHandler(new CustomLoginSuccessHandler(memberRepository, loginHistoryRepository));
+        filter.setAuthenticationSuccessHandler(new CustomLoginSuccessHandler());
         filter.setAuthenticationFailureHandler(new CustomLoginFailHandler(objectMapper));
         filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
 
@@ -145,10 +150,12 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
-        return new ProviderManager(provider);
+        return new ProviderManager(new CustomUserDetailsAuthenticationProvider(
+            userDetailsService,
+            passwordEncoder(),
+            memberRepository,
+            loginHistoryRepository
+        ));
     }
 
 }
