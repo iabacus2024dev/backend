@@ -49,10 +49,8 @@ public class CustomUserDetailsAuthenticationProvider implements AuthenticationPr
             failureLoginProcess(member);
         }
 
-        UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
-        result.setDetails(authentication.getDetails());
         successLoginProcess(member);
-        return result;
+        return UsernamePasswordAuthenticationToken.authenticated(userDetails, authentication.getCredentials(), userDetails.getAuthorities());
     }
 
     @Override
