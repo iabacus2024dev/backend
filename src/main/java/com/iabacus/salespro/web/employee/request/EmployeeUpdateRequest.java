@@ -1,6 +1,7 @@
 package com.iabacus.salespro.web.employee.request;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.Data;
 
@@ -22,5 +23,6 @@ public class EmployeeUpdateRequest {
     private LocalDate birthDate;
     private LocalDate joinDate;
     private String comment;
+    private LocalDateTime modifiedDateTime;
 
 }

@@ -2,7 +2,6 @@ package com.iabacus.salespro.web.partners.controller;
 
 import jakarta.validation.Valid;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.iabacus.salespro.web.common.PageResponse;
 import com.iabacus.salespro.web.partners.request.PartnersCreateRequest;
 import com.iabacus.salespro.web.partners.request.PartnersSearchCondition;
 import com.iabacus.salespro.web.partners.request.PartnersUpdateRequest;
@@ -41,7 +41,7 @@ public class PartnersController {
 
     @PreAuthorize("hasAuthority('협력사 조회')")
     @GetMapping
-    public ResponseEntity<Page<PartnersSearchResponse>> searchPartners(PartnersSearchCondition condition, Pageable pageable) {
+    public ResponseEntity<PageResponse<PartnersSearchResponse>> searchPartners(PartnersSearchCondition condition, Pageable pageable) {
         return ResponseEntity.ok(partnersService.searchPartners(condition, pageable));
     }
 

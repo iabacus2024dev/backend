@@ -2,11 +2,13 @@ package com.iabacus.salespro.web.partners.response;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import com.iabacus.salespro.web.partners.domain.Partners;
 import com.iabacus.salespro.web.partners.domain.PartnersGrade;
 
 @Data
+@NoArgsConstructor
 public class PartnersSearchResponse {
 
     private Long id;

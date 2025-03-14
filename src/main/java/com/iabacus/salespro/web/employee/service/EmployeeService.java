@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
+import com.iabacus.salespro.web.common.PageResponse;
 import com.iabacus.salespro.web.department.domain.Department;
 import com.iabacus.salespro.web.department.repository.DepartmentRepository;
 import com.iabacus.salespro.web.employee.domain.Employee;
@@ -39,11 +40,12 @@ public class EmployeeService {
         return EmployeeDetailResponse.from(employee, partners, department);
     }
 
-    public Page<EmployeeSearchResponse> searchEmployees(EmployeeSearchCondition condition, Pageable pageable) {
-        return employeeRepository.search(condition, pageable).map(employee -> {
+    public PageResponse<EmployeeSearchResponse> searchEmployees(EmployeeSearchCondition condition, Pageable pageable) {
+        Page<EmployeeSearchResponse> page = employeeRepository.search(condition, pageable).map(employee -> {
             Department department = departmentRepository.findByIdAndIsActivatedTrue(employee.getDepartmentId()).orElse(null);
             return EmployeeSearchResponse.from(employee, department);
         });
+        return new PageResponse<>(page);
     }
 
     @Transactional
@@ -54,6 +56,9 @@ public class EmployeeService {
     @Transactional
     public void updateEmployee(Long id, EmployeeUpdateRequest request) {
         Employee employee = findEmployee(id);
+        if (!employee.getModifiedDateTime().equals(request.getModifiedDateTime())) {
+            throw new BusinessException(ErrorCode.CONFLICT_MODIFIED_TIME);
+        }
         employee.update(request);
     }
 
