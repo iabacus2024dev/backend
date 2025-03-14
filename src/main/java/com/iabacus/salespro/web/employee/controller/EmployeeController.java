@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import jakarta.validation.Valid;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.iabacus.salespro.core.security.service.UserPrincipal;
+import com.iabacus.salespro.web.common.PageResponse;
 import com.iabacus.salespro.web.employee.request.EmployeeCreateRequest;
 import com.iabacus.salespro.web.employee.request.EmployeeSearchCondition;
 import com.iabacus.salespro.web.employee.request.EmployeeUpdateRequest;
@@ -50,7 +50,7 @@ public class EmployeeController {
 
     @PreAuthorize("hasAuthority('구성원 조회')")
     @GetMapping
-    public ResponseEntity<Page<EmployeeSearchResponse>> searchEmployees(@Valid @RequestBody EmployeeSearchCondition condition, Pageable pageable) {
+    public ResponseEntity<PageResponse<EmployeeSearchResponse>> searchEmployees(@Valid @RequestBody EmployeeSearchCondition condition, Pageable pageable) {
         return ResponseEntity.ok(employeeService.searchEmployees(condition, pageable));
     }
 

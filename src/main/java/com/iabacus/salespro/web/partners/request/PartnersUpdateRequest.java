@@ -1,6 +1,7 @@
 package com.iabacus.salespro.web.partners.request;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Data;
@@ -19,10 +20,12 @@ public class PartnersUpdateRequest {
     private String detail;
     private String zipcode;
     private String comment;
+    private LocalDateTime modifiedDateTime;
 
     @Builder
     public PartnersUpdateRequest(String name, String ceoName, String salesRepName, String salesRepPhone, String salesRepEmail,
-                                 String zipcode, String street, String detail, String grade, BigDecimal commissionRate, String comment) {
+                                 String zipcode, String street, String detail, String grade, BigDecimal commissionRate, String comment,
+                                 LocalDateTime modifiedDateTime) {
         this.name = name;
         this.ceoName = ceoName;
         this.salesRepName = salesRepName;
@@ -34,6 +37,7 @@ public class PartnersUpdateRequest {
         this.grade = grade;
         this.commissionRate = commissionRate;
         this.comment = comment;
+        this.modifiedDateTime = modifiedDateTime;
     }
 
 }

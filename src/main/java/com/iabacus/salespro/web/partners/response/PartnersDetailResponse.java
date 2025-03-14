@@ -1,6 +1,7 @@
 package com.iabacus.salespro.web.partners.response;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Data;
@@ -23,10 +24,12 @@ public class PartnersDetailResponse {
     private String street;
     private String detail;
     private String zipcode;
+    private LocalDateTime modifiedDateTime;
 
     @Builder
     public PartnersDetailResponse(Long id, String name, String ceoName, String salesRepName, String salesRepPhone, String salesRepEmail,
-                                  PartnersGrade grade, BigDecimal commissionRate, String comment, String street, String detail, String zipcode) {
+                                  PartnersGrade grade, BigDecimal commissionRate, String comment, String street, String detail, String zipcode,
+                                  LocalDateTime modifiedDateTime) {
         this.id = id;
         this.name = name;
         this.ceoName = ceoName;
@@ -39,6 +42,7 @@ public class PartnersDetailResponse {
         this.street = street;
         this.detail = detail;
         this.zipcode = zipcode;
+        this.modifiedDateTime = modifiedDateTime;
     }
 
     public static PartnersDetailResponse from(Partners partners) {
@@ -55,6 +59,7 @@ public class PartnersDetailResponse {
             .street(partners.getAddress() != null ? partners.getAddress().getStreet() : null)
             .detail(partners.getAddress() != null ? partners.getAddress().getDetail() : null)
             .zipcode(partners.getAddress() != null ? partners.getAddress().getZipcode() : null)
+            .modifiedDateTime(partners.getModifiedDateTime())
             .build();
     }
 

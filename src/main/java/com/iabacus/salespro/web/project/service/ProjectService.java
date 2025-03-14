@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
+import com.iabacus.salespro.web.common.PageResponse;
 import com.iabacus.salespro.web.department.domain.Department;
 import com.iabacus.salespro.web.department.repository.DepartmentRepository;
 import com.iabacus.salespro.web.project.domain.Project;
@@ -36,8 +37,9 @@ public class ProjectService {
         return ProjectDetailResponse.from(project, department);
     }
 
-    public Page<ProjectSearchResponse> searchProjects(ProjectSearchCondition condition, Pageable pageable) {
-        return projectRepository.search(condition, pageable).map(ProjectSearchResponse::from);
+    public PageResponse<ProjectSearchResponse> searchProjects(ProjectSearchCondition condition, Pageable pageable) {
+        Page<ProjectSearchResponse> page = projectRepository.search(condition, pageable).map(ProjectSearchResponse::from);
+        return new PageResponse<>(page);
     }
 
     @Transactional
@@ -48,6 +50,9 @@ public class ProjectService {
     @Transactional
     public void updateProject(UUID id, ProjectUpdateRequest request) {
         Project project = findProject(id);
+        if (!project.getModifiedDateTime().equals(request.getModifiedDateTime())) {
+            throw new BusinessException(ErrorCode.CONFLICT_MODIFIED_TIME);
+        }
         project.update(request);
     }
 

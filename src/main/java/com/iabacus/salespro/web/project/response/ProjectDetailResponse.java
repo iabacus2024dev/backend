@@ -2,6 +2,7 @@ package com.iabacus.salespro.web.project.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import lombok.Builder;
@@ -38,11 +39,13 @@ public class ProjectDetailResponse {
     private BigDecimal expectedAmount;
     private BigDecimal contractAmount;
 
+    private LocalDateTime modifiedDateTime;
+
     @Builder
     public ProjectDetailResponse(UUID id, String name, String code, ProjectType type, ProjectStatus status, LocalDate contractDate,
                                  Long ownerTeamId, String ownerTeamName, LocalDate startDate, LocalDate endDate, String pmName, String pmPhone,
                                  String mainCompany, String mainCompanyRep, String mainCompanyRepPhone, String clientCompany, String clientCompanyRep,
-                                 String clientCompanyRepPhone, BigDecimal expectedAmount, BigDecimal contractAmount) {
+                                 String clientCompanyRepPhone, BigDecimal expectedAmount, BigDecimal contractAmount, LocalDateTime modifiedDateTime) {
         this.id = id;
         this.name = name;
         this.code = code;
@@ -63,6 +66,7 @@ public class ProjectDetailResponse {
         this.clientCompanyRepPhone = clientCompanyRepPhone;
         this.expectedAmount = expectedAmount;
         this.contractAmount = contractAmount;
+        this.modifiedDateTime = modifiedDateTime;
     }
 
     @Builder
@@ -88,6 +92,7 @@ public class ProjectDetailResponse {
             .clientCompanyRepPhone(project.getClientCompanyRefPhone() != null ? project.getClientCompanyRefPhone().getWithHyphen() : null)
             .expectedAmount(project.getExpectedAmount() != null ? project.getExpectedAmount().getAmount() : null)
             .contractAmount(project.getContractAmount() != null ? project.getContractAmount().getAmount() : null)
+            .modifiedDateTime(project.getModifiedDateTime())
             .build();
     }
 

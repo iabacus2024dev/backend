@@ -2,6 +2,7 @@ package com.iabacus.salespro.web.employee.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Data;
@@ -38,10 +39,12 @@ public class EmployeeDetailResponse {
     private BigDecimal salary;
     private BigDecimal monthlyPay;
 
+    private LocalDateTime modifiedDateTime;
+
     @Builder
     public EmployeeDetailResponse(Long id, Long partnersId, String partnersName, String name, String email, EmployeeRank rank, EmployeeGrade grade,
                                   EmployeeType type, EmployeeStatus status, String phone, LocalDate birthDate, LocalDate joinDate,
-                                  LocalDate leaveDate, String comment, String teamName, BigDecimal salary, BigDecimal monthlyPay) {
+                                  LocalDate leaveDate, String comment, String teamName, BigDecimal salary, BigDecimal monthlyPay, LocalDateTime modifiedDateTime) {
         this.id = id;
         this.partnersId = partnersId;
         this.partnersName = partnersName;
@@ -59,6 +62,7 @@ public class EmployeeDetailResponse {
         this.teamName = teamName;
         this.salary = salary;
         this.monthlyPay = monthlyPay;
+        this.modifiedDateTime = modifiedDateTime;
     }
 
     public static EmployeeDetailResponse from(Employee employee, Partners partners, Department department) {
@@ -80,6 +84,7 @@ public class EmployeeDetailResponse {
             .teamName(department != null ? department.getName() : null)
             .salary(employee.getSalary() != null ? employee.getSalary().getAmount() : null)
             .monthlyPay(employee.getMonthlyPay() != null ? employee.getMonthlyPay().getAmount() : null)
+            .modifiedDateTime(employee.getModifiedDateTime())
             .build();
     }
 

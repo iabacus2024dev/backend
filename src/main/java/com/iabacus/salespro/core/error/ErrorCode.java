@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ErrorCode {
+    // COMMON
+    CONFLICT_MODIFIED_TIME(HttpStatus.CONFLICT, "conflict.modified.time"),
 
     // MEMBER
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "member.not.found"),
