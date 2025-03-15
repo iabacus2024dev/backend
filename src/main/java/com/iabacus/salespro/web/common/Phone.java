@@ -2,13 +2,13 @@ package com.iabacus.salespro.web.common;
 
 import jakarta.persistence.Embeddable;
 
+import com.iabacus.salespro.core.error.BusinessException;
+import com.iabacus.salespro.core.error.ErrorCode;
+
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import com.iabacus.salespro.core.error.BusinessException;
-import com.iabacus.salespro.core.error.ErrorCode;
 
 @Getter
 @EqualsAndHashCode
@@ -31,7 +31,7 @@ public class Phone {
     }
 
     public String getWithHyphen() {
-        return this.number.replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3");
+        return this.number.replaceAll("(\\d{2,3})(\\d{3,4})(\\d{4})", "$1-$2-$3");
     }
 
 }
