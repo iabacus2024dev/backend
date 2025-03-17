@@ -56,6 +56,20 @@ public class PartnersRepositoryImpl implements CustomPartnersRepository {
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
+    @Override
+    public List<Partners> searchWithoutPage(PartnersSearchCondition condition) {
+        return queryFactory
+            .selectFrom(partners)
+            .where(
+                gradeEq(condition.getGrade()),
+                nameContains(condition.getName()),
+                ceoNameContains(condition.getCeoName()),
+                salesPerNameContains(condition.getSalesRepName()),
+                partners.isActivated.isTrue()
+            )
+            .fetch();
+    }
+
     private BooleanExpression gradeEq(PartnersGrade grade) {
         return grade != null ? partners.grade.eq(grade) : null;
     }
