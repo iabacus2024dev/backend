@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.iabacus.salespro.web.project.domain.Project;
 
-public interface ProjectRepository extends JpaRepository<Project, Long>, CustomProjectRepository {
+public interface ProjectRepository extends JpaRepository<Project, UUID>, CustomProjectRepository {
 
     Optional<Project> findByIdAndIsActivatedTrue(UUID id);
 
