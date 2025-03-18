@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DepartmentController {
 
-    @PreAuthorize("hasAuthority('트리뷰 조회')")
+    //@PreAuthorize("hasAuthority('트리뷰 조회')")
     @GetMapping("/api/v1/teams/tree-view")
     public void getDepartmentTreeView() {
     }
