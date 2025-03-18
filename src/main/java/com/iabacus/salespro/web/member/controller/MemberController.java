@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.iabacus.salespro.core.security.service.UserPrincipal;
 import com.iabacus.salespro.web.auth.request.PasswordChangeRequest;
+import com.iabacus.salespro.web.member.response.MemberMyInfoResponse;
 import com.iabacus.salespro.web.member.service.MemberService;
 
 @Slf4j
@@ -23,6 +25,11 @@ import com.iabacus.salespro.web.member.service.MemberService;
 public class MemberController {
 
     private final MemberService memberService;
+
+    @GetMapping("/my")
+    public ResponseEntity<MemberMyInfoResponse> getMemberMyInfoResponse(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return ResponseEntity.ok(memberService.getMemberMyInfo(userPrincipal.getMemberId()));
+    }
 
     @PatchMapping("/password")
     public ResponseEntity<Void> changePassword(@AuthenticationPrincipal UserPrincipal userPrincipal, @Valid @RequestBody PasswordChangeRequest request) {

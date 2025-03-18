@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -23,7 +22,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.context.DelegatingSecurityContextRepository;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
@@ -35,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.iabacus.salespro.core.security.filter.CsrfCookieFilter;
 import com.iabacus.salespro.core.security.filter.CustomAuthFilter;
+import com.iabacus.salespro.core.security.filter.CustomAuthorizationFilter;
 import com.iabacus.salespro.core.security.handler.CustomAccessDeniedHandler;
 import com.iabacus.salespro.core.security.handler.CustomBasicAuthenticationEntryPoint;
 import com.iabacus.salespro.core.security.handler.CustomLoginFailHandler;
@@ -42,6 +44,7 @@ import com.iabacus.salespro.core.security.handler.CustomLoginSuccessHandler;
 import com.iabacus.salespro.core.security.provider.CustomUserDetailsAuthenticationProvider;
 import com.iabacus.salespro.web.login.repository.LoginHistoryRepository;
 import com.iabacus.salespro.web.member.repository.MemberRepository;
+import com.iabacus.salespro.web.role.repository.RoleRepository;
 
 @RequiredArgsConstructor
 @EnableMethodSecurity
@@ -59,7 +62,7 @@ public class SecurityConfig {
 
     private final MemberRepository memberRepository;
     private final LoginHistoryRepository loginHistoryRepository;
-    private final ApplicationEventPublisher applicationEventPublisher;
+    private final RoleRepository roleRepository;
 
     @Value("${base.url}")
     private String baseUrl;
@@ -68,18 +71,15 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> {
-            web
-                .ignoring()
-                .requestMatchers("/favicon.ico", "/error")
-                .requestMatchers(toH2Console());
-        };
+        return web -> web
+            .ignoring()
+            .requestMatchers("/favicon.ico", "/error")
+            .requestMatchers(toH2Console());
     }
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-            // .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(STATELESS))
             .cors(corsConfig -> corsConfig.configurationSource(request -> {
                 CorsConfiguration config = new CorsConfiguration();
                 config.setAllowedOrigins(Collections.singletonList(baseUrl));
@@ -95,9 +95,8 @@ public class SecurityConfig {
                 .ignoringRequestMatchers("/api/v1/auths/**", "/swagger-ui/**", "/api-docs/**")
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
             .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-            // .csrf(AbstractHttpConfigurer::disable)
-
             .addFilterBefore(abstractAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new CustomAuthorizationFilter(roleRepository), BasicAuthenticationFilter.class)
 
             .logout(config -> config
                 .logoutUrl(LOGOUT_URI)
@@ -138,7 +137,10 @@ public class SecurityConfig {
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler(new CustomLoginSuccessHandler());
         filter.setAuthenticationFailureHandler(new CustomLoginFailHandler(objectMapper));
-        filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
+        filter.setSecurityContextRepository(new DelegatingSecurityContextRepository(
+            new HttpSessionSecurityContextRepository(),
+            new RequestAttributeSecurityContextRepository()
+        ));
 
         SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
         rememberMeServices.setRememberMeParameterName("remember");
@@ -150,12 +152,14 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager() {
-        return new ProviderManager(new CustomUserDetailsAuthenticationProvider(
+        ProviderManager providerManager = new ProviderManager(new CustomUserDetailsAuthenticationProvider(
             userDetailsService,
             passwordEncoder(),
             memberRepository,
             loginHistoryRepository
         ));
+        providerManager.setEraseCredentialsAfterAuthentication(false);
+        return providerManager;
     }
 
 }
