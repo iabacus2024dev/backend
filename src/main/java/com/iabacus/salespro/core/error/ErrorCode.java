@@ -64,7 +64,10 @@ public enum ErrorCode {
 
     // PHONE
     INVALID_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "invalid.phone.number"),
-    ;
+
+    // EXCEL
+    INVALID_EXCEL_FILE(HttpStatus.BAD_REQUEST, "invalid.excel.file"),
+    EXCEL_DOWNLOAD_FAILED(HttpStatus.BAD_REQUEST, "excel.download.failed");
 
     private final HttpStatus httpStatus;
     private final String code;

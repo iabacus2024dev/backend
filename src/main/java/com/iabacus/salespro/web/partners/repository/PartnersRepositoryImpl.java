@@ -10,15 +10,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
+import com.iabacus.salespro.web.partners.domain.Partners;
+import com.iabacus.salespro.web.partners.domain.PartnersGrade;
+import com.iabacus.salespro.web.partners.request.PartnersSearchCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-
-import com.iabacus.salespro.web.partners.domain.Partners;
-import com.iabacus.salespro.web.partners.domain.PartnersGrade;
-import com.iabacus.salespro.web.partners.request.PartnersSearchCondition;
 
 @RequiredArgsConstructor
 @Repository
@@ -37,7 +36,7 @@ public class PartnersRepositoryImpl implements CustomPartnersRepository {
                 salesPerNameContains(condition.getSalesRepName()),
                 partners.isActivated.isTrue()
             )
-            .orderBy(partners.createdDateTime.asc())
+            .orderBy(partners.createdDateTime.desc())
             .limit(pageable.getPageSize())
             .offset(pageable.getOffset())
             .fetch();
