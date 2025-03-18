@@ -30,7 +30,7 @@ public abstract class BaseSXSSFExcelFile implements ExcelFile {
     protected SXSSFWorkbook workbook;
     protected Sheet sheet;
 
-    public BaseSXSSFExcelFile() {
+    protected BaseSXSSFExcelFile() {
         this.workbook = new SXSSFWorkbook(ROW_ACCESS_WINDOW_SIZE);
     }
 

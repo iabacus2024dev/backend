@@ -1,9 +1,9 @@
 package com.iabacus.salespro.web.role.response;
 
-import com.iabacus.salespro.web.role.domain.Authority;
-
 import lombok.Builder;
 import lombok.Data;
+
+import com.iabacus.salespro.web.role.domain.Authority;
 
 @Data
 public class AuthorityResponse {

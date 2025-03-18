@@ -10,8 +10,12 @@ import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
 import com.iabacus.salespro.web.auth.request.PasswordChangeRequest;
 import com.iabacus.salespro.web.auth.validator.PasswordValidator;
+import com.iabacus.salespro.web.employee.domain.Employee;
+import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
 import com.iabacus.salespro.web.member.domain.Member;
 import com.iabacus.salespro.web.member.repository.MemberRepository;
+import com.iabacus.salespro.web.member.response.MemberMyInfoResponse;
+import com.iabacus.salespro.web.role.repository.RoleRepository;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -21,11 +25,12 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final PasswordValidator passwordValidator;
+    private final EmployeeRepository employeeRepository;
+    private final RoleRepository roleRepository;
 
     @Transactional
     public void changePassword(Long id, PasswordChangeRequest request) {
         passwordValidator.validation(request.getPassword(), request.getNewPassword(), request.getNewPasswordConfirm());
-        // TODO: 지금은 member id를 request로 받아서 이용하지만 Spring Security를 사용할 때는 SecurityContextHolder에서 id를 가져와야 함
         Member member = memberRepository.findByIdAndIsActivatedTrue(id)
             .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, id));
 
@@ -35,6 +40,14 @@ public class MemberService {
 
         String encodePassword = passwordEncoder.encode(request.getNewPassword());
         member.changePassword(encodePassword);
+    }
+
+    public MemberMyInfoResponse getMemberMyInfo(Long id) {
+        Member member = memberRepository.findByIdAndIsActivatedTrue(id)
+            .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+        Employee employee = employeeRepository.findByIdAndIsActivatedTrue(member.getEmployeeId())
+            .orElseThrow(() -> new BusinessException(ErrorCode.EMPLOYEE_NOT_FOUND));
+        return MemberMyInfoResponse.from(member, employee);
     }
 
 }

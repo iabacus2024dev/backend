@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.iabacus.salespro.web.auth.controller.AuthController;
 import com.iabacus.salespro.web.auth.request.MemberRegisterRequest;
 import com.iabacus.salespro.web.auth.request.PasswordFindRequest;
 import com.iabacus.salespro.web.auth.request.PasswordInitializeRequest;

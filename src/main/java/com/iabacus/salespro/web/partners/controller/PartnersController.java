@@ -1,5 +1,6 @@
 package com.iabacus.salespro.web.partners.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -74,19 +75,19 @@ public class PartnersController {
     }
 
     @GetMapping("/excel/download")
-    public ResponseEntity<Void> downloadPartners(PartnersSearchCondition condition, HttpServletResponse response) throws Exception {
+    public ResponseEntity<Void> downloadPartners(PartnersSearchCondition condition, HttpServletResponse response) throws IOException {
         new SXSSFExcelFile(ExcelSheetData.from(partnersService.getPartners(condition), PartnersExcelResponse.class), response);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/excel/sample")
-    public ResponseEntity<Void> downloadPartnersSample(HttpServletResponse response) throws Exception {
+    public ResponseEntity<Void> downloadPartnersSample(HttpServletResponse response) throws IOException {
         new SXSSFExcelFile(ExcelSheetData.from(List.of(), PartnersExcelResponse.class), response);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/excel/upload")
-    public ResponseEntity<Void> uploadPartners(MultipartFile file, HttpServletResponse response) throws Exception {
+    public ResponseEntity<Void> uploadPartners(MultipartFile file, HttpServletResponse response) throws IOException {
         partnersService.uploadPartners(file);
         return ResponseEntity.ok().build();
     }

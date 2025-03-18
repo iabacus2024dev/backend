@@ -29,7 +29,7 @@ public final class SuperClassReflectionUtils {
         return null;
     }
 
-    public static Field getField(Class<?> clazz, String name) throws Exception {
+    public static Field getField(Class<?> clazz, String name) throws NoSuchFieldException {
         for (Class<?> clazzInClasses : getAllClassesIncludingSuperClasses(clazz, false)) {
             for (Field field : clazzInClasses.getDeclaredFields()) {
                 if (field.getName().equals(name)) {
