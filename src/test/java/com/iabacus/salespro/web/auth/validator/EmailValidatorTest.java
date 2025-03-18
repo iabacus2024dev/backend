@@ -6,10 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.iabacus.salespro.web.auth.validator.EmailValidator;
-import com.iabacus.salespro.web.member.domain.Member;
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
+import com.iabacus.salespro.web.member.domain.Member;
 
 class EmailValidatorTest {
 

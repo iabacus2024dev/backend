@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.RequiredArgsConstructor;
+
 import com.iabacus.salespro.web.role.repository.RoleRepository;
 import com.iabacus.salespro.web.role.response.AuthorityResponse;
-
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -18,7 +18,9 @@ public class RoleService {
     private final RoleRepository roleRepository;
 
     public List<AuthorityResponse> getRoleWithAuthorities(Long memberId) {
-        return roleRepository.findByMemberIdWithAuthority(memberId).stream().map(AuthorityResponse::from).toList();
+        return roleRepository.findByMemberIdWithAuthority(memberId).stream()
+            .map(AuthorityResponse::from)
+            .toList();
     }
 
 }

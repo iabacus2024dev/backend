@@ -35,11 +35,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private List<GrantedAuthority> getGrantedAuthorities(Member member) {
         AtomicReference<List<GrantedAuthority>> authorities = new AtomicReference<>(new ArrayList<>());
-        roleRepository.findByIdWithAuthority(member.getRoleId()).ifPresent(role -> {
-            authorities.set(role.getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getName()))
-                .collect(Collectors.toUnmodifiableList()));
-        });
+        roleRepository.findByIdWithAuthority(member.getRoleId()).ifPresent(role -> authorities.set(role.getAuthorities().stream()
+            .map(authority -> new SimpleGrantedAuthority(authority.getName()))
+            .collect(Collectors.toUnmodifiableList())));
         return authorities.get();
     }
 
