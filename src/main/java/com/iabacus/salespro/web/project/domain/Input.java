@@ -4,6 +4,8 @@ import com.iabacus.salespro.web.common.BaseEntity;
 import com.iabacus.salespro.web.common.Money;
 import com.iabacus.salespro.web.common.Ratio;
 import com.iabacus.salespro.web.employee.domain.Employee;
+import com.iabacus.salespro.web.employee.domain.EmployeeType;
+
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import lombok.AccessLevel;
@@ -32,7 +34,7 @@ public class Input extends BaseEntity {
 
   @Enumerated(EnumType.STRING)
   @Column(name = "PERSONNEL_TYPE")
-  private PersonnelType type;
+  private EmployeeType type;
 
   @Column(name = "PERSONNEL_START_DATE")
   private LocalDate startDate;
@@ -60,7 +62,7 @@ public class Input extends BaseEntity {
       LocalDate startDate,
       LocalDate endDate,
       Money unitPrice,
-      PersonnelType type,
+      EmployeeType type,
       Money wage,
       Ratio sgaeRate,
       Ratio ovheRate) {

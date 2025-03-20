@@ -1,11 +1,11 @@
 package com.iabacus.salespro.web.project.repository;
 
-import com.iabacus.salespro.web.project.domain.Personnel;
+import com.iabacus.salespro.web.project.domain.Input;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface InputRepository extends JpaRepository<Personnel, UUID> {
+public interface InputRepository extends JpaRepository<Input, UUID> {
     
-    List<Personnel> findByContract_Id(UUID contractId);
+    List<Input> findByContractId(UUID contractId);
 }
