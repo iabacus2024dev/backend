@@ -32,10 +32,10 @@ public class Auth {
     @Column(name = "AUTH_TOKEN")
     private String token;
 
-    @Column(name = "AUTH_CREATED_DATE_TIME")
+    @Column(name = "CREATED_DATE_TIME")
     private LocalDateTime createdDateTime;
 
-    @Column(name = "AUTH_EXPIRED_DATE_TIME")
+    @Column(name = "EXPIRED_DATE_TIME")
     private LocalDateTime expiredDateTime;
 
     @Builder

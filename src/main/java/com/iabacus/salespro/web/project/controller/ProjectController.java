@@ -1,7 +1,6 @@
 package com.iabacus.salespro.web.project.controller;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import jakarta.validation.Valid;
 
@@ -38,7 +37,7 @@ public class ProjectController {
 
     @PreAuthorize("hasAuthority('프로젝트_조회')")
     @GetMapping("/{id}")
-    public ResponseEntity<ProjectDetailResponse> getProjectDetail(@PathVariable UUID id) {
+    public ResponseEntity<ProjectDetailResponse> getProjectDetail(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.getProjectDetail(id));
     }
 
@@ -57,14 +56,14 @@ public class ProjectController {
 
     @PreAuthorize("hasAuthority('프로젝트_편집')")
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateProject(@PathVariable UUID id, @Valid @RequestBody ProjectUpdateRequest request) {
+    public ResponseEntity<Void> updateProject(@PathVariable Long id, @Valid @RequestBody ProjectUpdateRequest request) {
         projectService.updateProject(id, request);
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("hasAuthority('프로젝트_편집')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProject(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         projectService.deleteProject(id, LocalDateTime.now());
         return ResponseEntity.ok().build();
     }

@@ -141,13 +141,13 @@ public class InitEmployeeMemberDepartmentRoleData {
             .name(name)
             .email(email)
             .departmentId(departmentId)
-            .salary(Money.wons(30_000_000))
+            .annualSalary(Money.wons(30_000_000))
             .phone(Phone.of("01012341234"))
             .birthDate(LocalDate.of(1998, 6, 8))
             .joinDate(LocalDate.of(2024, 11, 25))
             .rank(EmployeeRank.사원)
             .grade(EmployeeGrade.초급)
-            .type(EmployeeType.정규직)
+            .type(EmployeeType.정직원)
             .comment("최근 입사한 신입사원")
             .build();
     }

@@ -36,30 +36,30 @@ public class Partners extends BaseEntity {
     @Column(name = "PARTNERS_NAME")
     private String name;
 
-    @Column(name = "PARTNERS_CEO_NAME")
-    private String ceoName;
-
-    @Column(name = "PARTNERS_SALES_REP_NAME")
-    private String salesRepName;
-
-    @AttributeOverride(name = "number", column = @Column(name = "PARTNERS_SALES_REP_PHONE"))
-    private Phone salesRepPhone;
-
-    @Column(name = "PARTNERS_SALES_REP_EMAIL")
-    private String salesRepEmail;
-
-    @AttributeOverride(name = "rate", column = @Column(name = "PARTNERS_COMMISSION_RATE", precision = 4, scale = 2))
-    private Ratio commissionRate;
-
-    @Embedded
-    @AttributeOverride(name = "street", column = @Column(name = "PARTNERS_STREET_ADDRESS"))
-    @AttributeOverride(name = "detail", column = @Column(name = "PARTNERS_DETAIL_ADDRESS"))
-    @AttributeOverride(name = "zipcode", column = @Column(name = "PARTNERS_ZIPCODE"))
-    private Address address;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "PARTNERS_GRADE")
     private PartnersGrade grade;
+
+    @Embedded
+    @AttributeOverride(name = "street", column = @Column(name = "STREET_ADDRESS"))
+    @AttributeOverride(name = "detail", column = @Column(name = "DETAIL_ADDRESS"))
+    @AttributeOverride(name = "zipcode", column = @Column(name = "ZIPCODE"))
+    private Address address;
+
+    @AttributeOverride(name = "rate", column = @Column(name = "COMMISSION_RATE", precision = 4, scale = 2))
+    private Ratio commissionRate;
+
+    @Column(name = "CEO_NAME")
+    private String ceoName;
+
+    @Column(name = "SALES_REP_NAME")
+    private String salesRepName;
+
+    @Column(name = "SALES_REP_EMAIL")
+    private String salesRepEmail;
+
+    @AttributeOverride(name = "number", column = @Column(name = "SALES_REP_PHONE"))
+    private Phone salesRepPhone;
 
     @Column(name = "PARTNERS_COMMENT")
     private String comment;

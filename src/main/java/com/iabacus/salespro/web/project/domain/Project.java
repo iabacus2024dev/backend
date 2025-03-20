@@ -1,7 +1,6 @@
 package com.iabacus.salespro.web.project.domain;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -30,12 +29,9 @@ import com.iabacus.salespro.web.project.request.ProjectUpdateRequest;
 public class Project extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PROJECT_ID")
-    private UUID id;
-
-    @Column(name = "PROJECT_OWNER_TEAM_ID")
-    private Long ownerTeamId;
+    private Long id;
 
     @Column(name = "PROJECT_CODE", unique = true)
     private String code;
@@ -47,14 +43,21 @@ public class Project extends BaseEntity {
     @Column(name = "PROJECT_TYPE")
     private ProjectType type;
 
-    @AttributeOverride(name = "amount", column = @Column(name = "PROJECT_EXPECTED_AMOUNT", precision = 10, scale = 0))
+    @AttributeOverride(name = "amount", column = @Column(name = "EXPECTED_AMOUNT", precision = 10, scale = 0))
     private Money expectedAmount;
 
-    @AttributeOverride(name = "amount", column = @Column(name = "PROJECT_CONTRACT_AMOUNT", precision = 10, scale = 0))
+    @AttributeOverride(name = "amount", column = @Column(name = "CONTRACT_AMOUNT", precision = 10, scale = 0))
     private Money contractAmount;
 
     @Column(name = "PROJECT_CONTRACT_DATE")
     private LocalDate contractDate;
+
+    @Column(name = "OWNER_TEAM_ID")
+    private Long ownerTeamId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "PROJECT_STATUS")
+    private ProjectStatus status;
 
     @Column(name = "PROJECT_START_DATE")
     private LocalDate startDate;
@@ -62,38 +65,34 @@ public class Project extends BaseEntity {
     @Column(name = "PROJECT_END_DATE")
     private LocalDate endDate;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "PROJECT_STATUS")
-    private ProjectStatus status;
-
-    @Column(name = "PROJECT_CLIENT_COMPANY")
+    @Column(name = "CLIENT_COMPANY")
     private String clientCompany;
 
-    @Column(name = "PROJECT_CLIENT_COMPANY_REF")
-    private String clientCompanyRef;
+    @Column(name = "CLIENT_COMPANY_REP")
+    private String clientCompanyRep;
 
-    @AttributeOverride(name = "number", column = @Column(name = "PROJECT_CLIENT_COMPANY_REF_PHONE"))
-    private Phone clientCompanyRefPhone;
+    @AttributeOverride(name = "number", column = @Column(name = "CLIENT_COMPANY_REF_PHONE"))
+    private Phone clientCompanyRepPhone;
 
-    @Column(name = "PROJECT_MAIN_COMPANY")
+    @Column(name = "MAIN_COMPANY")
     private String mainCompany;
 
-    @Column(name = "PROJECT_MAIN_COMPANY_REF")
-    private String mainCompanyRef;
+    @Column(name = "MAIN_COMPANY_REP")
+    private String mainCompanyRep;
 
-    @AttributeOverride(name = "number", column = @Column(name = "PROJECT_MAIN_COMPANY_PHONE"))
-    private Phone mainCompanyRefPhone;
+    @AttributeOverride(name = "number", column = @Column(name = "MAIN_COMPANY_PHONE"))
+    private Phone mainCompanyRepPhone;
 
-    @Column(name = "PROJECT_PM_NAME")
+    @Column(name = "PM_NAME")
     private String pmName;
 
-    @AttributeOverride(name = "number", column = @Column(name = "PROJECT_PM_PHONE"))
+    @AttributeOverride(name = "number", column = @Column(name = "PM_PHONE"))
     private Phone pmPhone;
 
     @Builder
     public Project(Long ownerTeamId, String code, String name, ProjectType type, Money expectedAmount, Money contractAmount,
-                   LocalDate contractDate, LocalDate startDate, LocalDate endDate, String clientCompany, String clientCompanyRef,
-                   Phone clientCompanyRefPhone, String mainCompany, String mainCompanyRef, Phone mainCompanyRefPhone,
+                   LocalDate contractDate, LocalDate startDate, LocalDate endDate, String clientCompany, String clientCompanyRep,
+                   Phone clientCompanyRepPhone, String mainCompany, String mainCompanyRep, Phone mainCompanyRepPhone,
                    String pmName, Phone pmPhone) {
         this.ownerTeamId = ownerTeamId;
         this.code = code;
@@ -105,11 +104,11 @@ public class Project extends BaseEntity {
         this.startDate = startDate;
         this.endDate = endDate;
         this.clientCompany = clientCompany;
-        this.clientCompanyRef = clientCompanyRef;
-        this.clientCompanyRefPhone = clientCompanyRefPhone;
+        this.clientCompanyRep = clientCompanyRep;
+        this.clientCompanyRepPhone = clientCompanyRepPhone;
         this.mainCompany = mainCompany;
-        this.mainCompanyRef = mainCompanyRef;
-        this.mainCompanyRefPhone = mainCompanyRefPhone;
+        this.mainCompanyRep = mainCompanyRep;
+        this.mainCompanyRepPhone = mainCompanyRepPhone;
         this.pmName = pmName;
         this.pmPhone = pmPhone;
         this.status = ProjectStatus.fromDate(LocalDate.now(), this.startDate, this.endDate);
@@ -126,11 +125,11 @@ public class Project extends BaseEntity {
         this.startDate = request.getStartDate();
         this.endDate = request.getEndDate();
         this.clientCompany = request.getClientCompany();
-        this.clientCompanyRef = request.getClientCompanyRep();
-        this.clientCompanyRefPhone = Phone.of(request.getClientCompanyRepPhone());
+        this.clientCompanyRep = request.getClientCompanyRep();
+        this.clientCompanyRepPhone = Phone.of(request.getClientCompanyRepPhone());
         this.mainCompany = request.getMainCompany();
-        this.mainCompanyRef = request.getMainCompanyRep();
-        this.mainCompanyRefPhone = Phone.of(request.getMainCompanyRepPhone());
+        this.mainCompanyRep = request.getMainCompanyRep();
+        this.mainCompanyRepPhone = Phone.of(request.getMainCompanyRepPhone());
         this.pmName = request.getPmName();
         this.pmPhone = Phone.of(request.getPmPhone());
         this.status = request.getStatus();

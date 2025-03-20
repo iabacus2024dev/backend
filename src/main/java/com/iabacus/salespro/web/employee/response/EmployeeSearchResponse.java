@@ -47,7 +47,7 @@ public class EmployeeSearchResponse {
             .rank(employee.getRank())
             .grade(employee.getGrade())
             .type(employee.getType())
-            .status(employee.getStatus())
+            .status(employee.getHrStatus())
             .joinDate(employee.getJoinDate())
             .build();
     }

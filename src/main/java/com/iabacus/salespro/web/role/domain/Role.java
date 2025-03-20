@@ -33,8 +33,8 @@ public class Role extends BaseEntity {
     @Column(name = "ROLE_NAME", unique = true)
     private String name;
 
-    @Column(name = "ROLE_DEFAULT_YN")
-    private Boolean defaultYn;
+    @Column(name = "IS_DEFAULT_ROLE")
+    private Boolean isDefaultRole;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.PERSIST)
     private Set<Authority> authorities = new HashSet<>();
@@ -42,7 +42,7 @@ public class Role extends BaseEntity {
     @Builder
     private Role(String name, Set<Authority> authorities) {
         this.name = name;
-        this.defaultYn = false;
+        this.isDefaultRole = false;
         if (authorities != null) {
             authorities.forEach(this::addAuthority);
         }
@@ -54,7 +54,7 @@ public class Role extends BaseEntity {
     }
 
     public void setDefault() {
-        this.defaultYn = true;
+        this.isDefaultRole = true;
     }
 
 }

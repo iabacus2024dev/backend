@@ -34,17 +34,18 @@ public class TeamSalesGoal extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Department department;
 
-    @Column(name = "TEAM_SALES_GOAL_YEAR")
-    private Integer year;
+    @Column(name = "SALES_GOAL_YEAR")
+    private Integer salesGoalYear;
 
-    @AttributeOverride(name = "amount", column = @Column(name = "TEAM_SALES_GOAL_AMOUNT", precision = 10, scale = 0))
-    private Money amount;
+    @AttributeOverride(name = "amount", column = @Column(name = "SALES_GOAL_AMOUNT", precision = 10, scale = 0))
+    private Money salesGoalAmount;
+
 
     @Builder
-    private TeamSalesGoal(Department department, Integer year, Money amount) {
+    private TeamSalesGoal(Department department, Integer salesGoalYear, Money salesGoalAmount) {
         this.department = department;
-        this.year = year;
-        this.amount = amount;
+        this.salesGoalYear = salesGoalYear;
+        this.salesGoalAmount = salesGoalAmount;
     }
 
 }

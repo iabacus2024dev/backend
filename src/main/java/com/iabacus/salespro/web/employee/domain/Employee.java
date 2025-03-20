@@ -33,55 +33,55 @@ public class Employee extends BaseEntity {
     @Column(name = "EMPLOYEE_ID")
     private Long id;
 
+    @Column(name = "EMPLOYEE_NAME")
+    private String name;
+
     @Column(name = "DEPARTMENT_ID")
     private Long departmentId;
+
+    @Column(name = "EMAIL", unique = true)
+    private String email;
+
+    @AttributeOverride(name = "number", column = @Column(name = "PHONE"))
+    private Phone phone;
+
+    @Column(name = "BIRTH_DATE")
+    private LocalDate birthDate;
+
+    @AttributeOverride(name = "amount", column = @Column(name = "ANNUAL_SALARY", precision = 10, scale = 2))
+    private Money annualSalary;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "HR_STATUS")
+    private EmployeeStatus HrStatus;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "RANK")
+    private EmployeeRank rank;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "GRADE")
+    private EmployeeGrade grade;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TYPE")
+    private EmployeeType type;
 
     @Column(name = "PARTNERS_ID")
     private Long partnersId;
 
-    @Column(name = "EMPLOYEE_NAME")
-    private String name;
-
-    @Column(name = "EMPLOYEE_EMAIL", unique = true)
-    private String email;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "EMPLOYEE_RANK")
-    private EmployeeRank rank;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "EMPLOYEE_GRADE")
-    private EmployeeGrade grade;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "EMPLOYEE_TYPE")
-    private EmployeeType type;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "EMPLOYEE_STATUS")
-    private EmployeeStatus status;
-
-    @AttributeOverride(name = "number", column = @Column(name = "EMPLOYEE_PHONE"))
-    private Phone phone;
-
-    @Column(name = "EMPLOYEE_BIRTH_DATE")
-    private LocalDate birthDate;
-
-    @Column(name = "EMPLOYEE_JOIN_DATE")
+    @Column(name = "JOIN_DATE")
     private LocalDate joinDate;
 
-    @Column(name = "EMPLOYEE_LEAVE_DATE")
+    @Column(name = "LEAVE_DATE")
     private LocalDate leaveDate;
 
-    @AttributeOverride(name = "amount", column = @Column(name = "EMPLOYEE_MONEY", precision = 10, scale = 2))
-    private Money salary;
-
-    @Column(name = "EMPLOYEE_COMMENT")
+    @Column(name = "COMMENT")
     private String comment;
 
     @Builder
     public Employee(Long departmentId, Long partnersId, String name, String email, EmployeeRank rank, EmployeeGrade grade,
-                    EmployeeType type, Phone phone, LocalDate birthDate, LocalDate joinDate, Money salary, String comment) {
+                    EmployeeType type, Phone phone, LocalDate birthDate, LocalDate joinDate, Money annualSalary, String comment) {
         this.departmentId = departmentId;
         this.partnersId = partnersId;
         this.name = name;
@@ -92,19 +92,19 @@ public class Employee extends BaseEntity {
         this.phone = phone;
         this.birthDate = birthDate;
         this.joinDate = joinDate;
-        this.salary = salary;
+        this.annualSalary = annualSalary;
         this.comment = comment;
-        this.status = EmployeeStatus.재직;
+        this.HrStatus = EmployeeStatus.재직;
     }
 
     public void leave(LocalDate leaveDate) {
         this.leaveDate = leaveDate;
-        this.status = EmployeeStatus.퇴사;
+        this.HrStatus = EmployeeStatus.퇴사;
     }
 
     public Money getMonthlyPay() {
-        if (salary != null) {
-            return salary.divide(12);
+        if (annualSalary != null) {
+            return annualSalary.divide(12);
         }
         return null;
     }

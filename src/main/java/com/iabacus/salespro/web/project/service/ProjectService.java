@@ -1,7 +1,6 @@
 package com.iabacus.salespro.web.project.service;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +30,7 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final DepartmentRepository departmentRepository;
 
-    public ProjectDetailResponse getProjectDetail(UUID id) {
+    public ProjectDetailResponse getProjectDetail(Long id) {
         Project project = findProject(id);
         Department department = departmentRepository.findByIdAndIsActivatedTrue(project.getOwnerTeamId()).orElse(null);
         return ProjectDetailResponse.from(project, department);
@@ -48,7 +47,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public void updateProject(UUID id, ProjectUpdateRequest request) {
+    public void updateProject(Long id, ProjectUpdateRequest request) {
         Project project = findProject(id);
         if (!project.getModifiedDateTime().equals(request.getModifiedDateTime())) {
             throw new BusinessException(ErrorCode.CONFLICT_MODIFIED_TIME);
@@ -57,12 +56,12 @@ public class ProjectService {
     }
 
     @Transactional
-    public void deleteProject(UUID id, LocalDateTime inactivatedDateTime) {
+    public void deleteProject(Long id, LocalDateTime inactivatedDateTime) {
         Project project = findProject(id);
         project.inactivate(inactivatedDateTime);
     }
 
-    private Project findProject(UUID id) {
+    private Project findProject(Long id) {
         return projectRepository.findByIdAndIsActivatedTrue(id)
             .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
     }

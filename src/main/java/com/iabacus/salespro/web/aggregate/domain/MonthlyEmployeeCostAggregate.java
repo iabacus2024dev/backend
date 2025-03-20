@@ -1,7 +1,6 @@
 package com.iabacus.salespro.web.aggregate.domain;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -20,7 +19,8 @@ import lombok.NoArgsConstructor;
 
 import com.iabacus.salespro.web.common.Money;
 import com.iabacus.salespro.web.common.Ratio;
-import com.iabacus.salespro.web.project.domain.PersonnelType;
+import com.iabacus.salespro.web.employee.domain.EmployeeType;
+import com.iabacus.salespro.web.project.domain.ProjectType;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,24 +33,17 @@ public class MonthlyEmployeeCostAggregate {
     @Column(name = "MONTHLY_EMPLOYEE_COST_AGGREGATE_ID")
     private Long id;
 
-    @Column(name = "PERSONNEL_ID")
-    private Long personnelId;
-
-    @Column(name = "EMPLOYEE_NAME")
-    private String employeeName;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "PERSONNEL_TYPE")
-    private PersonnelType personnelType;
-
-    @Column(name = "DEPARTMENT_ID")
-    private Long departmentId;
-
-    @Column(name = "DEPARTMENT_NAME")
-    private String departmentName;
-
     @Column(name = "PROJECT_ID")
-    private UUID projectId;
+    private Long projectId;
+
+    @Column(name = "PROJECT_CODE")
+    private String projectCode;
+
+    @Column(name = "PROJECT_NAME")
+    private String projectName;
+
+    @Column(name = "PROJECT_TYPE")
+    private ProjectType projectType;
 
     @Column(name = "PROJECT_OWNER_DEPARTMENT_ID")
     private Long ownerDepartmentId;
@@ -59,7 +52,26 @@ public class MonthlyEmployeeCostAggregate {
     private String ownerDepartmentName;
 
     @Column(name = "CONTRACT_ID")
-    private UUID contractId;
+    private Long contractId;
+
+    @Column(name = "INPUT_ID")
+    private Long inputId;
+
+    @Column(name = "PERSONNEL_ID")
+    private Long personnelId;
+
+    @Column(name = "PERSONNEL_NAME")
+    private String personnelName;
+
+    @Column(name = "PERSONNEL_DEPARTMENT_ID")
+    private Long personnelDepartmentId;
+
+    @Column(name = "PERSONNEL_DEPARTMENT_NAME")
+    private String personnelDepartmentName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "PERSONNEL_TYPE")
+    private EmployeeType personnelType;
 
     @Column(name = "PERSONNEL_START_DATE")
     private LocalDate personnelStartDate;
@@ -70,38 +82,41 @@ public class MonthlyEmployeeCostAggregate {
     @AttributeOverride(name = "rate", column = @Column(name = "MAN_MONTH", precision = 3, scale = 2))
     private Ratio manMonth;
 
-    @AttributeOverride(name = "amount", column = @Column(name = "UNIT_PRICE", precision = 7, scale = 0))
-    private Money unitPrice;
+    @AttributeOverride(name = "amount", column = @Column(name = "MONTHLY_WAGE", precision = 7, scale = 0))
+    private Money monthlyWage;
 
-    @AttributeOverride(name = "amount", column = @Column(name = "WAGE", precision = 7, scale = 0))
-    private Money wage;
-
-    @AttributeOverride(name = "rate", column = @Column(name = "SGAE_RATE", precision = 3, scale = 2))
+    @AttributeOverride(name = "rate", column = @Column(name = "SGAE_RATE", precision = 4, scale = 2))
     private Ratio sgaeRate;
 
     @AttributeOverride(name = "amount", column = @Column(name = "SGAE_AMOUNT", precision = 7, scale = 0))
     private Money sgaeAmount;
 
-    @AttributeOverride(name = "rate", column = @Column(name = "OVHE_RATE", precision = 3, scale = 2))
+    @AttributeOverride(name = "rate", column = @Column(name = "OVHE_RATE", precision = 4, scale = 2))
     private Ratio ovheRate;
 
     @AttributeOverride(name = "amount", column = @Column(name = "OVHE_AMOUNT", precision = 7, scale = 0))
     private Money ovheAmount;
 
-    @AttributeOverride(name = "amount", column = @Column(name = "TOTAL_AMOUNT", precision = 10, scale = 0))
-    private Money totalAmount;
+    @AttributeOverride(name = "amount", column = @Column(name = "UNIT_PRICE", precision = 7, scale = 0))
+    private Money unitPrice;
+
+    @AttributeOverride(name = "amount", column = @Column(name = "TOTAL_COST", precision = 10, scale = 0))
+    private Money totalCost;
 
     @Builder
-    private MonthlyEmployeeCostAggregate(Long personnelId, String employeeName, PersonnelType personnelType, Long departmentId,
-                                         String departmentName, UUID projectId, Long ownerDepartmentId, String ownerDepartmentName,
-                                         UUID contractId, LocalDate personnelStartDate, LocalDate personnelEndDate, Ratio manMonth,
-                                         Money unitPrice, Money wage, Ratio sgaeRate, Money sgaeAmount, Ratio ovheRate, Money ovheAmount, Money totalAmount) {
+    private MonthlyEmployeeCostAggregate(Long personnelId, String employeeName, EmployeeType personnelType, Long personnelDepartmentId,
+                                         String personnelDepartmentName, Long projectId, String projectCode, String projectName, Long ownerDepartmentId, String ownerDepartmentName,
+                                         Long contractId, Long inputId, LocalDate personnelStartDate, LocalDate personnelEndDate, Ratio manMonth,
+                                         Money unitPrice, Money monthlyWage, Ratio sgaeRate, Money sgaeAmount, Ratio ovheRate, Money ovheAmount, Money totalCost) {
         this.personnelId = personnelId;
-        this.employeeName = employeeName;
+        this.personnelName = employeeName;
         this.personnelType = personnelType;
-        this.departmentId = departmentId;
-        this.departmentName = departmentName;
+        this.personnelDepartmentId = personnelDepartmentId;
+        this.personnelDepartmentName = personnelDepartmentName;
         this.projectId = projectId;
+        this.projectCode = projectCode;
+        this.projectName = projectName;
+        this.inputId = inputId;
         this.ownerDepartmentId = ownerDepartmentId;
         this.ownerDepartmentName = ownerDepartmentName;
         this.contractId = contractId;
@@ -109,12 +124,12 @@ public class MonthlyEmployeeCostAggregate {
         this.personnelEndDate = personnelEndDate;
         this.manMonth = manMonth;
         this.unitPrice = unitPrice;
-        this.wage = wage;
+        this.monthlyWage = monthlyWage;
         this.sgaeRate = sgaeRate;
         this.sgaeAmount = sgaeAmount;
         this.ovheRate = ovheRate;
         this.ovheAmount = ovheAmount;
-        this.totalAmount = totalAmount;
+        this.totalCost = totalCost;
     }
 
 }

@@ -2,7 +2,6 @@ package com.iabacus.salespro.web.project.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +13,7 @@ import com.iabacus.salespro.web.project.domain.ProjectType;
 @Data
 public class ProjectSearchResponse {
 
-    private UUID id;
+    private Long id;
     private String code;
     private String name;
     private ProjectType type;
@@ -27,7 +26,7 @@ public class ProjectSearchResponse {
     private ProjectStatus status;
 
     @Builder
-    public ProjectSearchResponse(UUID id, String code, String name, ProjectType type, LocalDate startDate, LocalDate endDate,
+    public ProjectSearchResponse(Long id, String code, String name, ProjectType type, LocalDate startDate, LocalDate endDate,
                                  LocalDate contractDate, BigDecimal contractAmount, String mainCompany, String clientCompany, ProjectStatus status) {
         this.id = id;
         this.code = code;

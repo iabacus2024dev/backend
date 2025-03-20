@@ -42,7 +42,7 @@ public class CustomUserDetailsAuthenticationProvider implements AuthenticationPr
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         Member member = memberRepository.findByUsernameAndIsActivatedTrue(username)
             .orElseThrow(() -> new BadCredentialsException(MessageUtil.getMessage("login.fail")));
-        if (Boolean.TRUE.equals(member.getIsLoginLocked())) {
+        if (Boolean.TRUE.equals(member.getIsAccountLocked())) {
             throw new LockedException(MessageUtil.getMessage("login.locked"));
         }
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
