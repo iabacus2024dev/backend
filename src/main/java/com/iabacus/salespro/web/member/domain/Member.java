@@ -32,24 +32,24 @@ public class Member extends BaseEntity {
     @Column(name = "MEMBER_ID")
     private Long id;
 
-    @JoinColumn(name = "ROLE_ID")
-    private Long roleId;
-
     @Column(name = "EMPLOYEE_ID")
     private Long employeeId;
 
-    @Column(name = "MEMBER_USERNAME", unique = true)
+    @JoinColumn(name = "ROLE_ID")
+    private Long roleId;
+
+    @Column(name = "USERNAME", unique = true)
     private String username;
 
     @JsonProperty(access = WRITE_ONLY)
-    @Column(name = "MEMBER_PASSWORD")
+    @Column(name = "PASSWORD")
     private String password;
 
     @Column(name = "LOGIN_FAIL_COUNT")
     private Integer loginFailCount;
 
-    @Column(name = "IS_LOGIN_LOCKED")
-    private Boolean isLoginLocked;
+    @Column(name = "IS_ACCOUNT_LOCKED")
+    private Boolean isAccountLocked;
 
     @Builder
     public Member(Long roleId, Long employeeId, String username, String password) {
@@ -58,7 +58,7 @@ public class Member extends BaseEntity {
         this.username = username;
         this.password = password;
         this.loginFailCount = 0;
-        this.isLoginLocked = false;
+        this.isAccountLocked = false;
     }
 
     public static Member create(Long employeeId, String username, String password) {
@@ -72,7 +72,7 @@ public class Member extends BaseEntity {
     public void initializePassword(String encodePassword) {
         this.password = encodePassword;
         loginFailCount = 0;
-        isLoginLocked = false;
+        isAccountLocked = false;
     }
 
     public void changePassword(String newPassword) {
@@ -81,19 +81,19 @@ public class Member extends BaseEntity {
         }
         this.password = newPassword;
         loginFailCount = 0;
-        isLoginLocked = false;
+        isAccountLocked = false;
     }
 
     public void failLogin() {
         loginFailCount++;
         if (loginFailCount >= 5) {
-            this.isLoginLocked = true;
+            this.isAccountLocked = true;
         }
     }
 
     public void successLogin() {
         loginFailCount = 0;
-        isLoginLocked = false;
+        isAccountLocked = false;
     }
 
 }
