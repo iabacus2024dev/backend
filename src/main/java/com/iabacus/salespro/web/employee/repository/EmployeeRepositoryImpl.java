@@ -75,7 +75,7 @@ public class EmployeeRepositoryImpl implements CustomEmployeeRepository {
     }
 
     private BooleanExpression statusEq(EmployeeStatus status) {
-        return status != null ? employee.status.eq(status) : null;
+        return status != null ? employee.HrStatus.eq(status) : null;
     }
 
     private BooleanExpression departmentEq(Long departmentId) {
