@@ -32,14 +32,15 @@ public class Salary extends BaseEntity {
     @Column(name = "EMPLOYEE_ID")
     private Long employeeId;
 
-    @Column(name = "SALARY_START_DATE")
+    @AttributeOverride(name = "amount", column = @Column(name = "MONTHLY_AMOUNT", precision = 10, scale = 2))
+    private Money monthlyAmount;
+
+    @Column(name = "START_DATE")
     private LocalDate startDate;
 
-    @Column(name = "SALARY_END_DATE")
+    @Column(name = "END_DATE")
     private LocalDate endDate;
 
-    @AttributeOverride(name = "amount", column = @Column(name = "SALARY_MONTHLY_AMOUNT", precision = 10, scale = 2))
-    private Money monthlyAmount;
 
     @Builder
     private Salary(Long employeeId, LocalDate startDate, LocalDate endDate, Money monthlyAmount) {
