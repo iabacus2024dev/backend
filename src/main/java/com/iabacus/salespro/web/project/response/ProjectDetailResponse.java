@@ -3,7 +3,6 @@ package com.iabacus.salespro.web.project.response;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +15,7 @@ import com.iabacus.salespro.web.project.domain.ProjectType;
 @Data
 public class ProjectDetailResponse {
 
-    private UUID id;
+    private Long id;
     private String name;
     private String code;
     private ProjectType type;
@@ -42,7 +41,7 @@ public class ProjectDetailResponse {
     private LocalDateTime modifiedDateTime;
 
     @Builder
-    public ProjectDetailResponse(UUID id, String name, String code, ProjectType type, ProjectStatus status, LocalDate contractDate,
+    public ProjectDetailResponse(Long id, String name, String code, ProjectType type, ProjectStatus status, LocalDate contractDate,
                                  Long ownerTeamId, String ownerTeamName, LocalDate startDate, LocalDate endDate, String pmName, String pmPhone,
                                  String mainCompany, String mainCompanyRep, String mainCompanyRepPhone, String clientCompany, String clientCompanyRep,
                                  String clientCompanyRepPhone, BigDecimal expectedAmount, BigDecimal contractAmount, LocalDateTime modifiedDateTime) {
@@ -85,11 +84,11 @@ public class ProjectDetailResponse {
             .pmName(project.getPmName())
             .pmPhone(project.getPmPhone() != null ? project.getPmPhone().getWithHyphen() : null)
             .mainCompany(project.getMainCompany())
-            .mainCompanyRep(project.getMainCompanyRef())
-            .mainCompanyRepPhone(project.getMainCompanyRefPhone() != null ? project.getMainCompanyRefPhone().getWithHyphen() : null)
+            .mainCompanyRep(project.getMainCompanyRep())
+            .mainCompanyRepPhone(project.getMainCompanyRepPhone() != null ? project.getMainCompanyRepPhone().getWithHyphen() : null)
             .clientCompany(project.getClientCompany())
-            .clientCompanyRep(project.getClientCompanyRef())
-            .clientCompanyRepPhone(project.getClientCompanyRefPhone() != null ? project.getClientCompanyRefPhone().getWithHyphen() : null)
+            .clientCompanyRep(project.getClientCompanyRep())
+            .clientCompanyRepPhone(project.getClientCompanyRepPhone() != null ? project.getClientCompanyRepPhone().getWithHyphen() : null)
             .expectedAmount(project.getExpectedAmount() != null ? project.getExpectedAmount().getAmount() : null)
             .contractAmount(project.getContractAmount() != null ? project.getContractAmount().getAmount() : null)
             .modifiedDateTime(project.getModifiedDateTime())
