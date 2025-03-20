@@ -29,9 +29,9 @@ import com.iabacus.salespro.web.common.BaseEntity;
 public class Contract extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CONTRACT_ID")
-    private UUID id;
+    private Long id;
 
     @JoinColumn(name = "PROJECT_ID")
     @ManyToOne(fetch = FetchType.LAZY)
