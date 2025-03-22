@@ -7,8 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
-
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
 import com.iabacus.salespro.web.common.PageResponse;
@@ -20,9 +18,12 @@ import com.iabacus.salespro.web.employee.request.EmployeeCreateRequest;
 import com.iabacus.salespro.web.employee.request.EmployeeSearchCondition;
 import com.iabacus.salespro.web.employee.request.EmployeeUpdateRequest;
 import com.iabacus.salespro.web.employee.response.EmployeeDetailResponse;
+import com.iabacus.salespro.web.employee.response.EmployeeMyInfoResponse;
 import com.iabacus.salespro.web.employee.response.EmployeeSearchResponse;
 import com.iabacus.salespro.web.partners.domain.Partners;
 import com.iabacus.salespro.web.partners.repository.PartnersRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -30,8 +31,8 @@ import com.iabacus.salespro.web.partners.repository.PartnersRepository;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final PartnersRepository partnersRepository;
     private final DepartmentRepository departmentRepository;
+    private final PartnersRepository partnersRepository;
 
     public EmployeeDetailResponse getEmployeeDetail(Long id) {
         Employee employee = findEmployee(id);
@@ -46,6 +47,10 @@ public class EmployeeService {
             return EmployeeSearchResponse.from(employee, department);
         });
         return new PageResponse<>(page);
+    }
+
+    public EmployeeMyInfoResponse getMyInfo(Long memberId) {
+        return employeeRepository.getMyInfo(memberId);
     }
 
     @Transactional

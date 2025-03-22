@@ -4,8 +4,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
-
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
 import com.iabacus.salespro.web.auth.request.PasswordChangeRequest;
@@ -16,6 +14,8 @@ import com.iabacus.salespro.web.member.domain.Member;
 import com.iabacus.salespro.web.member.repository.MemberRepository;
 import com.iabacus.salespro.web.member.response.MemberMyInfoResponse;
 import com.iabacus.salespro.web.role.repository.RoleRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -42,8 +42,8 @@ public class MemberService {
         member.changePassword(encodePassword);
     }
 
-    public MemberMyInfoResponse getMemberMyInfo(Long id) {
-        Member member = memberRepository.findByIdAndIsActivatedTrue(id)
+    public MemberMyInfoResponse getMemberMyInfo(Long memberId) {
+        Member member = memberRepository.findByIdAndIsActivatedTrue(memberId)
             .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
         Employee employee = employeeRepository.findByIdAndIsActivatedTrue(member.getEmployeeId())
             .orElseThrow(() -> new BusinessException(ErrorCode.EMPLOYEE_NOT_FOUND));

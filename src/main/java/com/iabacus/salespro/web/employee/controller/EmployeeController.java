@@ -17,17 +17,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import com.iabacus.salespro.core.security.service.UserPrincipal;
 import com.iabacus.salespro.web.common.PageResponse;
 import com.iabacus.salespro.web.employee.request.EmployeeCreateRequest;
 import com.iabacus.salespro.web.employee.request.EmployeeSearchCondition;
 import com.iabacus.salespro.web.employee.request.EmployeeUpdateRequest;
 import com.iabacus.salespro.web.employee.response.EmployeeDetailResponse;
+import com.iabacus.salespro.web.employee.response.EmployeeMyInfoResponse;
 import com.iabacus.salespro.web.employee.response.EmployeeSearchResponse;
 import com.iabacus.salespro.web.employee.service.EmployeeService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,8 +45,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<EmployeeDetailResponse> getMyEmployeeDetail(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(employeeService.getEmployeeDetail(userPrincipal.getMemberId()));
+    public ResponseEntity<EmployeeMyInfoResponse> getMyEmployeeDetail(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return ResponseEntity.ok(employeeService.getMyInfo(userPrincipal.getMemberId()));
     }
 
     @PreAuthorize("hasAuthority('구성원 조회')")

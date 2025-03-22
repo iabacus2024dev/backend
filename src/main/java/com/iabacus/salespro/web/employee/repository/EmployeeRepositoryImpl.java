@@ -1,6 +1,8 @@
 package com.iabacus.salespro.web.employee.repository;
 
+import static com.iabacus.salespro.web.department.domain.QDepartment.*;
 import static com.iabacus.salespro.web.employee.domain.QEmployee.*;
+import static com.iabacus.salespro.web.member.domain.QMember.*;
 import static io.micrometer.common.util.StringUtils.*;
 
 import java.util.List;
@@ -10,18 +12,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-
-import lombok.RequiredArgsConstructor;
-
 import com.iabacus.salespro.web.employee.domain.Employee;
 import com.iabacus.salespro.web.employee.domain.EmployeeGrade;
 import com.iabacus.salespro.web.employee.domain.EmployeeRank;
 import com.iabacus.salespro.web.employee.domain.EmployeeStatus;
 import com.iabacus.salespro.web.employee.domain.EmployeeType;
 import com.iabacus.salespro.web.employee.request.EmployeeSearchCondition;
+import com.iabacus.salespro.web.employee.response.EmployeeMyInfoResponse;
+import com.iabacus.salespro.web.employee.response.QEmployeeMyInfoResponse;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Repository
@@ -60,6 +63,27 @@ public class EmployeeRepositoryImpl implements CustomEmployeeRepository {
                 employee.isActivated.isTrue()
             );
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public EmployeeMyInfoResponse getMyInfo(Long memberId) {
+        return queryFactory
+            .select(new QEmployeeMyInfoResponse(
+                employee.name,
+                department.name,
+                employee.email,
+                employee.phone.number,
+                employee.birthDate,
+                employee.joinDate
+            ))
+            .from(employee)
+            .join(member).on(employee.id.eq(member.employeeId))
+            .join(department).on(employee.departmentId.eq(department.id))
+            .where(
+                member.id.eq(memberId),
+                employee.isActivated.isTrue()
+            )
+            .fetchOne();
     }
 
     private BooleanExpression gradeEq(EmployeeGrade grade) {
