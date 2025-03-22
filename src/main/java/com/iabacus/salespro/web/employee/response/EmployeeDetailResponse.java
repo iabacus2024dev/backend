@@ -4,9 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import lombok.Builder;
-import lombok.Data;
-
 import com.iabacus.salespro.web.department.domain.Department;
 import com.iabacus.salespro.web.employee.domain.Employee;
 import com.iabacus.salespro.web.employee.domain.EmployeeGrade;
@@ -14,6 +11,9 @@ import com.iabacus.salespro.web.employee.domain.EmployeeRank;
 import com.iabacus.salespro.web.employee.domain.EmployeeStatus;
 import com.iabacus.salespro.web.employee.domain.EmployeeType;
 import com.iabacus.salespro.web.partners.domain.Partners;
+
+import lombok.Builder;
+import lombok.Data;
 
 @Data
 public class EmployeeDetailResponse {
