@@ -1,7 +1,5 @@
 package com.iabacus.salespro.core.security.config;
 
-import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.*;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -14,7 +12,6 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,14 +65,6 @@ public class SecurityConfig {
     private String baseUrl;
 
     private final Environment env;
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web
-            .ignoring()
-            .requestMatchers("/favicon.ico", "/error")
-            .requestMatchers(toH2Console());
-    }
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
