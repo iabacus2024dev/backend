@@ -22,10 +22,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
-public class SalesAggregateService {
+public class SalesAggregateService{
 
     private final MonthlyEmployeeCostAggregateRepository monthlyEmployeeCostAggregateRepository;
 
+    // todo: 팀 목표 매출액 정보 추가, 변경계약 생성 시 이전 집계 종료일자 수정
     public void createMonthlyEmployeeCostAggregate(Project project, Contract contract, Input input) {
         List<Map<String, LocalDate>> splitPeriodByMonthList = DateUtil.getSplitPeriodByMonth(input.getStartDate(), input.getEndDate());
         splitPeriodByMonthList.forEach(period -> {
@@ -44,8 +45,10 @@ public class SalesAggregateService {
                 .projectCode(project.getCode())
                 .projectName(project.getName())
                 .projectType(project.getType())
+                .projectStartDate(project.getStartDate())
+                .projectEndDate(project.getEndDate())
+                .projectContractAmount(project.getContractAmount())
                 .ownerDepartmentId(project.getOwnerTeamId())
-                .ownerDepartmentName(project.getName())
                 .contractId(contract.getId())
                 .inputId(input.getId())
                 .personnelId(input.getPersonnel().getId())
