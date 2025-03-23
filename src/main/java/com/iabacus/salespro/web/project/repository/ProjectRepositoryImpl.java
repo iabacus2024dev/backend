@@ -79,21 +79,21 @@ public class ProjectRepositoryImpl implements CustomProjectRepository {
 
     private BooleanExpression dateBetween(ProjectSearchCondition condition) {
         ProjectSearchType searchType = condition.getSearchType();
-        LocalDate startDate = condition.getStartDate();
-        LocalDate endDate = condition.getEndDate();
-        if (searchType == null || startDate == null || endDate == null) {
+        LocalDate fromDate = condition.getFromDate();
+        LocalDate toDate = condition.getToDate();
+        if (searchType == null || fromDate == null || toDate == null) {
             return null;
         }
 
         switch (searchType) {
             case 계약일자 -> {
-                return project.contractDate.between(startDate, endDate);
+                return project.contractDate.between(fromDate, toDate);
             }
             case 시작일자 -> {
-                return project.startDate.between(endDate, startDate);
+                return project.startDate.between(fromDate, toDate);
             }
             case 종료일자 -> {
-                return project.endDate.between(startDate, endDate);
+                return project.endDate.between(fromDate, toDate);
             }
             default -> {
                 return null;
