@@ -1,6 +1,5 @@
 package com.iabacus.salespro.web.common.util;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -9,23 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 날짜와 관련한 유틸 함수
+ * 날짜와 관련된 유틸리티 클래스입니다.
  */
 public class DateUtil {
-
-    // todo: 공휴일 알아보는 api 필요할듯
-    /**
-     * 월 투입량을 계산하여 반환합니다.
-     * 공식: M/M = workingDays / businessDays
-     *
-     * @param businessDays 해당 달의 법적 업무 가능한 일수
-     * @param startDate 실제 근무 시작 일자
-     * @param endDate 실제 근무 종료 일자
-     * @return M/M(Man-Month) 월투입량
-     */
-    public static BigDecimal getManMonth(int businessDays, LocalDate startDate, LocalDate endDate) {
-        return new BigDecimal(1);
-    }
 
     /**
      * 주어진 날짜가 속한 달의 마지막 날짜를 반환합니다.
