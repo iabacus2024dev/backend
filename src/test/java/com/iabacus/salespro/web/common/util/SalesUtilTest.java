@@ -54,9 +54,23 @@ class SalesUtilTest {
 
         // when
         Money sgaeAmount = SalesUtil.getSgaeAmount(monthlyWage, sgaeRate);
-        System.out.println("판관비: " + sgaeAmount.getAmount());
 
         // then
         assertThat(sgaeAmount.getAmount()).isEqualTo(BigDecimal.valueOf(659200).setScale(1, RoundingMode.HALF_UP));
+    }
+
+    @Test
+    @DisplayName("주어진 월 급여에 제경비 비율을 적용하여 제경비 금액을 계산하여 반환합니다.")
+    void getOvheAmountTest() {
+        // given
+        Money monthlyWage = Money.wons(3200000);
+        Ratio ovheRate = Ratio.valueOf(9.0);
+
+        // when
+        Money ovheAmount = SalesUtil.getSgaeAmount(monthlyWage, ovheRate);
+        System.out.println("제경비: " + ovheAmount.getAmount());
+
+        // then
+        assertThat(ovheAmount.getAmount()).isEqualTo(BigDecimal.valueOf(288000).setScale(1, RoundingMode.HALF_UP));
     }
 }

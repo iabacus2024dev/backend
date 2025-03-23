@@ -68,4 +68,17 @@ public class SalesUtil {
         BigDecimal sgaeAmount = monthlyWage.multiply(sgaeRate.getRate()).divide(100).getAmount().setScale(1, RoundingMode.HALF_UP);
         return Money.wons(sgaeAmount);
     }
+
+    /**
+     * 주어진 월 급여에 제경비 비율을 적용하여 제경비 금액을 계산하여 반환합니다.
+     *
+     *
+     * @param monthlyWage 월 급여
+     * @param ovheRate 제경비 비율
+     * @return 제경비 금액
+     */
+    public static Money getOvheAmount(Money monthlyWage, Ratio ovheRate) {
+        BigDecimal ovheAmount = monthlyWage.multiply(ovheRate.getRate()).divide(100).getAmount().setScale(1, RoundingMode.HALF_UP);
+        return Money.wons(ovheAmount);
+    }
 }
