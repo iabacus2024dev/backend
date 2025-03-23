@@ -18,75 +18,65 @@ import com.iabacus.salespro.web.project.domain.ProjectType;
 public class ProjectCreateRequest {
 
     @NotBlank
-    private String name;
+    private String code;
 
     @NotBlank
-    private String code;
+    private String name;
 
     @NotNull
     private ProjectType type;
 
     @NotNull
-    private Long ownerTeamId;
-
-    @NotNull
-    private String pmName;
-
-    @NotNull
-    private String pmPhone;
-
-    @NotNull
     private LocalDate contractDate;
 
-    @NotNull
-    private LocalDate startDate;
+    private BigDecimal expectedAmount;
+
+    private BigDecimal contractAmount;
 
     @NotNull
+    private Long ownerTeamId;
+
+    private String pmName;
+
+    private String pmPhone;
+
+    private LocalDate startDate;
+
     private LocalDate endDate;
 
     @NotBlank
     private String mainCompany;
 
-    @NotBlank
     private String mainCompanyRep;
 
-    @NotBlank
     private String mainCompanyRepPhone;
 
     @NotBlank
     private String clientCompany;
 
-    @NotBlank
     private String clientCompanyRep;
 
-    @NotBlank
     private String clientCompanyRepPhone;
 
-    private BigDecimal expectedAmount;
-    private BigDecimal contractAmount;
-
     @Builder
-    public ProjectCreateRequest(String name, String code, ProjectType type, Long ownerTeamId, String pmName, String pmPhone,
-                                LocalDate contractDate, LocalDate startDate, LocalDate endDate, String mainCompany, String mainCompanyRep,
-                                String mainCompanyRepPhone, String clientCompany, String clientCompanyRep, String clientCompanyRepPhone,
-                                BigDecimal expectedAmount, BigDecimal contractAmount) {
-        this.name = name;
-        this.code = code;
-        this.type = type;
-        this.ownerTeamId = ownerTeamId;
-        this.pmName = pmName;
-        this.pmPhone = pmPhone;
-        this.contractDate = contractDate;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.mainCompany = mainCompany;
-        this.mainCompanyRep = mainCompanyRep;
-        this.mainCompanyRepPhone = mainCompanyRepPhone;
+    public ProjectCreateRequest(String clientCompany, String clientCompanyRep, String clientCompanyRepPhone, String code, BigDecimal contractAmount, LocalDate contractDate, LocalDate endDate, BigDecimal expectedAmount, String mainCompany, String mainCompanyRep, String mainCompanyRepPhone, String name, Long ownerTeamId, String pmName, String pmPhone, LocalDate startDate, ProjectType type) {
         this.clientCompany = clientCompany;
         this.clientCompanyRep = clientCompanyRep;
         this.clientCompanyRepPhone = clientCompanyRepPhone;
-        this.expectedAmount = expectedAmount;
+        this.code = code;
         this.contractAmount = contractAmount;
+        this.contractDate = contractDate;
+        this.endDate = endDate;
+        this.expectedAmount = expectedAmount;
+        this.mainCompany = mainCompany;
+        this.mainCompanyRep = mainCompanyRep;
+        this.mainCompanyRepPhone = mainCompanyRepPhone;
+        this.name = name;
+        this.ownerTeamId = ownerTeamId;
+        this.pmName = pmName;
+        this.pmPhone = pmPhone;
+        this.startDate = startDate;
+        this.type = type;
     }
 
     public Project toEntity() {
@@ -94,17 +84,20 @@ public class ProjectCreateRequest {
             .name(name)
             .code(code)
             .type(type)
-            .contractDate(contractDate)
+            .ownerTeamId(ownerTeamId)
+            .pmName(pmName)
+            .pmPhone(Phone.of(pmPhone))
             .startDate(startDate)
             .endDate(endDate)
+            .contractDate(contractDate)
+            .expectedAmount(Money.wons(expectedAmount))
+            .contractAmount(Money.wons(contractAmount))
             .mainCompany(mainCompany)
             .mainCompanyRep(mainCompanyRep)
             .mainCompanyRepPhone(Phone.of(mainCompanyRepPhone))
             .clientCompany(clientCompany)
             .clientCompanyRep(clientCompanyRep)
             .clientCompanyRepPhone(Phone.of(clientCompanyRepPhone))
-            .expectedAmount(Money.wons(expectedAmount))
-            .contractAmount(Money.wons(contractAmount))
             .build();
     }
 
