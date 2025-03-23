@@ -42,10 +42,10 @@ public class Input extends BaseEntity {
   @Column(name = "PERSONNEL_END_DATE")
   private LocalDate endDate;
 
-  @AttributeOverride(name = "rate", column = @Column(name = "PERSONNEL_SGAE_RATE", precision = 3, scale = 2))
+  @AttributeOverride(name = "rate", column = @Column(name = "PERSONNEL_SGAE_RATE", precision = 4, scale = 2))
   private Ratio sgaeRate;
 
-  @AttributeOverride(name = "rate", column = @Column(name = "PERSONNEL_OVHE", precision = 3, scale = 2))
+  @AttributeOverride(name = "rate", column = @Column(name = "PERSONNEL_OVHE_RATE", precision = 4, scale = 2))
   private Ratio ovheRate;
 
   @AttributeOverride(name = "amount", column = @Column(name = "PERSONNEL_UNIT_PRICE", precision = 7, scale = 0))

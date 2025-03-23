@@ -30,6 +30,7 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final DepartmentRepository departmentRepository;
 
+    // todo: project code로 조회
     public ProjectDetailResponse getProjectDetail(Long id) {
         Project project = findProject(id);
         Department department = departmentRepository.findByIdAndIsActivatedTrue(project.getOwnerTeamId()).orElse(null);
