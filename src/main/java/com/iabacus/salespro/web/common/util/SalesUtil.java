@@ -65,7 +65,7 @@ public class SalesUtil {
      * @return 판관비 금액
      */
     public static Money getSgaeAmount(Money monthlyWage, Ratio sgaeRate) {
-        BigDecimal sgaeAmount = monthlyWage.multiply(sgaeRate.getRate()).divide(100).getAmount().setScale(1, RoundingMode.HALF_UP);
+        BigDecimal sgaeAmount = monthlyWage.multiply(sgaeRate.getRate()).divide(100).getAmount().setScale(0, RoundingMode.HALF_UP);
         return Money.wons(sgaeAmount);
     }
 
@@ -78,7 +78,20 @@ public class SalesUtil {
      * @return 제경비 금액
      */
     public static Money getOvheAmount(Money monthlyWage, Ratio ovheRate) {
-        BigDecimal ovheAmount = monthlyWage.multiply(ovheRate.getRate()).divide(100).getAmount().setScale(1, RoundingMode.HALF_UP);
+        BigDecimal ovheAmount = monthlyWage.multiply(ovheRate.getRate()).divide(100).getAmount().setScale(0, RoundingMode.HALF_UP);
         return Money.wons(ovheAmount);
+    }
+
+    /**
+     * 주어진 월 급여, 판관비, 제경비를 모두 더한 총 비용을 반환합니다.
+     *
+     * @param monthlyWage 월 급여
+     * @param sgaeAmount 판관비
+     * @param ovheAmount 제경비
+     * @return 총 비용
+     */
+    public static Money getTotalCost(Money monthlyWage, Money sgaeAmount, Money ovheAmount) {
+        BigDecimal totalCost = monthlyWage.plus(sgaeAmount).plus(ovheAmount).getAmount().setScale(0, RoundingMode.HALF_UP);
+        return Money.wons(totalCost);
     }
 }

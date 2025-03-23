@@ -104,12 +104,12 @@ public class MonthlyEmployeeCostAggregate {
     private Money totalCost;
 
     @Builder
-    private MonthlyEmployeeCostAggregate(Long personnelId, String employeeName, EmployeeType personnelType, Long personnelDepartmentId,
+    private MonthlyEmployeeCostAggregate(Long personnelId, String personnelName, EmployeeType personnelType, Long personnelDepartmentId, ProjectType projectType,
                                          String personnelDepartmentName, Long projectId, String projectCode, String projectName, Long ownerDepartmentId, String ownerDepartmentName,
                                          Long contractId, Long inputId, LocalDate personnelStartDate, LocalDate personnelEndDate, Ratio manMonth,
                                          Money unitPrice, Money monthlyWage, Ratio sgaeRate, Money sgaeAmount, Ratio ovheRate, Money ovheAmount, Money totalCost) {
         this.personnelId = personnelId;
-        this.personnelName = employeeName;
+        this.personnelName = personnelName;
         this.personnelType = personnelType;
         this.personnelDepartmentId = personnelDepartmentId;
         this.personnelDepartmentName = personnelDepartmentName;
@@ -130,6 +130,36 @@ public class MonthlyEmployeeCostAggregate {
         this.ovheRate = ovheRate;
         this.ovheAmount = ovheAmount;
         this.totalCost = totalCost;
+    }
+
+    @Override
+    public String toString() {
+        return "MonthlyEmployeeCostAggregate{" +
+            "contractId=" + contractId +
+            ", id=" + id +
+            ", projectId=" + projectId +
+            ", projectCode='" + projectCode + '\'' +
+            ", projectName='" + projectName + '\'' +
+            ", projectType=" + projectType +
+            ", ownerDepartmentId=" + ownerDepartmentId +
+            ", ownerDepartmentName='" + ownerDepartmentName + '\'' +
+            ", inputId=" + inputId +
+            ", personnelId=" + personnelId +
+            ", personnelName='" + personnelName + '\'' +
+            ", personnelDepartmentId=" + personnelDepartmentId +
+            ", personnelDepartmentName='" + personnelDepartmentName + '\'' +
+            ", personnelType=" + personnelType +
+            ", personnelStartDate=" + personnelStartDate +
+            ", personnelEndDate=" + personnelEndDate +
+            ", manMonth=" + manMonth.getRate() +
+            ", monthlyWage=" + monthlyWage.getAmount() +
+            ", sgaeRate=" + sgaeRate.getRate() +
+            ", sgaeAmount=" + sgaeAmount.getAmount() +
+            ", ovheRate=" + ovheRate.getRate() +
+            ", ovheAmount=" + ovheAmount.getAmount() +
+            ", unitPrice=" + unitPrice.getAmount() +
+            ", totalCost=" + totalCost.getAmount() +
+            '}';
     }
 
 }
