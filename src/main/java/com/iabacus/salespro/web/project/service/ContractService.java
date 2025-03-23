@@ -1,7 +1,6 @@
 package com.iabacus.salespro.web.project.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +13,7 @@ import com.iabacus.salespro.web.project.domain.Project;
 import com.iabacus.salespro.web.project.repository.ContractRepository;
 import com.iabacus.salespro.web.project.repository.ProjectRepository;
 import com.iabacus.salespro.web.project.request.ContractCreateRequest;
+import com.iabacus.salespro.web.project.request.ContractSearchResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +56,8 @@ public class ContractService {
         contractRepository.save(Contract.builder()
             .project(project)
             .projectCode(request.getProjectCode())
+            .startDate(request.getStartDate())
+            .endDate(request.getEndDate())
             .type(contractType)
             .index(contractIndex)
             .build());
@@ -66,6 +68,13 @@ public class ContractService {
 
         // 계약별 인력 투입
         inputService.inputPersonnelByContract(contract, request.getInputCreateRequest());
+    }
 
+    @Transactional(readOnly = true)
+    public List<ContractSearchResponse> getContractsByProjectCode(String projectCode) {
+        return contractRepository.findByProjectCodeOrderByIndexDesc(projectCode)
+            .stream()
+            .map(ContractSearchResponse::from)
+            .toList();
     }
 }

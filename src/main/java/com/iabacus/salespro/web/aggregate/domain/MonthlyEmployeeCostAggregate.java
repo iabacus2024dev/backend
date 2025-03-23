@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import com.iabacus.salespro.web.common.BaseEntity;
 import com.iabacus.salespro.web.common.Money;
 import com.iabacus.salespro.web.common.Ratio;
 import com.iabacus.salespro.web.employee.domain.EmployeeType;
@@ -26,7 +27,7 @@ import com.iabacus.salespro.web.project.domain.ProjectType;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "TB_MONTHLY_EMPLOYEE_COST_AGGREGATE")
-public class MonthlyEmployeeCostAggregate {
+public class MonthlyEmployeeCostAggregate extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,14 +43,24 @@ public class MonthlyEmployeeCostAggregate {
     @Column(name = "PROJECT_NAME")
     private String projectName;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "PROJECT_TYPE")
     private ProjectType projectType;
+
+    @AttributeOverride(name = "amount", column = @Column(name = "PROJECT_CONTRACT_AMOUNT", precision = 10, scale = 0))
+    private Money projectContractAmount;
+
+    @Column(name = "PROJECT_START_DATE")
+    private LocalDate projectStartDate;
+
+    @Column(name = "PROJECT_END_DATE")
+    private LocalDate projectEndDate;
 
     @Column(name = "PROJECT_OWNER_DEPARTMENT_ID")
     private Long ownerDepartmentId;
 
-    @Column(name = "PROJECT_OWNER_DEPARTMENT_NAME")
-    private String ownerDepartmentName;
+    // @Column(name = "PROJECT_OWNER_DEPARTMENT_NAME")
+    // private String ownerDepartmentName;
 
     @Column(name = "CONTRACT_ID")
     private Long contractId;
@@ -66,8 +77,8 @@ public class MonthlyEmployeeCostAggregate {
     @Column(name = "PERSONNEL_DEPARTMENT_ID")
     private Long personnelDepartmentId;
 
-    @Column(name = "PERSONNEL_DEPARTMENT_NAME")
-    private String personnelDepartmentName;
+    // @Column(name = "PERSONNEL_DEPARTMENT_NAME")
+    // private String personnelDepartmentName;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "PERSONNEL_TYPE")
@@ -104,32 +115,34 @@ public class MonthlyEmployeeCostAggregate {
     private Money totalCost;
 
     @Builder
-    private MonthlyEmployeeCostAggregate(Long personnelId, String personnelName, EmployeeType personnelType, Long personnelDepartmentId, ProjectType projectType,
-                                         String personnelDepartmentName, Long projectId, String projectCode, String projectName, Long ownerDepartmentId, String ownerDepartmentName,
-                                         Long contractId, Long inputId, LocalDate personnelStartDate, LocalDate personnelEndDate, Ratio manMonth,
-                                         Money unitPrice, Money monthlyWage, Ratio sgaeRate, Money sgaeAmount, Ratio ovheRate, Money ovheAmount, Money totalCost) {
+    private MonthlyEmployeeCostAggregate(Long contractId, Long id, Long inputId, Ratio manMonth, Money monthlyWage, Money ovheAmount, Ratio ovheRate, Long ownerDepartmentId, Long personnelDepartmentId, LocalDate personnelEndDate, Long personnelId, String personnelName, LocalDate personnelStartDate, EmployeeType personnelType, String projectCode, Money projectContractAmount, LocalDate projectEndDate, Long projectId, String projectName, LocalDate projectStartDate, ProjectType projectType, Money sgaeAmount, Ratio sgaeRate, Money totalCost, Money unitPrice) {
+        this.contractId = contractId;
+        this.id = id;
+        this.inputId = inputId;
+        this.manMonth = manMonth;
+        this.monthlyWage = monthlyWage;
+        this.ovheAmount = ovheAmount;
+        this.ovheRate = ovheRate;
+        this.ownerDepartmentId = ownerDepartmentId;
+        // this.ownerDepartmentName = ownerDepartmentName;
+        this.personnelDepartmentId = personnelDepartmentId;
+        // this.personnelDepartmentName = personnelDepartmentName;
+        this.personnelEndDate = personnelEndDate;
         this.personnelId = personnelId;
         this.personnelName = personnelName;
-        this.personnelType = personnelType;
-        this.personnelDepartmentId = personnelDepartmentId;
-        this.personnelDepartmentName = personnelDepartmentName;
-        this.projectId = projectId;
-        this.projectCode = projectCode;
-        this.projectName = projectName;
-        this.inputId = inputId;
-        this.ownerDepartmentId = ownerDepartmentId;
-        this.ownerDepartmentName = ownerDepartmentName;
-        this.contractId = contractId;
         this.personnelStartDate = personnelStartDate;
-        this.personnelEndDate = personnelEndDate;
-        this.manMonth = manMonth;
-        this.unitPrice = unitPrice;
-        this.monthlyWage = monthlyWage;
-        this.sgaeRate = sgaeRate;
+        this.personnelType = personnelType;
+        this.projectCode = projectCode;
+        this.projectContractAmount = projectContractAmount;
+        this.projectEndDate = projectEndDate;
+        this.projectId = projectId;
+        this.projectName = projectName;
+        this.projectStartDate = projectStartDate;
+        this.projectType = projectType;
         this.sgaeAmount = sgaeAmount;
-        this.ovheRate = ovheRate;
-        this.ovheAmount = ovheAmount;
+        this.sgaeRate = sgaeRate;
         this.totalCost = totalCost;
+        this.unitPrice = unitPrice;
     }
 
     @Override
@@ -141,13 +154,16 @@ public class MonthlyEmployeeCostAggregate {
             ", projectCode='" + projectCode + '\'' +
             ", projectName='" + projectName + '\'' +
             ", projectType=" + projectType +
+            ", projectContractAmount=" + projectContractAmount +
+            ", projectStartDate=" + projectStartDate +
+            ", projectEndDate=" + projectEndDate +
             ", ownerDepartmentId=" + ownerDepartmentId +
-            ", ownerDepartmentName='" + ownerDepartmentName + '\'' +
+            // ", ownerDepartmentName='" + ownerDepartmentName + '\'' +
             ", inputId=" + inputId +
             ", personnelId=" + personnelId +
             ", personnelName='" + personnelName + '\'' +
             ", personnelDepartmentId=" + personnelDepartmentId +
-            ", personnelDepartmentName='" + personnelDepartmentName + '\'' +
+            // ", personnelDepartmentName='" + personnelDepartmentName + '\'' +
             ", personnelType=" + personnelType +
             ", personnelStartDate=" + personnelStartDate +
             ", personnelEndDate=" + personnelEndDate +
