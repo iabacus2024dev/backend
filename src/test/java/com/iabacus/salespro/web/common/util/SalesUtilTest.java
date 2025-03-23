@@ -56,7 +56,7 @@ class SalesUtilTest {
         Money sgaeAmount = SalesUtil.getSgaeAmount(monthlyWage, sgaeRate);
 
         // then
-        assertThat(sgaeAmount.getAmount()).isEqualTo(BigDecimal.valueOf(659200).setScale(1, RoundingMode.HALF_UP));
+        assertThat(sgaeAmount.getAmount()).isEqualTo(BigDecimal.valueOf(659200));
     }
 
     @Test
@@ -68,9 +68,8 @@ class SalesUtilTest {
 
         // when
         Money ovheAmount = SalesUtil.getSgaeAmount(monthlyWage, ovheRate);
-        System.out.println("제경비: " + ovheAmount.getAmount());
 
         // then
-        assertThat(ovheAmount.getAmount()).isEqualTo(BigDecimal.valueOf(288000).setScale(1, RoundingMode.HALF_UP));
+        assertThat(ovheAmount.getAmount()).isEqualTo(BigDecimal.valueOf(288000));
     }
 }
