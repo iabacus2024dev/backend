@@ -4,11 +4,15 @@ package com.iabacus.salespro.web.common.util;
 import static org.assertj.core.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.iabacus.salespro.web.common.Money;
+import com.iabacus.salespro.web.common.Ratio;
 
 @SpringBootTest
 class SalesUtilTest {
@@ -41,4 +45,18 @@ class SalesUtilTest {
         assertThat(manMonth).isEqualTo(BigDecimal.valueOf(0.71));
     }
 
+    @Test
+    @DisplayName("주어진 월 급여에 판관비 비율을 적용하여 판관비 금액을 계산하여 반환합니다.")
+    void getSgaeAmountTest() {
+        // given
+        Money monthlyWage = Money.wons(3200000);
+        Ratio sgaeRate = Ratio.valueOf(20.6);
+
+        // when
+        Money sgaeAmount = SalesUtil.getSgaeAmount(monthlyWage, sgaeRate);
+        System.out.println("판관비: " + sgaeAmount.getAmount());
+
+        // then
+        assertThat(sgaeAmount.getAmount()).isEqualTo(BigDecimal.valueOf(659200).setScale(1, RoundingMode.HALF_UP));
+    }
 }
