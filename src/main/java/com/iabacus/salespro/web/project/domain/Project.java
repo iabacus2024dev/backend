@@ -71,7 +71,7 @@ public class Project extends BaseEntity {
     @Column(name = "CLIENT_COMPANY_REP")
     private String clientCompanyRep;
 
-    @AttributeOverride(name = "number", column = @Column(name = "CLIENT_COMPANY_REF_PHONE"))
+    @AttributeOverride(name = "number", column = @Column(name = "CLIENT_COMPANY_REP_PHONE"))
     private Phone clientCompanyRepPhone;
 
     @Column(name = "MAIN_COMPANY")
@@ -80,7 +80,7 @@ public class Project extends BaseEntity {
     @Column(name = "MAIN_COMPANY_REP")
     private String mainCompanyRep;
 
-    @AttributeOverride(name = "number", column = @Column(name = "MAIN_COMPANY_PHONE"))
+    @AttributeOverride(name = "number", column = @Column(name = "MAIN_COMPANY_REP_PHONE"))
     private Phone mainCompanyRepPhone;
 
     @Column(name = "PM_NAME")

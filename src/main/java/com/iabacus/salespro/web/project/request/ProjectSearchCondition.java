@@ -12,19 +12,19 @@ import com.iabacus.salespro.web.project.domain.ProjectType;
 public class ProjectSearchCondition {
 
     private ProjectSearchType searchType;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDate fromDate;
+    private LocalDate toDate;
     private ProjectType projectType;
     private ProjectStatus projectStatus;
     private String name;
     private String code;
 
     @Builder
-    public ProjectSearchCondition(ProjectSearchType searchType, LocalDate startDate, LocalDate endDate,
+    public ProjectSearchCondition(ProjectSearchType searchType, LocalDate fromDate, LocalDate toDate,
                                   ProjectType projectType, ProjectStatus projectStatus, String name, String code) {
         this.searchType = searchType;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
         this.projectType = projectType;
         this.projectStatus = projectStatus;
         this.name = name;
