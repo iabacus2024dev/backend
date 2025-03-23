@@ -6,6 +6,9 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import com.iabacus.salespro.web.common.Money;
+import com.iabacus.salespro.web.common.Ratio;
+
 /**
  * 매출 계산과 관련된 유틸리티 클래스입니다.
  */
@@ -51,5 +54,18 @@ public class SalesUtil {
 
         // Man-Month 계산하여 반환 (소수점 2자리 반올림하여 반환)
         return BigDecimal.valueOf(workingDays / daysInMonth).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    /**
+     * 주어진 월 급여에 판관비 비율을 적용하여 판관비 금액을 계산하여 반환합니다.
+     *
+     *
+     * @param monthlyWage 월 급여
+     * @param sgaeRate 판관비 비율
+     * @return 판관비 금액
+     */
+    public static Money getSgaeAmount(Money monthlyWage, Ratio sgaeRate) {
+        BigDecimal sgaeAmount = monthlyWage.multiply(sgaeRate.getRate()).divide(100).getAmount().setScale(1, RoundingMode.HALF_UP);
+        return Money.wons(sgaeAmount);
     }
 }
