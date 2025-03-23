@@ -10,6 +10,7 @@ import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
 import com.iabacus.salespro.web.project.domain.Contract;
 import com.iabacus.salespro.web.project.domain.ContractType;
+import com.iabacus.salespro.web.project.domain.Project;
 import com.iabacus.salespro.web.project.repository.ContractRepository;
 import com.iabacus.salespro.web.project.repository.ProjectRepository;
 import com.iabacus.salespro.web.project.request.ContractCreateRequest;
@@ -32,6 +33,8 @@ public class ContractService {
 
         /* 계약 ~ 투입까지 한 트랜잭션으로 */
 
+        Project project = projectRepository.findById(request.getProjectId()).orElseThrow();
+
         // 같은 프로젝트 코드를 가지는 계약이 있는지 조회
         List<Contract> contracts= contractRepository.findByProjectCodeOrderByIndexDesc(request.getProjectCode());
 
@@ -51,6 +54,7 @@ public class ContractService {
 
         // 계약 등록
         contractRepository.save(Contract.builder()
+            .project(project)
             .projectCode(request.getProjectCode())
             .type(contractType)
             .index(contractIndex)

@@ -11,6 +11,9 @@ import lombok.Data;
 @Data
 public class ContractCreateRequest {
 
+    @NotNull
+    private Long projectId;
+
     @NotBlank
     private String projectCode;
 

@@ -1,12 +1,9 @@
 package com.iabacus.salespro.web.project.service;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import jakarta.transaction.Transactional;
@@ -16,11 +13,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
+import com.iabacus.salespro.web.aggregate.domain.MonthlyEmployeeCostAggregate;
+import com.iabacus.salespro.web.aggregate.repository.MonthlyEmployeeCostAggregateRepository;
 import com.iabacus.salespro.web.auth.domain.Auth;
 import com.iabacus.salespro.web.auth.service.AuthMailService;
+import com.iabacus.salespro.web.common.Money;
+import com.iabacus.salespro.web.common.Ratio;
 import com.iabacus.salespro.web.employee.domain.Employee;
+import com.iabacus.salespro.web.employee.domain.EmployeeGrade;
+import com.iabacus.salespro.web.employee.domain.EmployeeType;
 import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
 import com.iabacus.salespro.web.project.domain.Contract;
 import com.iabacus.salespro.web.project.domain.ContractType;
@@ -51,6 +53,9 @@ class ContractServiceTest {
     private ProjectRepository projectRepository;
 
     @Autowired
+    private MonthlyEmployeeCostAggregateRepository monthlyEmployeeCostAggregateRepository;
+
+    @Autowired
     private ContractService contractService;
 
     @Autowired
@@ -63,34 +68,51 @@ class ContractServiceTest {
         Project project = Project.builder()
             .code("P00001")
             .type(ProjectType.SI)
-            .startDate(LocalDate.now().minusDays(1))
-            .endDate(LocalDate.now())
+            .startDate(LocalDate.of(2025, 1, 1))
+            .endDate(LocalDate.of(2025, 2, 28))
             .build();
         projectRepository.save(project);
 
         Employee employee1 = Employee.builder()
             .name("이동욱")
+            .type(EmployeeType.정직원)
+            .grade(EmployeeGrade.초급)
             .build();
         employeeRepository.save(employee1);
 
         Employee employee2 = Employee.builder()
             .name("이지수")
+            .type(EmployeeType.정직원)
+            .grade(EmployeeGrade.초급)
             .build();
         employeeRepository.save(employee2);
 
-        List<InputCreateRequest> inputCreateRequests = new ArrayList<>();
-
+        List<InputCreateRequest> inputCreateRequestList = new ArrayList<>();
         InputCreateRequest inputCreateRequest1 = new InputCreateRequest();
         inputCreateRequest1.setPersonnelId(employee1.getId());
-        inputCreateRequests.add(inputCreateRequest1);
-
+        inputCreateRequest1.setStartDate(LocalDate.of(2025, 1, 1));
+        inputCreateRequest1.setEndDate(LocalDate.of(2025, 2, 28));
+        inputCreateRequest1.setUnitPrice(Money.wons(4000000));
+        inputCreateRequest1.setWage(Money.wons(3200000));
+        inputCreateRequest1.setSgaeRate(Ratio.valueOf(20.6));
+        inputCreateRequest1.setOvheRate(Ratio.valueOf(9.0));
+        inputCreateRequestList.add(inputCreateRequest1);
         InputCreateRequest inputCreateRequest2 = new InputCreateRequest();
         inputCreateRequest2.setPersonnelId(employee2.getId());
-        inputCreateRequests.add(inputCreateRequest2);
+        inputCreateRequest2.setStartDate(LocalDate.of(2025, 1, 1));
+        inputCreateRequest2.setEndDate(LocalDate.of(2025, 2, 28));
+        inputCreateRequest2.setUnitPrice(Money.wons(4000000));
+        inputCreateRequest2.setWage(Money.wons(3200000));
+        inputCreateRequest2.setSgaeRate(Ratio.valueOf(20.6));
+        inputCreateRequest2.setOvheRate(Ratio.valueOf(9.0));
+        inputCreateRequestList.add(inputCreateRequest2);
 
         ContractCreateRequest contractCreateRequest = new ContractCreateRequest();
+        contractCreateRequest.setProjectId(project.getId());
         contractCreateRequest.setProjectCode(project.getCode());
-        contractCreateRequest.setInputCreateRequest(inputCreateRequests);
+        contractCreateRequest.setStartDate(LocalDate.of(2025, 1, 1));
+        contractCreateRequest.setEndDate(LocalDate.of(2025, 2, 28));
+        contractCreateRequest.setInputCreateRequest(inputCreateRequestList);
 
         // when
         contractService.createContract(contractCreateRequest);
@@ -102,6 +124,9 @@ class ContractServiceTest {
 
         List<Input> inputs = inputRepository.findByContractId(contract.getId());
         assertThat(inputs.size()).isEqualTo(2);
+
+        List<MonthlyEmployeeCostAggregate> monthlyEmployeeCostAggregates = monthlyEmployeeCostAggregateRepository.findAll();
+        assertThat(monthlyEmployeeCostAggregates.size()).isEqualTo(4);
     }
 
 }
