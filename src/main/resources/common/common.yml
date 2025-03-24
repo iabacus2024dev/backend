@@ -13,7 +13,7 @@ spring:
       max-request-size: 100MB
 
   session:
-    timeout: 10 # 24h
+    timeout: 86400 # 24h
 
 logging:
   level:
