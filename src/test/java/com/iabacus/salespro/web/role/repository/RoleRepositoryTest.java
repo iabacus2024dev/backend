@@ -3,7 +3,6 @@ package com.iabacus.salespro.web.role.repository;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
-import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +15,7 @@ import com.iabacus.salespro.web.member.domain.Member;
 import com.iabacus.salespro.web.member.repository.MemberRepository;
 import com.iabacus.salespro.web.role.domain.Authority;
 import com.iabacus.salespro.web.role.domain.Role;
+import com.iabacus.salespro.web.role.domain.RoleAuthority;
 
 @ActiveProfiles("test")
 @Transactional
@@ -41,8 +41,20 @@ class RoleRepositoryTest {
 
         Role role = Role.builder()
             .name("프로젝트 관리자")
-            .authorities(Set.of(authority1, authority2))
             .build();
+
+        RoleAuthority roleAuthority1 = RoleAuthority.builder()
+            .authority(authority1)
+            .role(role)
+            .build();
+
+        RoleAuthority roleAuthority2 = RoleAuthority.builder()
+            .authority(authority2)
+            .role(role)
+            .build();
+
+        role.addRoleAuthorities(roleAuthority1);
+        role.addRoleAuthorities(roleAuthority2);
         roleRepository.save(role);
 
         Member member = Member.builder()

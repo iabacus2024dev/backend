@@ -25,6 +25,7 @@ import com.iabacus.salespro.web.member.domain.Member;
 import com.iabacus.salespro.web.member.repository.MemberRepository;
 import com.iabacus.salespro.web.role.domain.Authority;
 import com.iabacus.salespro.web.role.domain.Role;
+import com.iabacus.salespro.web.role.domain.RoleAuthority;
 import com.iabacus.salespro.web.role.repository.RoleRepository;
 
 @Profile("local")
@@ -83,19 +84,40 @@ public class InitEmployeeMemberDepartmentRoleData {
         Authority authority13 = createAuthority("휴가 편집");
 
         Role admin = createRole("관리자");
-        admin.addAuthority(authority1);
-        admin.addAuthority(authority2);
-        admin.addAuthority(authority3);
-        admin.addAuthority(authority4);
-        admin.addAuthority(authority5);
-        admin.addAuthority(authority7);
-        admin.addAuthority(authority8);
-        admin.addAuthority(authority9);
-        admin.addAuthority(authority10);
-        admin.addAuthority(authority11);
-        admin.addAuthority(authority12);
-        admin.addAuthority(authority13);
+        Role basicRole = createRole("일반관리자");
+        RoleAuthority roleAuthority1 = createRoleAuthority(authority1, admin);
+        RoleAuthority roleAuthority2 = createRoleAuthority(authority2, admin);
+        RoleAuthority roleAuthority3 = createRoleAuthority(authority3, admin);
+        RoleAuthority roleAuthority4 = createRoleAuthority(authority4, admin);
+        RoleAuthority roleAuthority5 = createRoleAuthority(authority5, admin);
+        RoleAuthority roleAuthority7 = createRoleAuthority(authority7, admin);
+        RoleAuthority roleAuthority8 = createRoleAuthority(authority8, admin);
+        RoleAuthority roleAuthority9 = createRoleAuthority(authority9, admin);
+        RoleAuthority roleAuthority10 = createRoleAuthority(authority10, admin);
+        RoleAuthority roleAuthority11 = createRoleAuthority(authority11, admin);
+        RoleAuthority roleAuthority12 = createRoleAuthority(authority12, admin);
+        RoleAuthority roleAuthority13 = createRoleAuthority(authority13, admin);
+
+        admin.addRoleAuthorities(roleAuthority1);
+        admin.addRoleAuthorities(roleAuthority2);
+        admin.addRoleAuthorities(roleAuthority3);
+        admin.addRoleAuthorities(roleAuthority4);
+        admin.addRoleAuthorities(roleAuthority5);
+        admin.addRoleAuthorities(roleAuthority7);
+        admin.addRoleAuthorities(roleAuthority8);
+        admin.addRoleAuthorities(roleAuthority9);
+        admin.addRoleAuthorities(roleAuthority10);
+        admin.addRoleAuthorities(roleAuthority11);
+        admin.addRoleAuthorities(roleAuthority12);
+        admin.addRoleAuthorities(roleAuthority13);
         roleRepository.save(admin);
+
+        createRoleAuthority(authority1, basicRole);
+        createRoleAuthority(authority3, basicRole);
+        createRoleAuthority(authority5, basicRole);
+        createRoleAuthority(authority12, basicRole);
+        createRoleAuthority(authority13, basicRole);
+        roleRepository.save(basicRole);
 
         Member member1 = createMember(employee1, admin);
         Member member2 = createMember(employee2, admin);
@@ -105,6 +127,13 @@ public class InitEmployeeMemberDepartmentRoleData {
         Member member6 = createMember(employee6, admin);
         Member member7 = createMember(employee7, admin);
         memberRepository.saveAll(List.of(member1, member2, member3, member4, member5, member6, member7));
+    }
+
+    private static RoleAuthority createRoleAuthority(Authority authority, Role role) {
+        return RoleAuthority.builder()
+            .authority(authority)
+            .role(role)
+            .build();
     }
 
     private Member createMember(Employee employee1, Role role) {

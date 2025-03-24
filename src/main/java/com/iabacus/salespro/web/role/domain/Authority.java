@@ -2,12 +2,11 @@ package com.iabacus.salespro.web.role.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import lombok.AccessLevel;
@@ -28,21 +27,27 @@ public class Authority extends BaseEntity {
     @Column(name = "AUTHORITY_ID")
     private Long id;
 
-    @JoinColumn(name = "ROLE_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Role role;
-
     @Column(name = "AUTHORITY_NAME", unique = true)
     private String name;
 
-    @Builder
-    private Authority(Role role, String name) {
-        this.role = role;
-        this.name = name;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "AUTHORITY_PAGE")
+    private AuthorityPage page;
 
-    public void changeRole(Role role) {
-        this.role = role;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "AUTHORITY_ACTION")
+    private AuthorityAction action;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "AUTHORITY_RANGE")
+    private AuthorityRange range;
+
+    @Builder
+    public Authority(String name, AuthorityPage page, AuthorityAction action, AuthorityRange range) {
+        this.name = name;
+        this.page = page;
+        this.action = action;
+        this.range = range;
     }
 
 }

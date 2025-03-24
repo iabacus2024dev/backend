@@ -1,7 +1,7 @@
 package com.iabacus.salespro.web.role.domain;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -36,21 +36,21 @@ public class Role extends BaseEntity {
     @Column(name = "IS_DEFAULT_ROLE")
     private Boolean isDefaultRole;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.PERSIST)
-    private Set<Authority> authorities = new HashSet<>();
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    private List<RoleAuthority> roleAuthorities = new ArrayList<>();
 
     @Builder
-    private Role(String name, Set<Authority> authorities) {
+    private Role(String name, List<RoleAuthority> roleAuthorities) {
         this.name = name;
         this.isDefaultRole = false;
-        if (authorities != null) {
-            authorities.forEach(this::addAuthority);
+        if (roleAuthorities != null) {
+            roleAuthorities.forEach(this::addRoleAuthorities);
         }
     }
 
-    public void addAuthority(Authority authority) {
-        this.authorities.add(authority);
-        authority.changeRole(this);
+    public void addRoleAuthorities(RoleAuthority roleAuthority) {
+        roleAuthorities.add(roleAuthority);
+        roleAuthority.changeRole(this);
     }
 
     public void setDefault() {
