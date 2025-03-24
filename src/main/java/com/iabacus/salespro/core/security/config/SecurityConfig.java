@@ -16,12 +16,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 import org.springframework.security.web.context.DelegatingSecurityContextRepository;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
@@ -83,13 +81,14 @@ public class SecurityConfig {
             .csrf(csrfConfig -> csrfConfig.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
                 .ignoringRequestMatchers("/api/v1/auths/**", "/swagger-ui/**", "/api-docs/**")
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-            .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-            .addFilterBefore(abstractAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(new CustomAuthorizationFilter(roleRepository), BasicAuthenticationFilter.class)
+            .addFilterAfter(new CsrfCookieFilter(), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new CustomAuthorizationFilter(roleRepository), UsernamePasswordAuthenticationFilter.class)
+            .addFilterAfter(new RememberMeAuthenticationFilter(authenticationManager(), rememberMeServices()), UsernamePasswordAuthenticationFilter.class)
 
             .logout(config -> config
                 .logoutUrl(LOGOUT_URI)
-                .deleteCookies("SESSION", "remember-me", "XSRF-TOKEN")
+                .deleteCookies("SESSION", "remember-me")
             )
 
             .exceptionHandling(e -> {
@@ -121,22 +120,23 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AbstractAuthenticationProcessingFilter abstractAuthenticationProcessingFilter() {
+    public CustomAuthFilter usernamePasswordAuthenticationFilter() {
         CustomAuthFilter filter = new CustomAuthFilter(LOGIN_URI, objectMapper);
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler(new CustomLoginSuccessHandler());
         filter.setAuthenticationFailureHandler(new CustomLoginFailHandler(objectMapper));
-        filter.setSecurityContextRepository(new DelegatingSecurityContextRepository(
-            new HttpSessionSecurityContextRepository(),
-            new RequestAttributeSecurityContextRepository()
-        ));
+        filter.setSecurityContextRepository(new DelegatingSecurityContextRepository(new HttpSessionSecurityContextRepository()));
+        filter.setRememberMeServices(rememberMeServices());
+        return filter;
+    }
 
+    @Bean
+    public SpringSessionRememberMeServices rememberMeServices() {
         SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
         rememberMeServices.setRememberMeParameterName("remember");
-        rememberMeServices.setAlwaysRemember(true);
         rememberMeServices.setValiditySeconds(REMEMBER_ME_TOKEN_VALIDITY_SECONDS);
-        filter.setRememberMeServices(rememberMeServices);
-        return filter;
+        rememberMeServices.setAlwaysRemember(true);
+        return rememberMeServices;
     }
 
     @Bean
