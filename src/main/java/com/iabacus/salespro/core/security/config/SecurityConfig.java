@@ -36,6 +36,7 @@ import com.iabacus.salespro.core.security.handler.CustomAccessDeniedHandler;
 import com.iabacus.salespro.core.security.handler.CustomBasicAuthenticationEntryPoint;
 import com.iabacus.salespro.core.security.handler.CustomLoginFailHandler;
 import com.iabacus.salespro.core.security.handler.CustomLoginSuccessHandler;
+import com.iabacus.salespro.core.security.handler.CustomLogoutSuccessHandler;
 import com.iabacus.salespro.core.security.provider.CustomUserDetailsAuthenticationProvider;
 import com.iabacus.salespro.web.login.repository.LoginHistoryRepository;
 import com.iabacus.salespro.web.member.repository.MemberRepository;
@@ -88,6 +89,7 @@ public class SecurityConfig {
 
             .logout(config -> config
                 .logoutUrl(LOGOUT_URI)
+                .logoutSuccessHandler(new CustomLogoutSuccessHandler())
                 .deleteCookies("SESSION", "remember-me")
             )
 
