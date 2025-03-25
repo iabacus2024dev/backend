@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.iabacus.salespro.web.role.domain.Authority;
 import com.iabacus.salespro.web.role.domain.Role;
 
-public interface RoleRepository extends JpaRepository<Role, Long> {
+public interface RoleRepository extends JpaRepository<Role, Long>, CustomRoleRepository {
 
     @Query("select r from Role r " +
         "left join fetch r.roleAuthorities ra " +

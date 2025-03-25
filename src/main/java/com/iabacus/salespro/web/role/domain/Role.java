@@ -34,15 +34,15 @@ public class Role extends BaseEntity {
     private String name;
 
     @Column(name = "IS_DEFAULT_ROLE")
-    private Boolean isDefaultRole;
+    private boolean isDefaultRole;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private List<RoleAuthority> roleAuthorities = new ArrayList<>();
 
     @Builder
-    private Role(String name, List<RoleAuthority> roleAuthorities) {
+    private Role(String name, boolean isDefaultRole, List<RoleAuthority> roleAuthorities) {
         this.name = name;
-        this.isDefaultRole = false;
+        this.isDefaultRole = isDefaultRole;
         if (roleAuthorities != null) {
             roleAuthorities.forEach(this::addRoleAuthorities);
         }

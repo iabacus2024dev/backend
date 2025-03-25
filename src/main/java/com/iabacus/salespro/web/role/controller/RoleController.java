@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.iabacus.salespro.core.security.service.UserPrincipal;
 import com.iabacus.salespro.web.role.response.AuthorityResponse;
+import com.iabacus.salespro.web.role.response.RoleResponse;
 import com.iabacus.salespro.web.role.service.RoleService;
 
 @Slf4j
@@ -23,9 +24,14 @@ public class RoleController {
 
     private final RoleService roleService;
 
-    @GetMapping
+    @GetMapping("/my")
     public ResponseEntity<List<AuthorityResponse>> getRoleWithAuthorities(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(roleService.getRoleWithAuthorities(userPrincipal.getMemberId()));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<RoleResponse>> getRoles() {
+        return ResponseEntity.ok(roleService.getRoles());
     }
 
 }
