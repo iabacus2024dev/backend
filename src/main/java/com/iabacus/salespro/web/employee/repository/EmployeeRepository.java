@@ -1,8 +1,10 @@
 package com.iabacus.salespro.web.employee.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.iabacus.salespro.web.employee.domain.Employee;
 
@@ -13,5 +15,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, Custo
     Optional<Employee> findByIdAndIsActivatedTrue(Long id);
 
     boolean existsByEmailAndNameAndIsActivatedTrue(String email, String name);
+
+    @Query("select e from Employee e where e.isActivated = true")
+    List<Employee> findEmployees();
 
 }

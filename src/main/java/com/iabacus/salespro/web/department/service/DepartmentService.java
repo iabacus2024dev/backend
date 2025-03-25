@@ -26,29 +26,28 @@ public class DepartmentService {
 
     public List<TreeViewResponse> getTreeView() {
         List<Department> departments = departmentRepository.findTreeViewWithEmployees();
-        List<Employee> employees = employeeRepository.findAll();
+        List<Employee> employees = employeeRepository.findEmployees();
 
-        Map<Long, TreeViewResponse> departmentMap = departments.stream()
-            .collect(Collectors.toMap(
-                Department::getId,
-                department -> TreeViewResponse.builder()
-                    .id(department.getId())
-                    .name(department.getName())
-                    .children(new ArrayList<>())
-                    .build()
-            ));
+        Map<Long, TreeViewResponse> departmentMap = buildDepartmentMap(departments);
+        addEmployeesToDepartments(employees, departmentMap);
+        return getRootDepartments(departments, departmentMap);
+    }
 
-        for (Employee employee : employees) {
-            Long deptId = employee.getDepartmentId();
-            if (departmentMap.containsKey(deptId)) {
-                departmentMap.get(deptId).getChildren()
-                    .add(TreeViewResponse.builder()
-                        .id(employee.getId())
-                        .name(employee.getName())
-                        .build());
-            }
-        }
+    private Map<Long, TreeViewResponse> buildDepartmentMap(List<Department> departments) {
+        return departments.stream()
+            .collect(Collectors.toMap(Department::getId,
+                department -> new TreeViewResponse(department.getId(), department.getName(), new ArrayList<>()))
+            );
+    }
 
+    private void addEmployeesToDepartments(List<Employee> employees, Map<Long, TreeViewResponse> departmentMap) {
+        employees.forEach(employee -> {
+            departmentMap.getOrDefault(employee.getDepartmentId(), new TreeViewResponse())
+                .getChildren().add(new TreeViewResponse(employee.getDepartmentId(), employee.getId(), getName(employee)));
+        });
+    }
+
+    private List<TreeViewResponse> getRootDepartments(List<Department> departments, Map<Long, TreeViewResponse> departmentMap) {
         List<TreeViewResponse> rootDepartments = new ArrayList<>();
         for (Department department : departments) {
             TreeViewResponse response = departmentMap.get(department.getId());
@@ -60,6 +59,10 @@ public class DepartmentService {
         }
 
         return rootDepartments;
+    }
+
+    private String getName(Employee employee) {
+        return employee.getName() + " " + employee.getRank();
     }
 
 }
