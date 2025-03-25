@@ -1,6 +1,7 @@
 package com.iabacus.salespro.web.role.domain;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +24,7 @@ public class RoleAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ROLE_AUTHORITY_ID")
     private Long id;
 
     @JoinColumn(name = "ROLE_ID")

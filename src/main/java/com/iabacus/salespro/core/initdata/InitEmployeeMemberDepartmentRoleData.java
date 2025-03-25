@@ -155,6 +155,7 @@ public class InitEmployeeMemberDepartmentRoleData {
     private Role createRole(String name) {
         return Role.builder()
             .name(name)
+            .isDefaultRole(true)
             .build();
     }
 
