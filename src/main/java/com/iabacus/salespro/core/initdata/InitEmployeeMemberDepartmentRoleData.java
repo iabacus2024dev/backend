@@ -68,7 +68,8 @@ public class InitEmployeeMemberDepartmentRoleData {
         Employee employee5 = createEmployee("김봉재", "55330m@iabacus.co.kr", department12.getId());
         Employee employee6 = createEmployee("이지수", "dlwltn6604@iabacus.co.kr", department13.getId());
         Employee employee7 = createEmployee("이동욱", "ledu202@iabacus.co.kr", department13.getId());
-        employeeRepository.saveAll(List.of(employee1, employee2, employee3, employee4, employee5, employee6, employee7));
+        Employee employee8 = createEmployee("이사", "abc@iabacus.co.kr", department2.getId());
+        employeeRepository.saveAll(List.of(employee1, employee2, employee3, employee4, employee5, employee6, employee7, employee8));
 
         Authority authority1 = createAuthority("프로젝트 조회");
         Authority authority2 = createAuthority("프로젝트 편집");
