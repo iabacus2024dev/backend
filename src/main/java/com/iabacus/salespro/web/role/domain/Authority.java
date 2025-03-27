@@ -1,5 +1,9 @@
 package com.iabacus.salespro.web.role.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -7,6 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 import lombok.AccessLevel;
@@ -38,16 +43,13 @@ public class Authority extends BaseEntity {
     @Column(name = "AUTHORITY_ACTION")
     private AuthorityAction action;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "AUTHORITY_RANGE")
-    private AuthorityRange range;
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    private List<AuthorityRange> authorityRanges = new ArrayList<>();
 
     @Builder
-    public Authority(String name, AuthorityPage page, AuthorityAction action, AuthorityRange range) {
+    private Authority(String name, List<AuthorityRange> authorityRanges) {
         this.name = name;
-        this.page = page;
-        this.action = action;
-        this.range = range;
+        this.authorityRanges = authorityRanges;
     }
 
 }

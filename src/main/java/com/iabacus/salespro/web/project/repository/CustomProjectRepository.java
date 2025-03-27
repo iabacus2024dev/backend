@@ -1,5 +1,7 @@
 package com.iabacus.salespro.web.project.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,5 +11,7 @@ import com.iabacus.salespro.web.project.request.ProjectSearchCondition;
 public interface CustomProjectRepository {
 
     Page<Project> search(ProjectSearchCondition condition, Pageable pageable);
+
+    List<Project> searchWithoutPage(ProjectSearchCondition condition, Pageable pageable);
 
 }
