@@ -41,9 +41,9 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.getProjectDetail(id));
     }
 
-    @PreAuthorize("hasAuthority('프로젝트_조회')")
+    @PreAuthorize("hasAuthority('프로젝트 조회')")
     @GetMapping
-    public ResponseEntity<PageResponse<ProjectSearchResponse>> searchProjects(@Valid @RequestBody ProjectSearchCondition condition, Pageable pageable) {
+    public ResponseEntity<PageResponse<ProjectSearchResponse>> searchProjects(ProjectSearchCondition condition, Pageable pageable) {
         return ResponseEntity.ok(projectService.searchProjects(condition, pageable));
     }
 

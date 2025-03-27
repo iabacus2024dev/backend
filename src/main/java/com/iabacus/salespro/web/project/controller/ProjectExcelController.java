@@ -1,4 +1,4 @@
-package com.iabacus.salespro.web.partners.controller;
+package com.iabacus.salespro.web.project.controller;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,23 +21,23 @@ import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
 import com.iabacus.salespro.core.excel.dto.ExcelSheetData;
 import com.iabacus.salespro.core.excel.file.SXSSFExcelFile;
-import com.iabacus.salespro.web.partners.request.PartnersSearchCondition;
-import com.iabacus.salespro.web.partners.response.PartnersExcelResponse;
-import com.iabacus.salespro.web.partners.service.PartnersService;
+import com.iabacus.salespro.web.project.request.ProjectSearchCondition;
+import com.iabacus.salespro.web.project.response.ProjectExcelResponse;
+import com.iabacus.salespro.web.project.service.ProjectService;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/partners")
-public class PartnersExcelController {
+@RequestMapping("/api/v1/projects")
+public class ProjectExcelController {
 
-    private final PartnersService partnersService;
+    private final ProjectService projectService;
 
-    @PreAuthorize("hasAuthority('협력사 조회')")
+    @PreAuthorize("hasAuthority('프로젝트 조회')")
     @GetMapping("/excel/download")
-    public ResponseEntity<Void> downloadPartners(PartnersSearchCondition condition, Pageable pageable, HttpServletResponse response) {
+    public ResponseEntity<Void> downloadProjects(ProjectSearchCondition condition, Pageable pageable, HttpServletResponse response) {
         try {
-            new SXSSFExcelFile(ExcelSheetData.from(partnersService.getPartners(condition, pageable), PartnersExcelResponse.class), response);
+            new SXSSFExcelFile(ExcelSheetData.from(projectService.getProjects(condition, pageable), ProjectExcelResponse.class), response);
         } catch (IOException e) {
             log.error("엑셀 다운로드 중 오류가 발생했습니다.", e);
             throw new BusinessException(ErrorCode.EXCEL_DOWNLOAD_FAILED);
@@ -45,11 +45,11 @@ public class PartnersExcelController {
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasAuthority('협력사 조회')")
+    @PreAuthorize("hasAuthority('프로젝트 조회')")
     @GetMapping("/excel/sample")
-    public ResponseEntity<Void> downloadPartnersSample(HttpServletResponse response) {
+    public ResponseEntity<Void> downloadProjectsSample(HttpServletResponse response) {
         try {
-            new SXSSFExcelFile(ExcelSheetData.from(List.of(), PartnersExcelResponse.class), response);
+            new SXSSFExcelFile(ExcelSheetData.from(List.of(), ProjectExcelResponse.class), response);
         } catch (IOException e) {
             log.error("엑셀 다운로드 중 오류가 발생했습니다.", e);
             throw new BusinessException(ErrorCode.EXCEL_DOWNLOAD_FAILED);
@@ -57,10 +57,10 @@ public class PartnersExcelController {
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasAuthority('협력사 편집')")
+    @PreAuthorize("hasAuthority('프로젝트 편집')")
     @PostMapping("/excel/upload")
-    public ResponseEntity<Void> uploadPartners(MultipartFile file) {
-        partnersService.uploadPartners(file);
+    public ResponseEntity<Void> uploadProjects(MultipartFile file) {
+        projectService.uploadProject(file);
         return ResponseEntity.ok().build();
     }
 

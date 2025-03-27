@@ -58,7 +58,7 @@ public class PartnersRepositoryImpl implements CustomPartnersRepository {
     }
 
     @Override
-    public List<Partners> searchWithoutPage(PartnersSearchCondition condition) {
+    public List<Partners> searchWithoutPage(PartnersSearchCondition condition, Pageable pageable) {
         return queryFactory
             .selectFrom(partners)
             .where(
@@ -68,6 +68,7 @@ public class PartnersRepositoryImpl implements CustomPartnersRepository {
                 salesPerNameContains(condition.getSalesRepName()),
                 partners.isActivated.isTrue()
             )
+            .orderBy(QuerydslUtils.getSort(pageable, partners))
             .fetch();
     }
 
@@ -76,15 +77,15 @@ public class PartnersRepositoryImpl implements CustomPartnersRepository {
     }
 
     private BooleanExpression nameContains(String name) {
-        return isNotEmpty(name) ? partners.name.contains(name) : null;
+        return isNotEmpty(name) ? partners.name.containsIgnoreCase(name) : null;
     }
 
     private BooleanExpression ceoNameContains(String ceoName) {
-        return isNotEmpty(ceoName) ? partners.ceoName.contains(ceoName) : null;
+        return isNotEmpty(ceoName) ? partners.ceoName.containsIgnoreCase(ceoName) : null;
     }
 
     private BooleanExpression salesPerNameContains(String salesRepName) {
-        return isNotEmpty(salesRepName) ? partners.salesRepName.contains(salesRepName) : null;
+        return isNotEmpty(salesRepName) ? partners.salesRepName.containsIgnoreCase(salesRepName) : null;
     }
 
 }

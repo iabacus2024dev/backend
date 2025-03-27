@@ -72,8 +72,8 @@ public class PartnersService {
         partnersRepository.save(partners);
     }
 
-    public List<PartnersExcelResponse> getPartners(PartnersSearchCondition condition) {
-        return partnersRepository.searchWithoutPage(condition).stream()
+    public List<PartnersExcelResponse> getPartners(PartnersSearchCondition condition, Pageable pageable) {
+        return partnersRepository.searchWithoutPage(condition, pageable).stream()
             .map(PartnersExcelResponse::from)
             .toList();
     }

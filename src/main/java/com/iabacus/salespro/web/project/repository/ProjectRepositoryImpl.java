@@ -17,6 +17,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 
+import com.iabacus.salespro.core.util.QuerydslUtils;
 import com.iabacus.salespro.web.project.domain.Project;
 import com.iabacus.salespro.web.project.domain.ProjectStatus;
 import com.iabacus.salespro.web.project.domain.ProjectType;
@@ -41,7 +42,7 @@ public class ProjectRepositoryImpl implements CustomProjectRepository {
                 dateBetween(condition),
                 project.isActivated.isTrue()
             )
-            .orderBy(project.createdDateTime.asc())
+            .orderBy(QuerydslUtils.getSort(pageable, project))
             .limit(pageable.getPageSize())
             .offset(pageable.getOffset())
             .fetch();
@@ -59,6 +60,22 @@ public class ProjectRepositoryImpl implements CustomProjectRepository {
             );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public List<Project> searchWithoutPage(ProjectSearchCondition condition, Pageable pageable) {
+        return queryFactory
+            .selectFrom(project)
+            .where(
+                projectTypeEq(condition.getProjectType()),
+                projectStatusEq(condition.getProjectStatus()),
+                nameContains(condition.getName()),
+                codeContains(condition.getCode()),
+                dateBetween(condition),
+                project.isActivated.isTrue()
+            )
+            .orderBy(QuerydslUtils.getSort(pageable, project))
+            .fetch();
     }
 
     private BooleanExpression projectTypeEq(ProjectType type) {

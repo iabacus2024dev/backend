@@ -12,6 +12,6 @@ public interface CustomPartnersRepository {
 
     Page<Partners> search(PartnersSearchCondition condition, Pageable pageable);
 
-    List<Partners> searchWithoutPage(PartnersSearchCondition condition);
+    List<Partners> searchWithoutPage(PartnersSearchCondition condition, Pageable pageable);
 
 }
