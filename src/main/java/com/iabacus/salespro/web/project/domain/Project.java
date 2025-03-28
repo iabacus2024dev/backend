@@ -55,10 +55,6 @@ public class Project extends BaseEntity {
     @Column(name = "OWNER_TEAM_ID")
     private Long ownerTeamId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "PROJECT_STATUS")
-    private ProjectStatus status;
-
     @Column(name = "PROJECT_START_DATE")
     private LocalDate startDate;
 
@@ -111,7 +107,6 @@ public class Project extends BaseEntity {
         this.mainCompanyRepPhone = mainCompanyRepPhone;
         this.pmName = pmName;
         this.pmPhone = pmPhone;
-        this.status = ProjectStatus.fromDate(LocalDate.now(), this.startDate, this.endDate);
     }
 
     public void update(ProjectUpdateRequest request) {
@@ -132,7 +127,10 @@ public class Project extends BaseEntity {
         this.mainCompanyRepPhone = Phone.of(request.getMainCompanyRepPhone());
         this.pmName = request.getPmName();
         this.pmPhone = Phone.of(request.getPmPhone());
-        this.status = request.getStatus();
+    }
+
+    public ProjectStatus getStatus() {
+        return ProjectStatus.fromDate(LocalDate.now(), startDate, endDate);
     }
 
 }

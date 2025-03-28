@@ -18,13 +18,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
+import com.iabacus.salespro.core.excel.util.WorksheetUtil;
 import com.iabacus.salespro.web.common.PageResponse;
 import com.iabacus.salespro.web.department.domain.Department;
 import com.iabacus.salespro.web.department.repository.DepartmentRepository;
-import com.iabacus.salespro.web.member.repository.MemberRepository;
 import com.iabacus.salespro.web.project.domain.Project;
 import com.iabacus.salespro.web.project.repository.ProjectRepository;
 import com.iabacus.salespro.web.project.request.ProjectCreateRequest;
+import com.iabacus.salespro.web.project.request.ProjectExcelRequest;
 import com.iabacus.salespro.web.project.request.ProjectSearchCondition;
 import com.iabacus.salespro.web.project.request.ProjectUpdateRequest;
 import com.iabacus.salespro.web.project.response.ProjectDetailResponse;
@@ -39,7 +40,6 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final DepartmentRepository departmentRepository;
-    private final MemberRepository memberRepository;
 
     // todo: project code로 조회
     public ProjectDetailResponse getProjectDetail(Long id) {
@@ -95,9 +95,16 @@ public class ProjectService {
             XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
             XSSFSheet worksheet = workbook.getSheetAt(0);
 
-            for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
+            for (int i = 1; i < WorksheetUtil.getActualDataRows(worksheet); i++) {
                 DataFormatter formatter = new DataFormatter();
                 XSSFRow row = worksheet.getRow(i);
+
+                ProjectExcelRequest excel = new ProjectExcelRequest();
+                String departmentName = formatter.formatCellValue(row.getCell(4));
+                Department department = departmentRepository.findByNameAndIsActivatedTrue(departmentName)
+                    .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_NOT_FOUND));
+                Project project = excel.toEntity(formatter, row, department.getId());
+                projectRepository.save(project);
             }
         } catch (Exception e) {
             log.error("프로젝트 엑셀 업로드 중 오류 발생", e);
