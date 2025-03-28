@@ -3,6 +3,7 @@ package com.iabacus.salespro.core.excel.file;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -33,7 +34,7 @@ public interface ExcelFile {
         } else if (value instanceof Double) {
             cell.setCellValue((Double) value);
         } else if (value instanceof LocalDate) {
-            cell.setCellValue((LocalDate) value);
+            cell.setCellValue(((LocalDate) value).format(DateTimeFormatter.ISO_DATE));
         } else {
             cell.setCellValue((String) value);
         }
