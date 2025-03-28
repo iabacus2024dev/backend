@@ -52,7 +52,7 @@ public class InitProjectData {
 
     private static Project createProject(String code, String name, int expectedAmount, int contractAmount, LocalDate contractDate, LocalDate startDate, LocalDate endDate, ProjectType projectType) {
         return Project.builder()
-            .ownerTeamId(1L)
+            .ownerTeamId(3L)
             .code(code)
             .name(name)
             .type(projectType)

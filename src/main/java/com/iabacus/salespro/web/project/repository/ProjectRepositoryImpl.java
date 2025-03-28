@@ -5,6 +5,7 @@ import static io.micrometer.common.util.StringUtils.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,8 +36,8 @@ public class ProjectRepositoryImpl implements CustomProjectRepository {
         List<Project> content = queryFactory
             .selectFrom(project)
             .where(
-                projectTypeEq(condition.getProjectType()),
-                projectStatusEq(condition.getProjectStatus()),
+                projectTypeEq(condition.getType()),
+                projectStatusEq(condition.getStatus()),
                 nameContains(condition.getName()),
                 codeContains(condition.getCode()),
                 dateBetween(condition),
@@ -51,8 +52,8 @@ public class ProjectRepositoryImpl implements CustomProjectRepository {
             .select(project.count())
             .from(project)
             .where(
-                projectTypeEq(condition.getProjectType()),
-                projectStatusEq(condition.getProjectStatus()),
+                projectTypeEq(condition.getType()),
+                projectStatusEq(condition.getStatus()),
                 nameContains(condition.getName()),
                 codeContains(condition.getCode()),
                 dateBetween(condition),
@@ -67,15 +68,17 @@ public class ProjectRepositoryImpl implements CustomProjectRepository {
         return queryFactory
             .selectFrom(project)
             .where(
-                projectTypeEq(condition.getProjectType()),
-                projectStatusEq(condition.getProjectStatus()),
+                projectTypeEq(condition.getType()),
+                projectStatusEq(condition.getStatus()),
                 nameContains(condition.getName()),
                 codeContains(condition.getCode()),
                 dateBetween(condition),
                 project.isActivated.isTrue()
             )
             .orderBy(QuerydslUtils.getSort(pageable, project))
-            .fetch();
+            .fetch()
+            .stream().filter(Objects::nonNull)
+            .toList();
     }
 
     private BooleanExpression projectTypeEq(ProjectType type) {
@@ -83,7 +86,17 @@ public class ProjectRepositoryImpl implements CustomProjectRepository {
     }
 
     private BooleanExpression projectStatusEq(ProjectStatus status) {
-        return status != null ? project.status.eq(status) : null;
+        if (status == null) {
+            return null;
+        }
+
+        LocalDate today = LocalDate.now();
+        return switch (status) {
+            case 예약 -> project.startDate.after(today);
+            case 진행중 -> project.startDate.before(today).and(project.endDate.after(today));
+            case 완료 -> project.endDate.before(today);
+            default -> null;
+        };
     }
 
     private BooleanExpression nameContains(String name) {
@@ -96,8 +109,8 @@ public class ProjectRepositoryImpl implements CustomProjectRepository {
 
     private BooleanExpression dateBetween(ProjectSearchCondition condition) {
         ProjectSearchType searchType = condition.getSearchType();
-        LocalDate fromDate = condition.getFromDate();
-        LocalDate toDate = condition.getToDate();
+        LocalDate fromDate = condition.getStartDate();
+        LocalDate toDate = condition.getEndDate();
         if (searchType == null || fromDate == null || toDate == null) {
             return null;
         }

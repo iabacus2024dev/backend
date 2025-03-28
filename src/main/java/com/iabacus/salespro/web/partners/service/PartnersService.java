@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
+import com.iabacus.salespro.core.excel.util.WorksheetUtil;
 import com.iabacus.salespro.web.common.PageResponse;
 import com.iabacus.salespro.web.partners.domain.Partners;
 import com.iabacus.salespro.web.partners.repository.PartnersRepository;
@@ -84,7 +85,7 @@ public class PartnersService {
             XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
             XSSFSheet worksheet = workbook.getSheetAt(0);
 
-            for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
+            for (int i = 1; i < WorksheetUtil.getActualDataRows(worksheet); i++) {
                 DataFormatter formatter = new DataFormatter();
                 XSSFRow row = worksheet.getRow(i);
 

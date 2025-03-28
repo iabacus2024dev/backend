@@ -35,7 +35,7 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
-    @PreAuthorize("hasAuthority('프로젝트_조회')")
+    @PreAuthorize("hasAuthority('프로젝트 조회')")
     @GetMapping("/{id}")
     public ResponseEntity<ProjectDetailResponse> getProjectDetail(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.getProjectDetail(id));

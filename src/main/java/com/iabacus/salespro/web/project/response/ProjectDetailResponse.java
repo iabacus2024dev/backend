@@ -92,6 +92,7 @@ public class ProjectDetailResponse {
             .expectedAmount(project.getExpectedAmount() != null ? project.getExpectedAmount().getAmount() : null)
             .contractAmount(project.getContractAmount() != null ? project.getContractAmount().getAmount() : null)
             .modifiedDateTime(project.getModifiedDateTime())
+            .status(project.getStatus())
             .build();
     }
 

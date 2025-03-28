@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 
 import lombok.Data;
 
-import com.iabacus.salespro.web.project.domain.ProjectStatus;
 import com.iabacus.salespro.web.project.domain.ProjectType;
 
 @Data
@@ -29,7 +28,6 @@ public class ProjectUpdateRequest {
     private String clientCompanyRepPhone;
     private BigDecimal expectedAmount;
     private BigDecimal contractAmount;
-    private ProjectStatus status;
     private LocalDateTime modifiedDateTime;
 
 }
