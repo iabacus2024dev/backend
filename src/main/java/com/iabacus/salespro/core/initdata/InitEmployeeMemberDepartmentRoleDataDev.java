@@ -27,7 +27,7 @@ import com.iabacus.salespro.web.role.domain.Role;
 import com.iabacus.salespro.web.role.domain.RoleAuthority;
 import com.iabacus.salespro.web.role.repository.RoleRepository;
 
-@Profile("dev")
+@Profile("local")
 @RequiredArgsConstructor
 @Component
 public class InitEmployeeMemberDepartmentRoleDataDev {
