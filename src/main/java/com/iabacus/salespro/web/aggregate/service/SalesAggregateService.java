@@ -13,6 +13,8 @@ import com.iabacus.salespro.web.common.Money;
 import com.iabacus.salespro.web.common.Ratio;
 import com.iabacus.salespro.web.common.util.DateUtil;
 import com.iabacus.salespro.web.common.util.SalesUtil;
+import com.iabacus.salespro.web.department.domain.TeamSalesGoal;
+import com.iabacus.salespro.web.department.repository.TeamSalesGoalRepository;
 import com.iabacus.salespro.web.project.domain.Contract;
 import com.iabacus.salespro.web.project.domain.Input;
 import com.iabacus.salespro.web.project.domain.Project;
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class SalesAggregateService{
 
     private final MonthlyEmployeeCostAggregateRepository monthlyEmployeeCostAggregateRepository;
+    private final TeamSalesGoalRepository teamSalesGoalRepository;
 
     // todo: 팀 목표 매출액 정보 추가, 변경계약 생성 시 이전 집계 종료일자 수정
     public void createMonthlyEmployeeCostAggregate(Project project, Contract contract, Input input) {
@@ -39,6 +42,12 @@ public class SalesAggregateService{
             Ratio ovheRate = input.getOvheRate();
             Money ovheAmount = SalesUtil.getOvheAmount(monthlyWage, ovheRate);
             Money totalCost = SalesUtil.getTotalCost(monthlyWage, sgaeAmount, ovheAmount);
+
+            // 팀 목표 매출액 정보 추가
+            Money teamSalesGoalAmountByYear = teamSalesGoalRepository
+                .findByDepartmentIdAndSalesGoalYear(input.getPersonnel().getDepartmentId(), input.getStartDate().getYear())
+                .map(TeamSalesGoal::getSalesGoalAmount)
+                .orElse(null);
 
             monthlyEmployeeCostAggregateRepository.save(MonthlyEmployeeCostAggregate.builder()
                 .projectId(project.getId())
@@ -65,8 +74,9 @@ public class SalesAggregateService{
                 .ovheRate(input.getOvheRate())
                 .ovheAmount(ovheAmount)
                 .totalCost(totalCost)
+                .teamSalesGoalAmountByYear(teamSalesGoalAmountByYear)
                 .build());
-            });
+        });
     }
 
 }
