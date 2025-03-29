@@ -30,7 +30,7 @@ public class ContractController {
 
     private final ContractService contractService;
 
-    @PreAuthorize("hasAuthority('계약 생성')")
+    @PreAuthorize("hasAuthority('계약 편집')")
     @PostMapping
     public ResponseEntity<Void> createContract(@Valid @RequestBody ContractCreateRequest contractCreateRequest) {
         contractService.createContract(contractCreateRequest);
