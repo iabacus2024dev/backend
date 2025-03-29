@@ -30,14 +30,14 @@ public class ContractController {
 
     private final ContractService contractService;
 
-    @PreAuthorize("hasAuthority('계약_생성')")
+    @PreAuthorize("hasAuthority('계약 생성')")
     @PostMapping
     public ResponseEntity<Void> createContract(@Valid @RequestBody ContractCreateRequest contractCreateRequest) {
         contractService.createContract(contractCreateRequest);
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasAuthority('계약_조회')")
+    @PreAuthorize("hasAuthority('계약 조회')")
     @GetMapping
     public ResponseEntity<List<ContractSearchResponse>> searchContract(@RequestParam String projectCode) {
         return ResponseEntity.ok(contractService.getContractsByProjectCode(projectCode));

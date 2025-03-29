@@ -47,21 +47,21 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.searchProjects(condition, pageable));
     }
 
-    @PreAuthorize("hasAuthority('프로젝트_편집')")
+    @PreAuthorize("hasAuthority('프로젝트 편집')")
     @PostMapping
     public ResponseEntity<Void> createProject(@Valid @RequestBody ProjectCreateRequest request) {
         projectService.createProject(request);
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasAuthority('프로젝트_편집')")
+    @PreAuthorize("hasAuthority('프로젝트 편집')")
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateProject(@PathVariable Long id, @Valid @RequestBody ProjectUpdateRequest request) {
         projectService.updateProject(id, request);
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasAuthority('프로젝트_편집')")
+    @PreAuthorize("hasAuthority('프로젝트 편집')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         projectService.deleteProject(id, LocalDateTime.now());
