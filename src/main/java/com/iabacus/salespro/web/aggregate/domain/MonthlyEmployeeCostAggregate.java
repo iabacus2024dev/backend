@@ -59,8 +59,6 @@ public class MonthlyEmployeeCostAggregate extends BaseEntity {
     @Column(name = "PROJECT_OWNER_DEPARTMENT_ID")
     private Long ownerDepartmentId;
 
-    // @Column(name = "PROJECT_OWNER_DEPARTMENT_NAME")
-    // private String ownerDepartmentName;
 
     @Column(name = "CONTRACT_ID")
     private Long contractId;
@@ -77,15 +75,15 @@ public class MonthlyEmployeeCostAggregate extends BaseEntity {
     @Column(name = "PERSONNEL_DEPARTMENT_ID")
     private Long personnelDepartmentId;
 
-    // @Column(name = "PERSONNEL_DEPARTMENT_NAME")
-    // private String personnelDepartmentName;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "PERSONNEL_TYPE")
     private EmployeeType personnelType;
 
     @Column(name = "PERSONNEL_START_DATE")
     private LocalDate personnelStartDate;
+
+    @AttributeOverride(name = "amount", column = @Column(name = "TEAM_SALES_GOAL_AMOUNT_BY_YEAR", precision = 10, scale = 0))
+    private Money teamSalesGoalAmountByYear;
 
     @Column(name = "PERSONNEL_END_DATE")
     private LocalDate personnelEndDate;
@@ -115,7 +113,7 @@ public class MonthlyEmployeeCostAggregate extends BaseEntity {
     private Money totalCost;
 
     @Builder
-    private MonthlyEmployeeCostAggregate(Long contractId, Long id, Long inputId, Ratio manMonth, Money monthlyWage, Money ovheAmount, Ratio ovheRate, Long ownerDepartmentId, Long personnelDepartmentId, LocalDate personnelEndDate, Long personnelId, String personnelName, LocalDate personnelStartDate, EmployeeType personnelType, String projectCode, Money projectContractAmount, LocalDate projectEndDate, Long projectId, String projectName, LocalDate projectStartDate, ProjectType projectType, Money sgaeAmount, Ratio sgaeRate, Money totalCost, Money unitPrice) {
+    private MonthlyEmployeeCostAggregate(Long contractId, Long id, Long inputId, Ratio manMonth, Money monthlyWage, Money ovheAmount, Ratio ovheRate, Long ownerDepartmentId, Long personnelDepartmentId, LocalDate personnelEndDate, Long personnelId, String personnelName, LocalDate personnelStartDate, EmployeeType personnelType, String projectCode, Money projectContractAmount, LocalDate projectEndDate, Long projectId, String projectName, LocalDate projectStartDate, ProjectType projectType, Money sgaeAmount, Ratio sgaeRate, Money teamSalesGoalAmountByYear, Money totalCost, Money unitPrice) {
         this.contractId = contractId;
         this.id = id;
         this.inputId = inputId;
@@ -124,9 +122,7 @@ public class MonthlyEmployeeCostAggregate extends BaseEntity {
         this.ovheAmount = ovheAmount;
         this.ovheRate = ovheRate;
         this.ownerDepartmentId = ownerDepartmentId;
-        // this.ownerDepartmentName = ownerDepartmentName;
         this.personnelDepartmentId = personnelDepartmentId;
-        // this.personnelDepartmentName = personnelDepartmentName;
         this.personnelEndDate = personnelEndDate;
         this.personnelId = personnelId;
         this.personnelName = personnelName;
@@ -142,6 +138,7 @@ public class MonthlyEmployeeCostAggregate extends BaseEntity {
         this.sgaeAmount = sgaeAmount;
         this.sgaeRate = sgaeRate;
         this.totalCost = totalCost;
+        this.teamSalesGoalAmountByYear = teamSalesGoalAmountByYear;
         this.unitPrice = unitPrice;
     }
 
@@ -158,12 +155,10 @@ public class MonthlyEmployeeCostAggregate extends BaseEntity {
             ", projectStartDate=" + projectStartDate +
             ", projectEndDate=" + projectEndDate +
             ", ownerDepartmentId=" + ownerDepartmentId +
-            // ", ownerDepartmentName='" + ownerDepartmentName + '\'' +
             ", inputId=" + inputId +
             ", personnelId=" + personnelId +
             ", personnelName='" + personnelName + '\'' +
             ", personnelDepartmentId=" + personnelDepartmentId +
-            // ", personnelDepartmentName='" + personnelDepartmentName + '\'' +
             ", personnelType=" + personnelType +
             ", personnelStartDate=" + personnelStartDate +
             ", personnelEndDate=" + personnelEndDate +
@@ -175,6 +170,7 @@ public class MonthlyEmployeeCostAggregate extends BaseEntity {
             ", ovheAmount=" + ovheAmount.getAmount() +
             ", unitPrice=" + unitPrice.getAmount() +
             ", totalCost=" + totalCost.getAmount() +
+            ", teamSalesGoalAmountByYear=" + teamSalesGoalAmountByYear.getAmount() +
             '}';
     }
 
