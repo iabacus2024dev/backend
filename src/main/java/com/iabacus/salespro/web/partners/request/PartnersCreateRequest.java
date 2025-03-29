@@ -4,13 +4,13 @@ import java.math.BigDecimal;
 
 import jakarta.validation.constraints.NotBlank;
 
-import lombok.Data;
-
 import com.iabacus.salespro.web.common.Address;
 import com.iabacus.salespro.web.common.Phone;
 import com.iabacus.salespro.web.common.Ratio;
 import com.iabacus.salespro.web.partners.domain.Partners;
 import com.iabacus.salespro.web.partners.domain.PartnersGrade;
+
+import lombok.Data;
 
 @Data
 public class PartnersCreateRequest {
@@ -33,6 +33,7 @@ public class PartnersCreateRequest {
     private String detail;
     private String zipcode;
     private PartnersGrade grade;
+    private String comment;
 
     public Partners toEntity() {
         return Partners.builder()
@@ -44,6 +45,7 @@ public class PartnersCreateRequest {
             .commissionRate(commissionRate != null ? Ratio.valueOf(commissionRate) : Ratio.valueOf(BigDecimal.ZERO))
             .address(createAddress())
             .grade(grade)
+            .comment(comment)
             .build();
     }
 
