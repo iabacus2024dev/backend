@@ -10,6 +10,7 @@ import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
 import com.iabacus.salespro.web.project.domain.Contract;
 import com.iabacus.salespro.web.project.domain.Input;
 import com.iabacus.salespro.web.project.domain.Project;
+import com.iabacus.salespro.web.project.repository.ContractRepository;
 import com.iabacus.salespro.web.project.repository.InputRepository;
 import com.iabacus.salespro.web.project.repository.ProjectRepository;
 import com.iabacus.salespro.web.project.request.InputCreateRequest;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class InputService {
 
   private final ProjectRepository projectRepository;
+  private final ContractRepository contractRepository;
   private final InputRepository inputRepository;
   private final EmployeeRepository employeeRepository;
   private final SalesAggregateService salesAggregateService;
@@ -34,6 +36,7 @@ public class InputService {
           .orElseThrow(() -> new BusinessException(ErrorCode.EMPLOYEE_NOT_FOUND));
 
       Input input = Input.builder()
+          .project(contract.getProject())
           .contract(contract)
           .personnel(personnel)
           .unitPrice(inputCreateRequest.getUnitPrice())
@@ -46,6 +49,10 @@ public class InputService {
           .build();
       inputRepository.save(input);
 
+      // todo: 변경계약 생성 시 이전 집계 종료일자 수정
+      salesAggregateService.updatePreviousMonthlyEmployeeCostAggregate(contract.getProject(), contract);
+
+      // 집계 데이터 생성
       salesAggregateService.createMonthlyEmployeeCostAggregate(contract.getProject(), contract, input);
     });
   }

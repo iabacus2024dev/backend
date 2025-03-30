@@ -1,6 +1,7 @@
 package com.iabacus.salespro.web.aggregate.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -172,6 +173,10 @@ public class MonthlyEmployeeCostAggregate extends BaseEntity {
             ", totalCost=" + totalCost.getAmount() +
             ", teamSalesGoalAmountByYear=" + teamSalesGoalAmountByYear.getAmount() +
             '}';
+    }
+
+    public void adjustPersonnelEndDate(LocalDate personnelEndDate) {
+        this.personnelEndDate = personnelEndDate;
     }
 
 }

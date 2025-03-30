@@ -25,6 +25,10 @@ public class Input extends BaseEntity {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "PROJECT_ID")
+  private Project project;
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "CONTRACT_ID")
   private Contract contract;
 
@@ -57,6 +61,7 @@ public class Input extends BaseEntity {
 
   @Builder
   private Input (
+      Project project,
       Contract contract,
       Employee personnel, // Employee 받도록 수정
       LocalDate startDate,
@@ -66,6 +71,7 @@ public class Input extends BaseEntity {
       Money wage,
       Ratio sgaeRate,
       Ratio ovheRate) {
+    this.project = project;
     this.contract = contract;
     this.personnel = personnel;
     this.startDate = startDate;

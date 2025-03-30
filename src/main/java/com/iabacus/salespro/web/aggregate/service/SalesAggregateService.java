@@ -1,6 +1,7 @@
 package com.iabacus.salespro.web.aggregate.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,6 @@ public class SalesAggregateService{
     private final MonthlyEmployeeCostAggregateRepository monthlyEmployeeCostAggregateRepository;
     private final TeamSalesGoalRepository teamSalesGoalRepository;
 
-    // todo: 팀 목표 매출액 정보 추가, 변경계약 생성 시 이전 집계 종료일자 수정
     public void createMonthlyEmployeeCostAggregate(Project project, Contract contract, Input input) {
         List<Map<String, LocalDate>> splitPeriodByMonthList = DateUtil.getSplitPeriodByMonth(input.getStartDate(), input.getEndDate());
         splitPeriodByMonthList.forEach(period -> {
@@ -77,6 +77,33 @@ public class SalesAggregateService{
                 .teamSalesGoalAmountByYear(teamSalesGoalAmountByYear)
                 .build());
         });
+    }
+
+    // todo: 변경계약 생성 시 이전 집계 종료일자 수정
+    public void updatePreviousMonthlyEmployeeCostAggregate(Project project, Contract contract) {
+        List<MonthlyEmployeeCostAggregate> monthlyEmployeeCostAggregateList =
+            monthlyEmployeeCostAggregateRepository.findByProjectId(project.getId());
+
+        monthlyEmployeeCostAggregateList.stream()
+            .filter(aggregate ->
+                aggregate.getPersonnelEndDate().isAfter(contract.getStartDate()) ||
+                    aggregate.getPersonnelEndDate().isEqual(contract.getStartDate())
+            )
+            .forEach(aggregate -> {
+                LocalDate newEndDate = contract.getStartDate().minusDays(1);
+
+                // 종료일이 시작일보다 이전이 되지 않도록 보정
+                if (newEndDate.isBefore(aggregate.getPersonnelStartDate())) {
+                    newEndDate = aggregate.getPersonnelStartDate();
+                }
+
+                // 새로운 종료일이 다음 계약 시작일 - 1 과 같다면 (시작일자 == 종료일자)비활성화 처리
+                if (!newEndDate.isEqual(aggregate.getPersonnelStartDate())) {
+                    aggregate.adjustPersonnelEndDate(newEndDate);
+                } else {
+                    aggregate.inactivate(LocalDateTime.now()); // 비활성화 처리
+                }
+            });
     }
 
 }

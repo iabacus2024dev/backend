@@ -13,4 +13,6 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
     List<Contract> findByProjectCodeOrderByIndexDesc(String projectCode);
 
     Optional<Contract> findByProjectCodeAndIndex(String projectCode, Integer index);
+
+    List<Contract> findByProjectId(Long projectId);
 }
