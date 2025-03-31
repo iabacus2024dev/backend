@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+import com.iabacus.salespro.web.department.response.DepartmentResponse;
 import com.iabacus.salespro.web.department.response.TreeViewResponse;
 import com.iabacus.salespro.web.department.service.DepartmentService;
 
@@ -16,6 +17,11 @@ import com.iabacus.salespro.web.department.service.DepartmentService;
 public class DepartmentController {
 
     private final DepartmentService departmentService;
+
+    @GetMapping("/api/v1/teams")
+    public ResponseEntity<List<DepartmentResponse>> getTeams() {
+        return ResponseEntity.ok(departmentService.getTeams());
+    }
 
     @GetMapping("/api/v1/teams/tree")
     public ResponseEntity<List<TreeViewResponse>> getDepartmentTreeView() {
