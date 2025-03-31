@@ -17,4 +17,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     Optional<Department> findByNameAndIsActivatedTrue(String name);
 
+    @Query("select d from Department d where d.isActivated = true and d.type = '팀'")
+    List<Department> findTeams();
+
 }
