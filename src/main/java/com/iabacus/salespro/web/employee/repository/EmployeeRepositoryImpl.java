@@ -12,6 +12,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import lombok.RequiredArgsConstructor;
+
+import com.iabacus.salespro.core.util.QuerydslUtils;
 import com.iabacus.salespro.web.employee.domain.Employee;
 import com.iabacus.salespro.web.employee.domain.EmployeeGrade;
 import com.iabacus.salespro.web.employee.domain.EmployeeRank;
@@ -20,11 +27,6 @@ import com.iabacus.salespro.web.employee.domain.EmployeeType;
 import com.iabacus.salespro.web.employee.request.EmployeeSearchCondition;
 import com.iabacus.salespro.web.employee.response.EmployeeMyInfoResponse;
 import com.iabacus.salespro.web.employee.response.QEmployeeMyInfoResponse;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Repository
@@ -45,7 +47,7 @@ public class EmployeeRepositoryImpl implements CustomEmployeeRepository {
                 nameContains(condition.getName()),
                 employee.isActivated.isTrue()
             )
-            .orderBy(employee.createdDateTime.asc())
+            .orderBy(QuerydslUtils.getSort(pageable, employee))
             .limit(pageable.getPageSize())
             .offset(pageable.getOffset())
             .fetch();
@@ -84,6 +86,25 @@ public class EmployeeRepositoryImpl implements CustomEmployeeRepository {
                 employee.isActivated.isTrue()
             )
             .fetchOne();
+    }
+
+    @Override
+    public List<Employee> searchWithoutPage(EmployeeSearchCondition condition, Pageable pageable) {
+        return queryFactory
+            .selectFrom(employee)
+            .where(
+                gradeEq(condition.getGrade()),
+                typeEq(condition.getType()),
+                rankEq(condition.getRank()),
+                statusEq(condition.getStatus()),
+                departmentEq(condition.getDepartmentId()),
+                nameContains(condition.getName()),
+                employee.isActivated.isTrue()
+            )
+            .orderBy(QuerydslUtils.getSort(pageable, employee))
+            .limit(pageable.getPageSize())
+            .offset(pageable.getOffset())
+            .fetch();
     }
 
     private BooleanExpression gradeEq(EmployeeGrade grade) {

@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import com.iabacus.salespro.core.security.service.UserPrincipal;
 import com.iabacus.salespro.web.common.PageResponse;
 import com.iabacus.salespro.web.employee.request.EmployeeCreateRequest;
@@ -26,9 +29,6 @@ import com.iabacus.salespro.web.employee.response.EmployeeDetailResponse;
 import com.iabacus.salespro.web.employee.response.EmployeeMyInfoResponse;
 import com.iabacus.salespro.web.employee.response.EmployeeSearchResponse;
 import com.iabacus.salespro.web.employee.service.EmployeeService;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -51,7 +51,7 @@ public class EmployeeController {
 
     @PreAuthorize("hasAuthority('구성원 조회')")
     @GetMapping
-    public ResponseEntity<PageResponse<EmployeeSearchResponse>> searchEmployees(@Valid @RequestBody EmployeeSearchCondition condition, Pageable pageable) {
+    public ResponseEntity<PageResponse<EmployeeSearchResponse>> searchEmployees(EmployeeSearchCondition condition, Pageable pageable) {
         return ResponseEntity.ok(employeeService.searchEmployees(condition, pageable));
     }
 
@@ -64,7 +64,7 @@ public class EmployeeController {
 
     @PreAuthorize("hasAuthority('구성원 편집')")
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateEmployee(@PathVariable Long id, EmployeeUpdateRequest request) {
+    public ResponseEntity<Void> updateEmployee(@PathVariable Long id, @Valid @RequestBody EmployeeUpdateRequest request) {
         employeeService.updateEmployee(id, request);
         return ResponseEntity.ok().build();
     }

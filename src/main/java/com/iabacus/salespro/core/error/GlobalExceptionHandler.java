@@ -6,11 +6,13 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -37,7 +39,7 @@ public class GlobalExceptionHandler {
     protected ErrorResponse handleBindException(BindException e) {
         log.error("handleBindException", e);
         List<FieldError> fieldErrors = e.getFieldErrors();
-        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, "validation error", request.getRequestURI());
+        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, fieldErrors.get(0).getDefaultMessage(), request.getRequestURI());
         fieldErrors.forEach(fieldError -> errorResponse.addValidation(fieldError.getField(), MessageUtil.getMessage(fieldError)));
         return errorResponse;
     }
@@ -99,6 +101,26 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ErrorResponse handleAuthorizationDeniedException(AuthorizationDeniedException e) {
         return ErrorResponse.of(HttpStatus.FORBIDDEN, MessageUtil.getMessage("forbidden.error"), request.getRequestURI());
+    }
+
+    /**
+     * 클라이언트에서 Body로 '객체' 데이터가 넘어오지 않았을 경우
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    protected ErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        log.error("HttpMessageNotReadableException", ex);
+        return ErrorResponse.of(HttpStatus.BAD_REQUEST, MessageUtil.getMessage("request.body.missing"), request.getRequestURI());
+    }
+
+    /**
+     * 클라이언트에서 request로 '파라미터로' 데이터가 넘어오지 않았을 경우
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    protected ErrorResponse handleMissingRequestHeaderExceptionException(MissingServletRequestParameterException ex) {
+        log.error("handleMissingServletRequestParameterException", ex);
+        return ErrorResponse.of(HttpStatus.BAD_REQUEST, MessageUtil.getMessage("missing.request.parameter"), request.getRequestURI());
     }
 
     /**

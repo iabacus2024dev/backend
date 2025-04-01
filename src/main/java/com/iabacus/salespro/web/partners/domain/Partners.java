@@ -33,7 +33,7 @@ public class Partners extends BaseEntity {
     @Column(name = "PARTNERS_ID")
     private Long id;
 
-    @Column(name = "PARTNERS_NAME")
+    @Column(name = "PARTNERS_NAME", unique = true)
     private String name;
 
     @Enumerated(EnumType.STRING)

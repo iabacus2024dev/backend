@@ -72,6 +72,7 @@ class EmployeeRepositoryImplTest {
             employeeRepository.save(Employee.builder()
                 .name("employee" + i)
                 .departmentId(department4.getId())
+                .hrStatus(EmployeeStatus.재직)
                 .build());
         }
 

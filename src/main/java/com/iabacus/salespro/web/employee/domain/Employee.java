@@ -81,7 +81,8 @@ public class Employee extends BaseEntity {
 
     @Builder
     public Employee(Long departmentId, Long partnersId, String name, String email, EmployeeRank rank, EmployeeGrade grade,
-                    EmployeeType type, Phone phone, LocalDate birthDate, LocalDate joinDate, Money annualSalary, String comment) {
+                    EmployeeType type, Phone phone, LocalDate birthDate, LocalDate joinDate, Money annualSalary, String comment,
+                    EmployeeStatus hrStatus) {
         this.departmentId = departmentId;
         this.partnersId = partnersId;
         this.name = name;
@@ -94,7 +95,7 @@ public class Employee extends BaseEntity {
         this.joinDate = joinDate;
         this.annualSalary = annualSalary;
         this.comment = comment;
-        this.HrStatus = EmployeeStatus.재직;
+        this.HrStatus = hrStatus;
     }
 
     public void leave(LocalDate leaveDate) {
