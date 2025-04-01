@@ -14,7 +14,7 @@ public class ProjectUpdateRequest {
     private String name;
     private String code;
     private ProjectType type;
-    private String department;
+    private Long departmentId;
     private String pmName;
     private String pmPhone;
     private LocalDate contractDate;

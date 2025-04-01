@@ -34,7 +34,7 @@ public class ProjectCreateRequest {
     private BigDecimal contractAmount;
 
     @NotNull
-    private Long ownerTeamId;
+    private Long departmentId;
 
     private String pmName;
 
@@ -59,7 +59,7 @@ public class ProjectCreateRequest {
     private String clientCompanyRepPhone;
 
     @Builder
-    public ProjectCreateRequest(String clientCompany, String clientCompanyRep, String clientCompanyRepPhone, String code, BigDecimal contractAmount, LocalDate contractDate, LocalDate endDate, BigDecimal expectedAmount, String mainCompany, String mainCompanyRep, String mainCompanyRepPhone, String name, Long ownerTeamId, String pmName, String pmPhone, LocalDate startDate, ProjectType type) {
+    public ProjectCreateRequest(String clientCompany, String clientCompanyRep, String clientCompanyRepPhone, String code, BigDecimal contractAmount, LocalDate contractDate, LocalDate endDate, BigDecimal expectedAmount, String mainCompany, String mainCompanyRep, String mainCompanyRepPhone, String name, Long departmentId, String pmName, String pmPhone, LocalDate startDate, ProjectType type) {
         this.clientCompany = clientCompany;
         this.clientCompanyRep = clientCompanyRep;
         this.clientCompanyRepPhone = clientCompanyRepPhone;
@@ -72,7 +72,7 @@ public class ProjectCreateRequest {
         this.mainCompanyRep = mainCompanyRep;
         this.mainCompanyRepPhone = mainCompanyRepPhone;
         this.name = name;
-        this.ownerTeamId = ownerTeamId;
+        this.departmentId = departmentId;
         this.pmName = pmName;
         this.pmPhone = pmPhone;
         this.startDate = startDate;
@@ -84,7 +84,7 @@ public class ProjectCreateRequest {
             .name(name)
             .code(code)
             .type(type)
-            .ownerTeamId(ownerTeamId)
+            .ownerTeamId(departmentId)
             .pmName(pmName)
             .pmPhone(Phone.of(pmPhone))
             .startDate(startDate)

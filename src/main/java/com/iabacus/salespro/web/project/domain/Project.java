@@ -109,11 +109,11 @@ public class Project extends BaseEntity {
         this.pmPhone = pmPhone;
     }
 
-    public void update(ProjectUpdateRequest request, Long ownerTeamId) {
+    public void update(ProjectUpdateRequest request) {
         this.name = request.getName();
         this.code = request.getCode();
         this.type = request.getType();
-        this.ownerTeamId = ownerTeamId;
+        this.ownerTeamId = request.getDepartmentId();
         this.expectedAmount = Money.wons(request.getExpectedAmount());
         this.contractAmount = Money.wons(request.getContractAmount());
         this.contractDate = request.getContractDate();

@@ -64,9 +64,7 @@ public class ProjectService {
         if (!project.getModifiedDateTime().equals(request.getModifiedDateTime())) {
             throw new BusinessException(ErrorCode.CONFLICT_MODIFIED_TIME);
         }
-        Department department = departmentRepository.findByNameAndIsActivatedTrue(request.getDepartment())
-            .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_NOT_FOUND));
-        project.update(request, department.getId());
+        project.update(request);
     }
 
     @Transactional
