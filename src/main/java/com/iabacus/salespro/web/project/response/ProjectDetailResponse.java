@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import com.iabacus.salespro.web.department.domain.Department;
+import com.iabacus.salespro.web.department.response.DepartmentResponse;
 import com.iabacus.salespro.web.project.domain.Project;
 import com.iabacus.salespro.web.project.domain.ProjectStatus;
 import com.iabacus.salespro.web.project.domain.ProjectType;
@@ -21,8 +22,7 @@ public class ProjectDetailResponse {
     private ProjectType type;
     private ProjectStatus status;
     private LocalDate contractDate;
-    private Long ownerTeamId;
-    private String ownerTeamName;
+    private DepartmentResponse department;
     private LocalDate startDate;
     private LocalDate endDate;
     private String pmName;
@@ -42,7 +42,7 @@ public class ProjectDetailResponse {
 
     @Builder
     public ProjectDetailResponse(Long id, String name, String code, ProjectType type, ProjectStatus status, LocalDate contractDate,
-                                 Long ownerTeamId, String ownerTeamName, LocalDate startDate, LocalDate endDate, String pmName, String pmPhone,
+                                 DepartmentResponse department, LocalDate startDate, LocalDate endDate, String pmName, String pmPhone,
                                  String mainCompany, String mainCompanyRep, String mainCompanyRepPhone, String clientCompany, String clientCompanyRep,
                                  String clientCompanyRepPhone, BigDecimal expectedAmount, BigDecimal contractAmount, LocalDateTime modifiedDateTime) {
         this.id = id;
@@ -51,8 +51,7 @@ public class ProjectDetailResponse {
         this.type = type;
         this.status = status;
         this.contractDate = contractDate;
-        this.ownerTeamId = ownerTeamId;
-        this.ownerTeamName = ownerTeamName;
+        this.department = department;
         this.startDate = startDate;
         this.endDate = endDate;
         this.pmName = pmName;
@@ -77,8 +76,7 @@ public class ProjectDetailResponse {
             .type(project.getType())
             .startDate(project.getStartDate())
             .contractDate(project.getContractDate())
-            .ownerTeamId(department != null ? department.getId() : null)
-            .ownerTeamName(department != null ? department.getName() : null)
+            .department(DepartmentResponse.from(department))
             .startDate(project.getStartDate())
             .endDate(project.getEndDate())
             .pmName(project.getPmName())

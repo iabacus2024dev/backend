@@ -113,7 +113,7 @@ public class Project extends BaseEntity {
         this.name = request.getName();
         this.code = request.getCode();
         this.type = request.getType();
-        this.ownerTeamId = request.getOwnerTeamId();
+        this.ownerTeamId = request.getDepartmentId();
         this.expectedAmount = Money.wons(request.getExpectedAmount());
         this.contractAmount = Money.wons(request.getContractAmount());
         this.contractDate = request.getContractDate();
