@@ -29,6 +29,10 @@ public class DepartmentService {
         return departmentRepository.findTeams().stream().map(DepartmentResponse::from).toList();
     }
 
+    public List<DepartmentResponse> getDepartments() {
+        return departmentRepository.findDepartments().stream().map(DepartmentResponse::from).toList();
+    }
+
     public List<TreeViewResponse> getTreeView() {
         List<Department> departments = departmentRepository.findTreeViewWithEmployees();
         List<Employee> employees = employeeRepository.findEmployees();

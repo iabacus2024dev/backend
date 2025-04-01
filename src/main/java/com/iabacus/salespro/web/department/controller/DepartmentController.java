@@ -23,6 +23,11 @@ public class DepartmentController {
         return ResponseEntity.ok(departmentService.getTeams());
     }
 
+    @GetMapping("/api/v1/departments")
+    public ResponseEntity<List<DepartmentResponse>> getDepartments() {
+        return ResponseEntity.ok(departmentService.getDepartments());
+    }
+
     @GetMapping("/api/v1/teams/tree")
     public ResponseEntity<List<TreeViewResponse>> getDepartmentTreeView() {
         return ResponseEntity.ok(departmentService.getTreeView());

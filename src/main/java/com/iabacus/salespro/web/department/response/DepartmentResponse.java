@@ -18,6 +18,9 @@ public class DepartmentResponse {
     }
 
     public static DepartmentResponse from(Department department) {
+        if (department == null) {
+            return null;
+        }
         return DepartmentResponse.builder()
             .id(department.getId())
             .name(department.getName())

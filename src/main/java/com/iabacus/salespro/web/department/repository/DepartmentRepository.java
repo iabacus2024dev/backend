@@ -20,4 +20,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     @Query("select d from Department d where d.isActivated = true and d.type = '팀'")
     List<Department> findTeams();
 
+    @Query("select d from Department d where d.isActivated = true")
+    List<Department> findDepartments();
+
 }
