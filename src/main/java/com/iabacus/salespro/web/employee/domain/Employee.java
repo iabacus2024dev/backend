@@ -110,9 +110,9 @@ public class Employee extends BaseEntity {
         return null;
     }
 
-    public void update(EmployeeUpdateRequest request) {
+    public void update(EmployeeUpdateRequest request, Long departmentId) {
         this.partnersId = request.getPartnersId();
-        this.departmentId = request.getDepartmentId();
+        this.departmentId = departmentId;
         this.name = request.getName();
         this.email = request.getEmail();
         this.rank = request.getRank();

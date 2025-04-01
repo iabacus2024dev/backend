@@ -75,7 +75,9 @@ public class EmployeeService {
         if (!employee.getModifiedDateTime().equals(request.getModifiedDateTime())) {
             throw new BusinessException(ErrorCode.CONFLICT_MODIFIED_TIME);
         }
-        employee.update(request);
+        Department department = departmentRepository.findByNameAndIsActivatedTrue(request.getDepartment())
+            .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_NOT_FOUND));
+        employee.update(request, department.getId());
     }
 
     @Transactional
@@ -107,7 +109,7 @@ public class EmployeeService {
             for (int i = 1; i < WorksheetUtil.getActualDataRows(worksheet); i++) {
                 DataFormatter formatter = new DataFormatter();
                 XSSFRow row = worksheet.getRow(i);
-                
+
                 EmployeeExcelRequest excel = new EmployeeExcelRequest();
                 String departmentName = formatter.formatCellValue(row.getCell(9));
                 Department department = departmentRepository.findByNameAndIsActivatedTrue(departmentName)

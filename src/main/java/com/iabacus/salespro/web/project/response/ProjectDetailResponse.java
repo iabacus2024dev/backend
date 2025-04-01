@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 
 import com.iabacus.salespro.web.department.domain.Department;
-import com.iabacus.salespro.web.department.response.DepartmentResponse;
 import com.iabacus.salespro.web.project.domain.Project;
 import com.iabacus.salespro.web.project.domain.ProjectStatus;
 import com.iabacus.salespro.web.project.domain.ProjectType;
@@ -22,7 +21,7 @@ public class ProjectDetailResponse {
     private ProjectType type;
     private ProjectStatus status;
     private LocalDate contractDate;
-    private DepartmentResponse department;
+    private String department;
     private LocalDate startDate;
     private LocalDate endDate;
     private String pmName;
@@ -42,7 +41,7 @@ public class ProjectDetailResponse {
 
     @Builder
     public ProjectDetailResponse(Long id, String name, String code, ProjectType type, ProjectStatus status, LocalDate contractDate,
-                                 DepartmentResponse department, LocalDate startDate, LocalDate endDate, String pmName, String pmPhone,
+                                 String department, LocalDate startDate, LocalDate endDate, String pmName, String pmPhone,
                                  String mainCompany, String mainCompanyRep, String mainCompanyRepPhone, String clientCompany, String clientCompanyRep,
                                  String clientCompanyRepPhone, BigDecimal expectedAmount, BigDecimal contractAmount, LocalDateTime modifiedDateTime) {
         this.id = id;
@@ -76,7 +75,7 @@ public class ProjectDetailResponse {
             .type(project.getType())
             .startDate(project.getStartDate())
             .contractDate(project.getContractDate())
-            .department(DepartmentResponse.from(department))
+            .department(department != null ? department.getName() : null)
             .startDate(project.getStartDate())
             .endDate(project.getEndDate())
             .pmName(project.getPmName())
