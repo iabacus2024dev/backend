@@ -47,12 +47,11 @@ public class EmployeeCreateRequest {
     @NotNull
     private LocalDate joinDate;
     private String comment;
-
-    private EmployeeStatus hrStatus;
+    private EmployeeStatus status;
 
     @Builder
     public EmployeeCreateRequest(Long partnersId, Long departmentId, String name, String email, EmployeeRank rank, EmployeeGrade grade,
-                                 EmployeeType type, String phone, LocalDate birthDate, LocalDate joinDate, String comment, EmployeeStatus hrStatus) {
+                                 EmployeeType type, String phone, LocalDate birthDate, LocalDate joinDate, String comment, EmployeeStatus status) {
         this.partnersId = partnersId;
         this.departmentId = departmentId;
         this.name = name;
@@ -64,7 +63,7 @@ public class EmployeeCreateRequest {
         this.birthDate = birthDate;
         this.joinDate = joinDate;
         this.comment = comment;
-        this.hrStatus = hrStatus;
+        this.status = status;
     }
 
     public Employee toEntity() {
@@ -80,7 +79,7 @@ public class EmployeeCreateRequest {
             .birthDate(birthDate)
             .joinDate(joinDate)
             .comment(comment)
-            .hrStatus(hrStatus)
+            .hrStatus(status)
             .build();
     }
 

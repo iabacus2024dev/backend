@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.iabacus.salespro.web.department.domain.Department;
 import com.iabacus.salespro.web.department.repository.DepartmentRepository;
+import com.iabacus.salespro.web.department.response.DepartmentResponse;
 import com.iabacus.salespro.web.department.response.TreeViewResponse;
 import com.iabacus.salespro.web.employee.domain.Employee;
 import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
@@ -24,12 +25,12 @@ public class DepartmentService {
     private final DepartmentRepository departmentRepository;
     private final EmployeeRepository employeeRepository;
 
-    public List<String> getTeams() {
-        return departmentRepository.findTeams().stream().map(Department::getName).toList();
+    public List<DepartmentResponse> getTeams() {
+        return departmentRepository.findTeams().stream().map(DepartmentResponse::from).toList();
     }
 
-    public List<String> getDepartments() {
-        return departmentRepository.findDepartments().stream().map(Department::getName).toList();
+    public List<DepartmentResponse> getDepartments() {
+        return departmentRepository.findDepartments().stream().map(DepartmentResponse::from).toList();
     }
 
     public List<TreeViewResponse> getTreeView() {

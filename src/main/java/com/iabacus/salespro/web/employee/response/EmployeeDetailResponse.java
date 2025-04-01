@@ -35,7 +35,7 @@ public class EmployeeDetailResponse {
     private LocalDate joinDate;
     private LocalDate leaveDate;
     private String comment;
-    private String department;
+    private DepartmentResponse department;
 
     private BigDecimal salary;
     private BigDecimal monthlyPay;
@@ -45,7 +45,7 @@ public class EmployeeDetailResponse {
     @Builder
     public EmployeeDetailResponse(Long id, Long partnersId, String partnersName, String name, String email, EmployeeRank rank, EmployeeGrade grade,
                                   EmployeeType type, EmployeeStatus status, String phone, LocalDate birthDate, LocalDate joinDate, LocalDate leaveDate,
-                                  String comment, String department, BigDecimal salary, BigDecimal monthlyPay, LocalDateTime modifiedDateTime) {
+                                  String comment, DepartmentResponse department, BigDecimal salary, BigDecimal monthlyPay, LocalDateTime modifiedDateTime) {
         this.id = id;
         this.partnersId = partnersId;
         this.partnersName = partnersName;
@@ -82,7 +82,7 @@ public class EmployeeDetailResponse {
             .joinDate(employee.getJoinDate())
             .leaveDate(employee.getLeaveDate())
             .comment(employee.getComment())
-            .department(DepartmentResponse.from(department) != null ? DepartmentResponse.from(department).getName() : null)
+            .department(DepartmentResponse.from(department))
             .salary(employee.getAnnualSalary() != null ? employee.getAnnualSalary().getAmount() : null)
             .monthlyPay(employee.getMonthlyPay() != null ? employee.getMonthlyPay().getAmount() : null)
             .modifiedDateTime(employee.getModifiedDateTime())

@@ -75,9 +75,7 @@ public class EmployeeService {
         if (!employee.getModifiedDateTime().equals(request.getModifiedDateTime())) {
             throw new BusinessException(ErrorCode.CONFLICT_MODIFIED_TIME);
         }
-        Department department = departmentRepository.findByNameAndIsActivatedTrue(request.getDepartment())
-            .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_NOT_FOUND));
-        employee.update(request, department.getId());
+        employee.update(request);
     }
 
     @Transactional

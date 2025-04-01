@@ -13,7 +13,7 @@ import com.iabacus.salespro.web.employee.domain.EmployeeType;
 public class EmployeeUpdateRequest {
 
     private Long partnersId;
-    private String department;
+    private Long departmentId;
     private String name;
     private String email;
     private EmployeeRank rank;
