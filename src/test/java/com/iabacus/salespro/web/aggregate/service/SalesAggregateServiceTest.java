@@ -1,11 +1,9 @@
 package com.iabacus.salespro.web.aggregate.service;
 
-
 import static org.assertj.core.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -102,12 +100,10 @@ class SalesAggregateServiceTest {
 
         // then
         List<MonthlyEmployeeCostAggregate> monthlyEmployeeCostAggregateList = monthlyEmployeeCostAggregateRepository.findByInputId(input.getId());
-        monthlyEmployeeCostAggregateList.forEach(monthlyEmployeeCostAggregate ->
-            System.out.println("집계 데이터: " + monthlyEmployeeCostAggregate)
-        );
         assertThat(monthlyEmployeeCostAggregateList.size()).isEqualTo(2);
 
         assertThat(monthlyEmployeeCostAggregateList.get(0).getTotalCost().getAmount()).isEqualTo(BigDecimal.valueOf(4147200));
         assertThat(monthlyEmployeeCostAggregateList.get(1).getTotalCost().getAmount()).isEqualTo(BigDecimal.valueOf(2073600));
     }
+
 }

@@ -19,6 +19,7 @@ import com.iabacus.salespro.web.department.repository.DepartmentRepository;
 import com.iabacus.salespro.web.employee.domain.Employee;
 import com.iabacus.salespro.web.employee.domain.EmployeeGrade;
 import com.iabacus.salespro.web.employee.domain.EmployeeRank;
+import com.iabacus.salespro.web.employee.domain.EmployeeStatus;
 import com.iabacus.salespro.web.employee.domain.EmployeeType;
 import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
 import com.iabacus.salespro.web.member.domain.Member;
@@ -198,6 +199,7 @@ public class InitEmployeeMemberDepartmentRoleData {
             .rank(EmployeeRank.사원)
             .grade(EmployeeGrade.초급)
             .type(EmployeeType.정직원)
+            .hrStatus(EmployeeStatus.재직)
             .comment("최근 입사한 신입사원")
             .build();
     }

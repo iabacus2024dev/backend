@@ -4,16 +4,17 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import lombok.Builder;
+import lombok.Data;
+
 import com.iabacus.salespro.web.department.domain.Department;
+import com.iabacus.salespro.web.department.response.DepartmentResponse;
 import com.iabacus.salespro.web.employee.domain.Employee;
 import com.iabacus.salespro.web.employee.domain.EmployeeGrade;
 import com.iabacus.salespro.web.employee.domain.EmployeeRank;
 import com.iabacus.salespro.web.employee.domain.EmployeeStatus;
 import com.iabacus.salespro.web.employee.domain.EmployeeType;
 import com.iabacus.salespro.web.partners.domain.Partners;
-
-import lombok.Builder;
-import lombok.Data;
 
 @Data
 public class EmployeeDetailResponse {
@@ -34,7 +35,7 @@ public class EmployeeDetailResponse {
     private LocalDate joinDate;
     private LocalDate leaveDate;
     private String comment;
-    private String teamName;
+    private DepartmentResponse department;
 
     private BigDecimal salary;
     private BigDecimal monthlyPay;
@@ -43,8 +44,8 @@ public class EmployeeDetailResponse {
 
     @Builder
     public EmployeeDetailResponse(Long id, Long partnersId, String partnersName, String name, String email, EmployeeRank rank, EmployeeGrade grade,
-                                  EmployeeType type, EmployeeStatus status, String phone, LocalDate birthDate, LocalDate joinDate,
-                                  LocalDate leaveDate, String comment, String teamName, BigDecimal salary, BigDecimal monthlyPay, LocalDateTime modifiedDateTime) {
+                                  EmployeeType type, EmployeeStatus status, String phone, LocalDate birthDate, LocalDate joinDate, LocalDate leaveDate,
+                                  String comment, DepartmentResponse department, BigDecimal salary, BigDecimal monthlyPay, LocalDateTime modifiedDateTime) {
         this.id = id;
         this.partnersId = partnersId;
         this.partnersName = partnersName;
@@ -59,7 +60,7 @@ public class EmployeeDetailResponse {
         this.joinDate = joinDate;
         this.leaveDate = leaveDate;
         this.comment = comment;
-        this.teamName = teamName;
+        this.department = department;
         this.salary = salary;
         this.monthlyPay = monthlyPay;
         this.modifiedDateTime = modifiedDateTime;
@@ -76,12 +77,12 @@ public class EmployeeDetailResponse {
             .grade(employee.getGrade())
             .type(employee.getType())
             .status(employee.getHrStatus())
-            .phone(employee.getPhone() != null ? employee.getPhone().getWithHyphen() : null)
+            .phone(employee.getPhone() != null ? employee.getPhone().getNumber() : null)
             .birthDate(employee.getBirthDate())
             .joinDate(employee.getJoinDate())
             .leaveDate(employee.getLeaveDate())
             .comment(employee.getComment())
-            .teamName(department != null ? department.getName() : null)
+            .department(DepartmentResponse.from(department))
             .salary(employee.getAnnualSalary() != null ? employee.getAnnualSalary().getAmount() : null)
             .monthlyPay(employee.getMonthlyPay() != null ? employee.getMonthlyPay().getAmount() : null)
             .modifiedDateTime(employee.getModifiedDateTime())

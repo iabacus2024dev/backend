@@ -38,7 +38,6 @@ public class EmployeeSearchResponse {
     }
 
     @Builder
-
     public static EmployeeSearchResponse from(Employee employee, Department department) {
         return EmployeeSearchResponse.builder()
             .id(employee.getId())

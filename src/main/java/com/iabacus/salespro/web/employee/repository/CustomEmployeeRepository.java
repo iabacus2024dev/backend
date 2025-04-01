@@ -1,5 +1,7 @@
 package com.iabacus.salespro.web.employee.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,5 +14,7 @@ public interface CustomEmployeeRepository {
     Page<Employee> search(EmployeeSearchCondition condition, Pageable pageable);
 
     EmployeeMyInfoResponse getMyInfo(Long memberId);
+
+    List<Employee> searchWithoutPage(EmployeeSearchCondition condition, Pageable pageable);
 
 }
