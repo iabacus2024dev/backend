@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.iabacus.salespro.core.security.service.UserPrincipal;
 import com.iabacus.salespro.web.common.PageResponse;
 import com.iabacus.salespro.web.employee.request.EmployeeCreateRequest;
+import com.iabacus.salespro.web.employee.request.EmployeeLeaveRequest;
 import com.iabacus.salespro.web.employee.request.EmployeeSearchCondition;
 import com.iabacus.salespro.web.employee.request.EmployeeUpdateRequest;
 import com.iabacus.salespro.web.employee.response.EmployeeDetailResponse;
@@ -71,8 +72,15 @@ public class EmployeeController {
 
     @PreAuthorize("hasAuthority('구성원 편집')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMember(@PathVariable Long id) {
-        employeeService.deleteMember(id, LocalDateTime.now());
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id, LocalDateTime.now());
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasAuthority('구성원 편집')")
+    @PostMapping("/{id}/leave")
+    public ResponseEntity<Void> leaveEmployee(@PathVariable Long id, @Valid @RequestBody EmployeeLeaveRequest request) {
+        employeeService.leaveEmployee(id, request.getLeaveDate());
         return ResponseEntity.ok().build();
     }
 
