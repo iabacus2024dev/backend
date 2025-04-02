@@ -61,6 +61,10 @@ public enum ErrorCode {
 
     // ROLE
     ROLE_NOT_FOUND(HttpStatus.BAD_REQUEST, "role.not.found"),
+    ROLE_ALREADY_REGISTERED(HttpStatus.BAD_REQUEST, "role.already.registered"),
+
+    // AUTHORITY
+    AUTHORITY_NOT_FOUND(HttpStatus.BAD_REQUEST, "authority.not.found"),
 
     // PHONE
     INVALID_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "invalid.phone.number"),

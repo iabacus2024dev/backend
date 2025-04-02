@@ -1,25 +1,13 @@
 package com.iabacus.salespro.web.role.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
-
+import com.iabacus.salespro.web.common.BaseEntity;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import com.iabacus.salespro.web.common.BaseEntity;
+import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,24 +20,35 @@ public class Authority extends BaseEntity {
     @Column(name = "AUTHORITY_ID")
     private Long id;
 
-    @Column(name = "AUTHORITY_NAME", unique = true)
+    @Column(name = "AUTHORITY_NAME", nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "AUTHORITY_PAGE")
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "PAGE_ID")
     private AuthorityPage page;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "AUTHORITY_ACTION")
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "ACTION_ID")
     private AuthorityAction action;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    private List<AuthorityRange> authorityRanges = new ArrayList<>();
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "RANGE_ID")
+    private AuthorityRange range;
 
     @Builder
-    private Authority(String name, List<AuthorityRange> authorityRanges) {
+    private Authority(String name, AuthorityPage page, AuthorityAction action, AuthorityRange range) {
         this.name = name;
-        this.authorityRanges = authorityRanges;
+        this.page = page;
+        this.action = action;
+        this.range = range;
     }
 
+    public static Authority createAuthority(String name, AuthorityPage page, AuthorityAction action, AuthorityRange range) {
+        return Authority.builder()
+                .name(name)
+                .page(page)
+                .action(action)
+                .range(range)
+                .build();
+    }
 }

@@ -1,42 +1,30 @@
 package com.iabacus.salespro.web.role.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
-
-import lombok.AccessLevel;
-import lombok.Builder;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
+
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@NoArgsConstructor(access = PROTECTED)
 @Table(name = "TB_AUTHORITY_RANGE")
 public class AuthorityRange {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "AUTHORITY_RANGE_ID")
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "RANGE_ID")
     private Long id;
 
-    @ManyToMany(mappedBy = "authorityRanges")
-    private List<Authority> authorities = new ArrayList<>();
-
-    @Column(name = "AUTHORITY_RANGE_NAME")
+    @Column(name = "RANGE_NAME", unique = true, nullable = false)
     private String name;
 
-    @Builder
-    public AuthorityRange(List<Authority> authorities, String name) {
-        this.authorities = authorities;
+    private AuthorityRange(String name) {
         this.name = name;
     }
 
+    public static AuthorityRange createAuthorityRange(String name) {
+        return new AuthorityRange(name);
+    }
 }

@@ -41,6 +41,12 @@ public class RoleAuthority {
         this.authority = authority;
     }
 
+    public static RoleAuthority createRoleAuthority(Authority authority) {
+        return RoleAuthority.builder()
+                .authority(authority)
+                .build();
+    }
+
     public void changeRole(Role role) {
         this.role = role;
     }

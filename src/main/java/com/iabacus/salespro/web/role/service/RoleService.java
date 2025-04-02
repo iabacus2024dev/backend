@@ -1,15 +1,22 @@
 package com.iabacus.salespro.web.role.service;
 
-import java.util.List;
-
+import com.iabacus.salespro.core.error.BusinessException;
+import com.iabacus.salespro.web.role.domain.*;
+import com.iabacus.salespro.web.role.repository.*;
+import com.iabacus.salespro.web.role.request.AuthorityRequest;
+import com.iabacus.salespro.web.role.request.RoleAddRequest;
+import com.iabacus.salespro.web.role.response.AuthorityResponse;
+import com.iabacus.salespro.web.role.response.RoleResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
-import com.iabacus.salespro.web.role.repository.RoleRepository;
-import com.iabacus.salespro.web.role.response.AuthorityResponse;
-import com.iabacus.salespro.web.role.response.RoleResponse;
+import static com.iabacus.salespro.core.error.ErrorCode.AUTHORITY_NOT_FOUND;
+import static com.iabacus.salespro.core.error.ErrorCode.ROLE_ALREADY_REGISTERED;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -17,6 +24,10 @@ import com.iabacus.salespro.web.role.response.RoleResponse;
 public class RoleService {
 
     private final RoleRepository roleRepository;
+    private final AuthorityRepository authorityRepository;
+    private final AuthorityActionRepository authorityActionRepository;
+    private final AuthorityPageRepository authorityPageRepository;
+    private final AuthorityRangeRepository authorityRangeRepository;
 
     public List<RoleResponse> getRoles() {
         return roleRepository.findRoles();
@@ -28,4 +39,45 @@ public class RoleService {
             .toList();
     }
 
+    @Transactional
+    public Long addRole(RoleAddRequest roleAddRequest) {
+        if (roleRepository.existsByName(roleAddRequest.getRoleName())) throw new BusinessException(ROLE_ALREADY_REGISTERED);
+        return roleRepository.save(getRole(roleAddRequest)).getId();
+    }
+
+    private Role getRole(RoleAddRequest roleAddRequest) {
+        return Role.createRole(roleAddRequest.getRoleName(), roleAddRequest.getIsDefaultRole(), getRoleAuthorities(roleAddRequest));
+    }
+
+    private List<RoleAuthority> getRoleAuthorities(RoleAddRequest roleAddRequest) {
+        return roleAddRequest.getAuthorityList().stream()
+                .filter(this::checkAuthRequest)
+                .map(this::getAuthority)
+                .map(RoleAuthority::createRoleAuthority)
+                .toList();
+    }
+
+    private boolean checkAuthRequest(AuthorityRequest authorityRequest) {
+        return Stream.of(authorityRequest.getAuthorityAction(), authorityRequest.getAuthorityPage(), authorityRequest.getAuthorityRange()).allMatch(Objects::nonNull);
+    }
+
+    private Authority getAuthority(AuthorityRequest authorityRequest) {
+        return authorityRepository.findByPageAndActionAndRange(getPage(authorityRequest),getAction(authorityRequest),getRange(authorityRequest))
+                .orElseThrow(() -> new BusinessException(AUTHORITY_NOT_FOUND));
+    }
+
+    private AuthorityRange getRange(AuthorityRequest authorityRequest) {
+        return authorityRangeRepository.findByName(authorityRequest.getAuthorityRange())
+                .orElseThrow(() -> new BusinessException(AUTHORITY_NOT_FOUND));
+    }
+
+    private AuthorityAction getAction(AuthorityRequest authorityRequest) {
+        return authorityActionRepository.findByName(authorityRequest.getAuthorityAction())
+                .orElseThrow(() -> new BusinessException(AUTHORITY_NOT_FOUND));
+    }
+
+    private AuthorityPage getPage(AuthorityRequest authorityRequest) {
+        return authorityPageRepository.findByName(authorityRequest.getAuthorityPage())
+                .orElseThrow(() -> new BusinessException(AUTHORITY_NOT_FOUND));
+    }
 }

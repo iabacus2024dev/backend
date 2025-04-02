@@ -1,23 +1,14 @@
 package com.iabacus.salespro.web.role.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-
+import com.iabacus.salespro.web.common.BaseEntity;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import com.iabacus.salespro.web.common.BaseEntity;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,13 +21,13 @@ public class Role extends BaseEntity {
     @Column(name = "ROLE_ID")
     private Long id;
 
-    @Column(name = "ROLE_NAME", unique = true)
+    @Column(name = "ROLE_NAME", unique = true, nullable = false)
     private String name;
 
     @Column(name = "IS_DEFAULT_ROLE")
     private boolean isDefaultRole;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoleAuthority> roleAuthorities = new ArrayList<>();
 
     @Builder
@@ -44,17 +35,30 @@ public class Role extends BaseEntity {
         this.name = name;
         this.isDefaultRole = isDefaultRole;
         if (roleAuthorities != null) {
-            roleAuthorities.forEach(this::addRoleAuthorities);
+            addRoleAuthorities(roleAuthorities);
         }
     }
 
-    public void addRoleAuthorities(RoleAuthority roleAuthority) {
-        roleAuthorities.add(roleAuthority);
-        roleAuthority.changeRole(this);
+    public static Role createRole(String name, boolean isDefaultRole, List<RoleAuthority> roleAuthorities) {
+        Role role = Role.builder()
+                .name(name)
+                .isDefaultRole(isDefaultRole)
+                .build();
+        role.addRoleAuthorities(roleAuthorities);
+        return role;
     }
 
-    public void setDefault() {
-        this.isDefaultRole = true;
+    public static Role createRole(String name, boolean isDefaultRole) {
+        return Role.builder()
+                .name(name)
+                .isDefaultRole(isDefaultRole)
+                .build();
     }
 
+    private void addRoleAuthorities(List<RoleAuthority> roleAuthorities) {
+        for (RoleAuthority roleAuthority : roleAuthorities) {
+            this.roleAuthorities.add(roleAuthority);
+            roleAuthority.changeRole(this);
+        }
+    }
 }

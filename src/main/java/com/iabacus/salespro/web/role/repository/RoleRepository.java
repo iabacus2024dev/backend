@@ -1,13 +1,12 @@
 package com.iabacus.salespro.web.role.repository;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.iabacus.salespro.web.role.domain.Authority;
+import com.iabacus.salespro.web.role.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.iabacus.salespro.web.role.domain.Authority;
-import com.iabacus.salespro.web.role.domain.Role;
+import java.util.List;
+import java.util.Optional;
 
 public interface RoleRepository extends JpaRepository<Role, Long>, CustomRoleRepository {
 
@@ -29,4 +28,5 @@ public interface RoleRepository extends JpaRepository<Role, Long>, CustomRoleRep
         "order by a.name")
     List<Authority> findByMemberIdWithAuthority(Long memberId);
 
+    boolean existsByName(String name);
 }
