@@ -1,5 +1,6 @@
 package com.iabacus.salespro.web.employee.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -79,14 +80,14 @@ public class EmployeeService {
     }
 
     @Transactional
-    public void deleteMember(Long id, LocalDateTime now) {
+    public void deleteEmployee(Long id, LocalDateTime now) {
         Employee employee = findEmployee(id);
         employee.inactivate(now);
     }
 
-    private Employee findEmployee(Long id) {
-        return employeeRepository.findByIdAndIsActivatedTrue(id)
-            .orElseThrow(() -> new BusinessException(ErrorCode.EMPLOYEE_NOT_FOUND));
+    @Transactional
+    public void leaveEmployee(Long id, LocalDate leaveDate) {
+        findEmployee(id).leave(leaveDate);
     }
 
     public List<EmployeeExcelResponse> getEmployees(EmployeeSearchCondition condition, Pageable pageable) {
@@ -119,6 +120,11 @@ public class EmployeeService {
             log.error("프로젝트 엑셀 업로드 중 오류 발생", e);
             throw new BusinessException(ErrorCode.INVALID_EXCEL_FILE);
         }
+    }
+
+    private Employee findEmployee(Long id) {
+        return employeeRepository.findByIdAndIsActivatedTrue(id)
+            .orElseThrow(() -> new BusinessException(ErrorCode.EMPLOYEE_NOT_FOUND));
     }
 
 }
