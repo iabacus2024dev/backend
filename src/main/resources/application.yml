@@ -2,6 +2,10 @@ spring:
   profiles:
     active: dev
 
+  devtools:
+    livereload:
+      enabled: true
+
   config:
     import:
       - classpath:/common/common.yml
