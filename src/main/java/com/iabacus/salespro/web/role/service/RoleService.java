@@ -25,9 +25,6 @@ public class RoleService {
 
     private final RoleRepository roleRepository;
     private final AuthorityRepository authorityRepository;
-    private final AuthorityActionRepository authorityActionRepository;
-    private final AuthorityPageRepository authorityPageRepository;
-    private final AuthorityRangeRepository authorityRangeRepository;
 
     public List<RoleResponse> getRoles() {
         return roleRepository.findRoles();
@@ -62,22 +59,7 @@ public class RoleService {
     }
 
     private Authority getAuthority(AuthorityRequest authorityRequest) {
-        return authorityRepository.findByPageAndActionAndRange(getPage(authorityRequest),getAction(authorityRequest),getRange(authorityRequest))
-                .orElseThrow(() -> new BusinessException(AUTHORITY_NOT_FOUND));
-    }
-
-    private AuthorityRange getRange(AuthorityRequest authorityRequest) {
-        return authorityRangeRepository.findByName(authorityRequest.getAuthorityRange())
-                .orElseThrow(() -> new BusinessException(AUTHORITY_NOT_FOUND));
-    }
-
-    private AuthorityAction getAction(AuthorityRequest authorityRequest) {
-        return authorityActionRepository.findByName(authorityRequest.getAuthorityAction())
-                .orElseThrow(() -> new BusinessException(AUTHORITY_NOT_FOUND));
-    }
-
-    private AuthorityPage getPage(AuthorityRequest authorityRequest) {
-        return authorityPageRepository.findByName(authorityRequest.getAuthorityPage())
+        return authorityRepository.findByPageAndActionAndRange(authorityRequest.getAuthorityPage(), authorityRequest.getAuthorityAction(), authorityRequest.getAuthorityRange())
                 .orElseThrow(() -> new BusinessException(AUTHORITY_NOT_FOUND));
     }
 }

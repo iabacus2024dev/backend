@@ -14,12 +14,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.iabacus.salespro.core.error.ErrorCode.AUTHORITY_NOT_FOUND;
 import static com.iabacus.salespro.core.error.ErrorCode.ROLE_ALREADY_REGISTERED;
 import static com.iabacus.salespro.web.role.domain.AuthorityAction.createAuthorityAction;
-import static com.iabacus.salespro.web.role.domain.AuthorityPage.createAuthorityPage;
+import static com.iabacus.salespro.web.role.domain.Page.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -37,44 +40,50 @@ class RoleServiceTest {
     private AuthorityRepository authorityRepository;
 
     @Autowired
-    private AuthorityPageRepository authorityPageRepository;
-
-    @Autowired
     private AuthorityActionRepository authorityActionRepository;
 
     @Autowired
     private AuthorityRangeRepository authorityRangeRepository;
 
+    @Autowired
+    private ActionRepository actionRepository;
+
+    @Autowired
+    private RangeRepository rangeRepository;
+
     @BeforeEach
     public void init() {
-        List<AuthorityPage> pages = authorityPageRepository.saveAll(List.of(
-                createAuthorityPage("프로젝트"),
-                createAuthorityPage("구성원"),
-                createAuthorityPage("협력사"),
-                createAuthorityPage("매출"),
-                createAuthorityPage("권한"),
-                createAuthorityPage("휴가")
-        ));
+        Map<String, Action> actions = saveActions("조회", "편집");
+        List<Range> ranges = saveRanges();
+        List<Page> pages = List.of(프로젝트, 구성원, 협력사, 매출, 권한, 휴가);
 
-        List<AuthorityAction> actions = authorityActionRepository.saveAll(List.of(
-                createAuthorityAction("조회"),
-                createAuthorityAction("편집")
-        ));
+        pages.forEach(page -> {
+            saveAuthority(page + " 조회", page, ranges, createAuthorityAction(actions.get("조회")));
+            saveAuthority(page + " 편집", page, ranges, createAuthorityAction(actions.get("편집")));
+        });
+    }
 
-        List<AuthorityRange> ranges = authorityRangeRepository.saveAll(List.of(
-                AuthorityRange.createAuthorityRange("전체"),
-                AuthorityRange.createAuthorityRange("소속 팀"),
-                AuthorityRange.createAuthorityRange("투입 프로젝트"),
-                AuthorityRange.createAuthorityRange("본인")
-        ));
+    private Map<String, Action> saveActions(String... actionNames) {
+        return Arrays.stream(actionNames)
+                .map(Action::createAction)
+                .map(actionRepository::save)
+                .collect(Collectors.toMap(Action::getName, a -> a));
+    }
 
-        authorityRepository.saveAllAndFlush(List.of(
-                Authority.createAuthority("프로젝트 관리", pages.get(0), actions.get(0), ranges.get(0)),
-                Authority.createAuthority("구성원 관리", pages.get(1), actions.get(0), ranges.get(2)),
-                Authority.createAuthority("협력사 관리", pages.get(2), actions.get(1), ranges.get(1)),
-                Authority.createAuthority("매출 관리", pages.get(3), actions.get(1), ranges.get(3)),
-                Authority.createAuthority("권한 관리", pages.get(4), actions.get(1), ranges.get(1)),
-                Authority.createAuthority("휴가 관리", pages.get(5), actions.get(0), ranges.get(2))
+    private void saveAuthority(String authName, Page page, List<Range> rangeList, AuthorityAction authorityAction) {
+        authorityRepository.save(Authority.createAuthority(authName, page, authorityAction, saveAuthorityRanges(rangeList)));
+    }
+
+    private List<AuthorityRange> saveAuthorityRanges(List<Range> rangeList) {
+        return authorityRangeRepository.saveAll(rangeList.stream().map(AuthorityRange::createAuthorityRange).toList());
+    }
+
+    private List<Range> saveRanges() {
+        return rangeRepository.saveAll(List.of(
+                Range.createAuthorityRange("전체"),
+                Range.createAuthorityRange("소속 팀"),
+                Range.createAuthorityRange("투입 프로젝트"),
+                Range.createAuthorityRange("본인")
         ));
     }
 
@@ -91,7 +100,7 @@ class RoleServiceTest {
         Role foundRole = roleRepository.findById(roleId).get();
         assertThat(foundRole.getName()).isEqualTo("관리자");
         assertThat(foundRole.isDefaultRole()).isEqualTo(true);
-        assertThat(foundRole.getRoleAuthorities().get(0).getAuthority().getName()).isEqualTo("프로젝트 관리");
+        assertThat(foundRole.getRoleAuthorities().size()).isEqualTo(6);
     }
 
     @Test

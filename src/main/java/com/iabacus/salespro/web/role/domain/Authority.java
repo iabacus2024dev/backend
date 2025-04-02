@@ -7,7 +7,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static jakarta.persistence.FetchType.LAZY;
+import java.util.ArrayList;
+import java.util.List;
+
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.EnumType.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,32 +27,36 @@ public class Authority extends BaseEntity {
     @Column(name = "AUTHORITY_NAME", nullable = false)
     private String name;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "PAGE_ID")
-    private AuthorityPage page;
+    @Enumerated(value = STRING)
+    private Page page;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "ACTION_ID")
-    private AuthorityAction action;
+    @OneToMany(mappedBy = "authority", cascade = PERSIST)
+    private List<AuthorityAction> authorityActionList = new ArrayList<>();
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "RANGE_ID")
-    private AuthorityRange range;
+    @OneToMany(mappedBy = "authority", cascade = PERSIST)
+    private List<AuthorityRange> authorityRangeList = new ArrayList<>();
 
     @Builder
-    private Authority(String name, AuthorityPage page, AuthorityAction action, AuthorityRange range) {
+    private Authority(String name, Page page, AuthorityAction authorityAction, List<AuthorityRange> authorityRangeList) {
         this.name = name;
         this.page = page;
-        this.action = action;
-        this.range = range;
+        this.authorityActionList.add(authorityAction);
+        authorityAction.setAuthority(this);
+        this.authorityRangeList.addAll(createList(authorityRangeList));
     }
 
-    public static Authority createAuthority(String name, AuthorityPage page, AuthorityAction action, AuthorityRange range) {
+    private List<AuthorityRange> createList(List<AuthorityRange> authorityRangeList) {
+        return authorityRangeList.stream()
+                .peek(a -> a.setAuthority(this))
+                .toList();
+    }
+
+    public static Authority createAuthority(String name, Page page, AuthorityAction authorityAction, List<AuthorityRange> authorityRangeList) {
         return Authority.builder()
                 .name(name)
                 .page(page)
-                .action(action)
-                .range(range)
+                .authorityAction(authorityAction)
+                .authorityRangeList(authorityRangeList)
                 .build();
     }
 }

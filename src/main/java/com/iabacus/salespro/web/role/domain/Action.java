@@ -10,22 +10,21 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @Entity
 @NoArgsConstructor(access = PROTECTED)
-@Table(name = "TB_AUTHORITY_PAGE")
-public class AuthorityPage {
+@Table(name = "TB_ACTION")
+public class Action {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "PAGE_ID")
+    @Column(name = "ACTION_ID")
     private Long id;
 
-    @Column(name = "PAGE_NAME", unique = true, nullable = false)
+    @Column(name = "ACTION_NAME", unique = true, nullable = false)
     private String name;
 
-    private AuthorityPage(String name) {
+    private Action(String name) {
         this.name = name;
     }
 
-    public static AuthorityPage createAuthorityPage(String pageName) {
-        return new AuthorityPage(pageName);
+    public static Action createAction(String name) {
+        return new Action(name);
     }
 }
-

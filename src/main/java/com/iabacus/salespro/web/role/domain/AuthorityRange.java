@@ -3,7 +3,9 @@ package com.iabacus.salespro.web.role.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -14,17 +16,23 @@ import static lombok.AccessLevel.PROTECTED;
 public class AuthorityRange {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "RANGE_ID")
+    @Column(name = "AUTHORITY_RANGE_ID")
     private Long id;
 
-    @Column(name = "RANGE_NAME", unique = true, nullable = false)
-    private String name;
+    @Setter
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "AUTHORITY_ID")
+    private Authority authority;
 
-    private AuthorityRange(String name) {
-        this.name = name;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "RANGE_ID")
+    private Range range;
+
+    private AuthorityRange(Range range) {
+        this.range = range;
     }
 
-    public static AuthorityRange createAuthorityRange(String name) {
-        return new AuthorityRange(name);
+    public static AuthorityRange createAuthorityRange(Range range) {
+        return new AuthorityRange(range);
     }
 }
