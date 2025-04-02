@@ -1,14 +1,23 @@
 package com.iabacus.salespro.web.role.domain;
 
-import com.iabacus.salespro.web.common.BaseEntity;
-import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.iabacus.salespro.web.common.BaseEntity;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,24 +50,25 @@ public class Role extends BaseEntity {
 
     public static Role createRole(String name, boolean isDefaultRole, List<RoleAuthority> roleAuthorities) {
         Role role = Role.builder()
-                .name(name)
-                .isDefaultRole(isDefaultRole)
-                .build();
+            .name(name)
+            .isDefaultRole(isDefaultRole)
+            .build();
         role.addRoleAuthorities(roleAuthorities);
         return role;
     }
 
     public static Role createRole(String name, boolean isDefaultRole) {
         return Role.builder()
-                .name(name)
-                .isDefaultRole(isDefaultRole)
-                .build();
+            .name(name)
+            .isDefaultRole(isDefaultRole)
+            .build();
     }
 
-    private void addRoleAuthorities(List<RoleAuthority> roleAuthorities) {
+    public void addRoleAuthorities(List<RoleAuthority> roleAuthorities) {
         for (RoleAuthority roleAuthority : roleAuthorities) {
             this.roleAuthorities.add(roleAuthority);
             roleAuthority.changeRole(this);
         }
     }
+
 }

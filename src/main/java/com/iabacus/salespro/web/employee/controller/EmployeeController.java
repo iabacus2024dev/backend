@@ -38,7 +38,7 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
-    @PreAuthorize("hasAuthority('구성원 조회')")
+    @PreAuthorize("hasAnyAuthority('구성원 조회')")
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeDetailResponse> getEmployeeDetail(@PathVariable Long id) {
         return ResponseEntity.ok(employeeService.getEmployeeDetail(id));
