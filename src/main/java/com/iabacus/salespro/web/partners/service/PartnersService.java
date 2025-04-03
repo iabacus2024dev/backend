@@ -3,27 +3,20 @@ package com.iabacus.salespro.web.partners.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
-import com.iabacus.salespro.core.excel.util.WorksheetUtil;
 import com.iabacus.salespro.web.common.PageResponse;
 import com.iabacus.salespro.web.partners.domain.Partners;
 import com.iabacus.salespro.web.partners.repository.PartnersRepository;
 import com.iabacus.salespro.web.partners.request.PartnersCreateRequest;
-import com.iabacus.salespro.web.partners.request.PartnersExcelRequest;
 import com.iabacus.salespro.web.partners.request.PartnersSearchCondition;
 import com.iabacus.salespro.web.partners.request.PartnersUpdateRequest;
 import com.iabacus.salespro.web.partners.response.PartnersDetailResponse;
@@ -77,26 +70,6 @@ public class PartnersService {
         return partnersRepository.searchWithoutPage(condition, pageable).stream()
             .map(PartnersExcelResponse::from)
             .toList();
-    }
-
-    @Transactional
-    public void uploadPartners(MultipartFile file) {
-        try {
-            XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
-            XSSFSheet worksheet = workbook.getSheetAt(0);
-
-            for (int i = 1; i < WorksheetUtil.getActualDataRows(worksheet); i++) {
-                DataFormatter formatter = new DataFormatter();
-                XSSFRow row = worksheet.getRow(i);
-
-                PartnersExcelRequest excel = new PartnersExcelRequest();
-                Partners partners = excel.toEntity(formatter, row);
-                partnersRepository.save(partners);
-            }
-        } catch (Exception e) {
-            log.error("협력사 엑셀 업로드 중 오류 발생", e);
-            throw new BusinessException(ErrorCode.INVALID_EXCEL_FILE);
-        }
     }
 
 }

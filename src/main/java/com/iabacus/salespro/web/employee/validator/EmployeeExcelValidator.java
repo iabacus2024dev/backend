@@ -19,7 +19,7 @@ public class EmployeeExcelValidator {
             throw new BusinessException(ErrorCode.INVALID_EXCEL_FILE, "이름이 누락되었습니다.");
         }
 
-        if (employee.getEmail() == null || employee.getEmail().contains("@")) {
+        if (employee.getEmail() == null || !employee.getEmail().contains("@")) {
             throw new BusinessException(ErrorCode.INVALID_EXCEL_FILE, "유효하지 않은 이메일 형식입니다.");
         }
 

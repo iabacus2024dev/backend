@@ -3,16 +3,27 @@ package com.iabacus.salespro.web.partners.request;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 public class PartnersUpdateRequest {
 
+    @NotBlank
     private String name;
+
+    @NotBlank
     private String ceoName;
+
+    @NotBlank
     private String salesRepName;
+
+    @NotBlank
     private String salesRepPhone;
+
     private String salesRepEmail;
     private BigDecimal commissionRate;
     private String grade;
@@ -20,6 +31,8 @@ public class PartnersUpdateRequest {
     private String detail;
     private String zipcode;
     private String comment;
+
+    @NotNull
     private LocalDateTime modifiedDateTime;
 
     @Builder
