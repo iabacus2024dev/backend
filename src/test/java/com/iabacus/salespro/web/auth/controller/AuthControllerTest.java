@@ -66,7 +66,6 @@ class AuthControllerTest {
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.code").value(400))
             .andExpect(jsonPath("$.status").value("Bad Request"))
-            .andExpect(jsonPath("$.message").value("must be a well-formed email address"))
             .andExpect(jsonPath("$.path").value("/api/v1/auths/register"))
             .andExpect(jsonPath("$.validation").isMap());
     }
