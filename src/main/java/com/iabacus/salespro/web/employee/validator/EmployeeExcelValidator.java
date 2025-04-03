@@ -2,19 +2,13 @@ package com.iabacus.salespro.web.employee.validator;
 
 import org.springframework.stereotype.Component;
 
-import lombok.RequiredArgsConstructor;
-
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
-import com.iabacus.salespro.web.auth.validator.EmailValidator;
 import com.iabacus.salespro.web.common.Money;
 import com.iabacus.salespro.web.employee.domain.Employee;
 
 @Component
-@RequiredArgsConstructor
 public class EmployeeExcelValidator {
-
-    private final EmailValidator emailValidator;
 
     public void validate(Employee employee) {
         if (employee.getDepartmentId() == null) {
@@ -25,10 +19,9 @@ public class EmployeeExcelValidator {
             throw new BusinessException(ErrorCode.INVALID_EXCEL_FILE, "이름이 누락되었습니다.");
         }
 
-        if (employee.getEmail() == null) {
+        if (employee.getEmail() == null || employee.getEmail().contains("@")) {
             throw new BusinessException(ErrorCode.INVALID_EXCEL_FILE, "유효하지 않은 이메일 형식입니다.");
         }
-        emailValidator.validate(employee.getEmail());
 
         if (employee.getRank() == null) {
             throw new BusinessException(ErrorCode.INVALID_EXCEL_FILE, "직급 정보가 누락되었습니다.");

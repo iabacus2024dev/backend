@@ -50,12 +50,13 @@ public class EmployeeExcelService {
 
             Department department = getDepartment(formatter, row);
             Employee employee = getEmployee(formatter, row, department);
+            employeeExcelValidator.validate(employee);
             employeeRepository.save(employee);
         }
     }
 
     private Employee getEmployee(DataFormatter formatter, XSSFRow row, Department department) {
-        Employee employee = Employee.builder()
+        return Employee.builder()
             .name(formatter.formatCellValue(row.getCell(0)))
             .email(formatter.formatCellValue(row.getCell(1)))
             .phone(Phone.of(formatter.formatCellValue(row.getCell(2))))
@@ -68,9 +69,6 @@ public class EmployeeExcelService {
             .departmentId(department.getId())
             .annualSalary(Money.wons(Long.parseLong(formatter.formatCellValue(row.getCell(10)))))
             .build();
-
-        employeeExcelValidator.validate(employee);
-        return employee;
     }
 
     private Department getDepartment(DataFormatter formatter, XSSFRow row) {
