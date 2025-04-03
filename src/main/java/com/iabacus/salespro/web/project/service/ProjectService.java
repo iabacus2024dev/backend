@@ -1,5 +1,6 @@
 package com.iabacus.salespro.web.project.service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,7 @@ import com.iabacus.salespro.web.project.request.ProjectUpdateRequest;
 import com.iabacus.salespro.web.project.response.ProjectDetailResponse;
 import com.iabacus.salespro.web.project.response.ProjectExcelResponse;
 import com.iabacus.salespro.web.project.response.ProjectSearchResponse;
+import com.iabacus.salespro.web.project.response.ProjectUrlResponse;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -87,29 +90,6 @@ public class ProjectService {
                 return ProjectExcelResponse.from(project, department);
             })
             .toList();
-    }
-
-    @Transactional
-    public void uploadProject(MultipartFile file) {
-        try {
-            XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
-            XSSFSheet worksheet = workbook.getSheetAt(0);
-
-            for (int i = 1; i < WorksheetUtil.getActualDataRows(worksheet); i++) {
-                DataFormatter formatter = new DataFormatter();
-                XSSFRow row = worksheet.getRow(i);
-
-                ProjectExcelRequest excel = new ProjectExcelRequest();
-                String departmentName = formatter.formatCellValue(row.getCell(4));
-                Department department = departmentRepository.findByNameAndIsActivatedTrue(departmentName)
-                    .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_NOT_FOUND));
-                Project project = excel.toEntity(formatter, row, department.getId());
-                projectRepository.save(project);
-            }
-        } catch (Exception e) {
-            log.error("프로젝트 엑셀 업로드 중 오류 발생", e);
-            throw new BusinessException(ErrorCode.INVALID_EXCEL_FILE);
-        }
     }
 
 }

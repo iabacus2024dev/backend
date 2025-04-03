@@ -81,6 +81,22 @@ public class ProjectRepositoryImpl implements CustomProjectRepository {
             .toList();
     }
 
+    @Override
+    public Page<Project> findProjectUrl(Pageable pageable, String query) {
+        List<Project> content = queryFactory.select(project)
+            .from(project)
+            .where(nameContains(query))
+            .limit(pageable.getPageSize())
+            .offset(pageable.getOffset())
+            .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory.select(project.count())
+            .from(project)
+            .where(nameContains(query));
+        
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
     private BooleanExpression projectTypeEq(ProjectType type) {
         return type != null ? project.type.eq(type) : null;
     }
