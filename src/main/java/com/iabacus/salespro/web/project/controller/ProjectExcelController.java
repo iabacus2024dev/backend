@@ -23,6 +23,7 @@ import com.iabacus.salespro.core.excel.dto.ExcelSheetData;
 import com.iabacus.salespro.core.excel.file.SXSSFExcelFile;
 import com.iabacus.salespro.web.project.request.ProjectSearchCondition;
 import com.iabacus.salespro.web.project.response.ProjectExcelResponse;
+import com.iabacus.salespro.web.project.service.ProjectExcelService;
 import com.iabacus.salespro.web.project.service.ProjectService;
 
 @Slf4j
@@ -32,6 +33,7 @@ import com.iabacus.salespro.web.project.service.ProjectService;
 public class ProjectExcelController {
 
     private final ProjectService projectService;
+    private final ProjectExcelService projectExcelService;
 
     @PreAuthorize("hasAuthority('프로젝트 조회')")
     @GetMapping("/excel/download")
@@ -59,8 +61,8 @@ public class ProjectExcelController {
 
     @PreAuthorize("hasAuthority('프로젝트 편집')")
     @PostMapping("/excel/upload")
-    public ResponseEntity<Void> uploadProjects(MultipartFile file) {
-        projectService.uploadProject(file);
+    public ResponseEntity<Void> uploadProjects(MultipartFile file) throws IOException {
+        projectExcelService.uploadProject(file);
         return ResponseEntity.ok().build();
     }
 

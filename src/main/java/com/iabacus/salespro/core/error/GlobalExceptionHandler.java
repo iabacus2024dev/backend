@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
     protected ErrorResponse handleBindException(BindException e) {
         log.error("handleBindException", e);
         List<FieldError> fieldErrors = e.getFieldErrors();
-        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, fieldErrors.get(0).getDefaultMessage(), request.getRequestURI());
+        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, MessageUtil.getMessage(fieldErrors.get(0)), request.getRequestURI());
         fieldErrors.forEach(fieldError -> errorResponse.addValidation(fieldError.getField(), MessageUtil.getMessage(fieldError)));
         return errorResponse;
     }

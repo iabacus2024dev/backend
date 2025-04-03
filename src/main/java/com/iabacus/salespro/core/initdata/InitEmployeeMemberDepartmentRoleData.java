@@ -91,10 +91,10 @@ public class InitEmployeeMemberDepartmentRoleData {
         employeeRepository.saveAll(List.of(employee1, employee2, employee3, employee4, employee5, employee6, employee7, employee8));
 
         // 권한 범위
-        Range range1 = Range.createAuthorityRange("전체");
-        Range range2 = Range.createAuthorityRange("팀");
-        Range range3 = Range.createAuthorityRange("프로젝트");
-        Range range4 = Range.createAuthorityRange("본인");
+        Range range1 = Range.createRange("전체");
+        Range range2 = Range.createRange("팀");
+        Range range3 = Range.createRange("프로젝트");
+        Range range4 = Range.createRange("본인");
         rangeRepository.saveAll(List.of(range1, range2, range3, range4));
 
         // 권한 액션(조회, 편집)

@@ -23,6 +23,7 @@ import com.iabacus.salespro.core.excel.dto.ExcelSheetData;
 import com.iabacus.salespro.core.excel.file.SXSSFExcelFile;
 import com.iabacus.salespro.web.employee.request.EmployeeSearchCondition;
 import com.iabacus.salespro.web.employee.response.EmployeeExcelResponse;
+import com.iabacus.salespro.web.employee.service.EmployeeExcelService;
 import com.iabacus.salespro.web.employee.service.EmployeeService;
 
 @Slf4j
@@ -31,6 +32,7 @@ import com.iabacus.salespro.web.employee.service.EmployeeService;
 @RequestMapping("/api/v1/employees")
 public class EmployeeExcelController {
 
+    private final EmployeeExcelService employeeExcelService;
     private final EmployeeService employeeService;
 
     @PreAuthorize("hasAuthority('구성원 조회')")
@@ -59,8 +61,8 @@ public class EmployeeExcelController {
 
     @PreAuthorize("hasAuthority('구성원 편집')")
     @PostMapping("/excel/upload")
-    public ResponseEntity<Void> uploadEmployees(MultipartFile file) {
-        employeeService.uploadEmployees(file);
+    public ResponseEntity<Void> uploadEmployees(MultipartFile file) throws IOException {
+        employeeExcelService.uploadEmployees(file);
         return ResponseEntity.ok().build();
     }
 

@@ -10,4 +10,6 @@ public interface PartnersRepository extends JpaRepository<Partners, Long>, Custo
 
     Optional<Partners> findByIdAndIsActivatedTrue(Long partnersId);
 
+    boolean existsByName(String name);
+
 }

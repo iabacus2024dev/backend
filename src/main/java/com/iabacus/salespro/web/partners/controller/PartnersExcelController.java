@@ -23,6 +23,7 @@ import com.iabacus.salespro.core.excel.dto.ExcelSheetData;
 import com.iabacus.salespro.core.excel.file.SXSSFExcelFile;
 import com.iabacus.salespro.web.partners.request.PartnersSearchCondition;
 import com.iabacus.salespro.web.partners.response.PartnersExcelResponse;
+import com.iabacus.salespro.web.partners.service.PartnersExcelService;
 import com.iabacus.salespro.web.partners.service.PartnersService;
 
 @Slf4j
@@ -32,6 +33,7 @@ import com.iabacus.salespro.web.partners.service.PartnersService;
 public class PartnersExcelController {
 
     private final PartnersService partnersService;
+    private final PartnersExcelService partnersExcelService;
 
     @PreAuthorize("hasAuthority('협력사 조회')")
     @GetMapping("/excel/download")
@@ -59,8 +61,8 @@ public class PartnersExcelController {
 
     @PreAuthorize("hasAuthority('협력사 편집')")
     @PostMapping("/excel/upload")
-    public ResponseEntity<Void> uploadPartners(MultipartFile file) {
-        partnersService.uploadPartners(file);
+    public ResponseEntity<Void> uploadPartners(MultipartFile file) throws IOException {
+        partnersExcelService.uploadPartners(file);
         return ResponseEntity.ok().build();
     }
 
