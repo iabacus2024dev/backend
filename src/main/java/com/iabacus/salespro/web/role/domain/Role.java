@@ -1,23 +1,14 @@
 package com.iabacus.salespro.web.role.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-
+import com.iabacus.salespro.web.common.BaseEntity;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import com.iabacus.salespro.web.common.BaseEntity;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -65,10 +56,10 @@ public class Role extends BaseEntity {
     }
 
     public void addRoleAuthorities(List<RoleAuthority> roleAuthorities) {
-        for (RoleAuthority roleAuthority : roleAuthorities) {
-            this.roleAuthorities.add(roleAuthority);
-            roleAuthority.changeRole(this);
-        }
+        roleAuthorities.forEach(a -> {
+            this.roleAuthorities.add(a);
+            a.changeRole(this);
+        });
     }
 
 }

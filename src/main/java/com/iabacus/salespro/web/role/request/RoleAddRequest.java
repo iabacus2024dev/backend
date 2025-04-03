@@ -15,12 +15,14 @@ public class RoleAddRequest {
     @NotNull
     private Boolean isDefaultRole;
     private List<AuthorityRequest> authorityList;
+    private List<RoleMemberRequest> roleMemberRequestList;
 
-    public static RoleAddRequest of(String roleName, Boolean isDefaultRole, List<AuthorityRequest> authorityList) {
+    public static RoleAddRequest of(String roleName, Boolean isDefaultRole, List<AuthorityRequest> authorityList, List<RoleMemberRequest> roleMemberRequestList) {
         return RoleAddRequest.builder()
                 .roleName(roleName)
                 .isDefaultRole(isDefaultRole)
                 .authorityList(authorityList)
+                .roleMemberRequestList(roleMemberRequestList)
                 .build();
     }
 }

@@ -3,6 +3,7 @@ package com.iabacus.salespro.web.role.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iabacus.salespro.web.role.request.AuthorityRequest;
 import com.iabacus.salespro.web.role.request.RoleAddRequest;
+import com.iabacus.salespro.web.role.request.RoleMemberRequest;
 import com.iabacus.salespro.web.role.service.RoleService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,6 +47,8 @@ class RoleControllerTest {
                         AuthorityRequest.of("매출", "편집", "본인"),
                         AuthorityRequest.of("권한", "편집", "소속 팀"),
                         AuthorityRequest.of("휴가", "조회", "투입 프로젝트")
+                ), List.of(
+                        RoleMemberRequest.of(1L, 1L, "김진규 사원")
                 )
         );
 

@@ -1,8 +1,12 @@
 package com.iabacus.salespro.web.role.service;
 
 import com.iabacus.salespro.core.error.BusinessException;
-import com.iabacus.salespro.web.role.domain.*;
-import com.iabacus.salespro.web.role.repository.*;
+import com.iabacus.salespro.web.member.repository.MemberRepository;
+import com.iabacus.salespro.web.role.domain.Authority;
+import com.iabacus.salespro.web.role.domain.Role;
+import com.iabacus.salespro.web.role.domain.RoleAuthority;
+import com.iabacus.salespro.web.role.repository.AuthorityRepository;
+import com.iabacus.salespro.web.role.repository.RoleRepository;
 import com.iabacus.salespro.web.role.request.AuthorityRequest;
 import com.iabacus.salespro.web.role.request.RoleAddRequest;
 import com.iabacus.salespro.web.role.response.AuthorityResponse;
@@ -25,6 +29,7 @@ public class RoleService {
 
     private final RoleRepository roleRepository;
     private final AuthorityRepository authorityRepository;
+    private final MemberRepository memberRepository;
 
     public List<RoleResponse> getRoles() {
         return roleRepository.findRoles();
@@ -39,7 +44,16 @@ public class RoleService {
     @Transactional
     public Long addRole(RoleAddRequest roleAddRequest) {
         if (roleRepository.existsByName(roleAddRequest.getRoleName())) throw new BusinessException(ROLE_ALREADY_REGISTERED);
-        return roleRepository.save(getRole(roleAddRequest)).getId();
+        Long roleId = roleRepository.save(getRole(roleAddRequest)).getId();
+        setRoleToMember(roleAddRequest, roleId);
+        return roleId;
+    }
+
+    private void setRoleToMember(RoleAddRequest roleAddRequest, Long roleId) {
+        roleAddRequest.getRoleMemberRequestList().stream()
+                .map(r -> memberRepository.findByEmployeeId(r.getEmployeeId()).orElse(null))
+                .filter(Objects::nonNull)
+                .forEach(m -> m.setRoleId(roleId));
     }
 
     private Role getRole(RoleAddRequest roleAddRequest) {

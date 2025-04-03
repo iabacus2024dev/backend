@@ -1,25 +1,13 @@
 package com.iabacus.salespro.web.member.domain;
 
-import static com.fasterxml.jackson.annotation.JsonProperty.Access.*;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
 import com.iabacus.salespro.web.common.BaseEntity;
+import jakarta.persistence.*;
+import lombok.*;
+
+import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,6 +23,7 @@ public class Member extends BaseEntity {
     @Column(name = "EMPLOYEE_ID")
     private Long employeeId;
 
+    @Setter
     @JoinColumn(name = "ROLE_ID")
     private Long roleId;
 

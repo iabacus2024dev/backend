@@ -1,21 +1,19 @@
 package com.iabacus.salespro.web.department.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
-
 import com.iabacus.salespro.web.department.domain.Department;
 import com.iabacus.salespro.web.department.repository.DepartmentRepository;
 import com.iabacus.salespro.web.department.response.DepartmentResponse;
 import com.iabacus.salespro.web.department.response.TreeViewResponse;
 import com.iabacus.salespro.web.employee.domain.Employee;
 import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -39,6 +37,15 @@ public class DepartmentService {
 
         Map<Long, TreeViewResponse> departmentMap = buildDepartmentMap(departments);
         addEmployeesToDepartments(employees, departmentMap);
+        return getRootDepartments(departments, departmentMap);
+    }
+
+    public List<TreeViewResponse> getTreeViewWithMember() {
+        List<Department> departments = departmentRepository.findTreeViewWithEmployees();
+        List<Employee> employeesWithMember = employeeRepository.findEmployeesWithMember();
+
+        Map<Long, TreeViewResponse> departmentMap = buildDepartmentMap(departments);
+        addEmployeesToDepartments(employeesWithMember, departmentMap);
         return getRootDepartments(departments, departmentMap);
     }
 
@@ -73,5 +80,4 @@ public class DepartmentService {
     private String getName(Employee employee) {
         return employee.getName() + " " + employee.getRank();
     }
-
 }

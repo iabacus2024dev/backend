@@ -1,26 +1,16 @@
 package com.iabacus.salespro.web.employee.domain;
 
-import java.time.LocalDate;
-
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
+import com.iabacus.salespro.web.common.BaseEntity;
+import com.iabacus.salespro.web.common.Money;
+import com.iabacus.salespro.web.common.Phone;
+import com.iabacus.salespro.web.employee.request.EmployeeUpdateRequest;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import com.iabacus.salespro.web.common.BaseEntity;
-import com.iabacus.salespro.web.common.Money;
-import com.iabacus.salespro.web.common.Phone;
-import com.iabacus.salespro.web.employee.request.EmployeeUpdateRequest;
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
