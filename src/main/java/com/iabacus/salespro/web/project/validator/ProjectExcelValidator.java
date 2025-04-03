@@ -9,10 +9,13 @@ import lombok.RequiredArgsConstructor;
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
 import com.iabacus.salespro.web.project.domain.Project;
+import com.iabacus.salespro.web.project.repository.ProjectRepository;
 
 @Component
 @RequiredArgsConstructor
 public class ProjectExcelValidator {
+
+    private final ProjectRepository projectRepository;
 
     public void validate(Project project) {
         if (project.getName() == null || project.getName().trim().isEmpty()) {
@@ -21,6 +24,10 @@ public class ProjectExcelValidator {
 
         if (project.getCode() == null || project.getCode().trim().isEmpty()) {
             throw new BusinessException(ErrorCode.INVALID_EXCEL_FILE, "프로젝트 코드가 누락되었습니다.");
+        }
+
+        if (projectRepository.existsByCode(project.getCode())) {
+            throw new BusinessException(ErrorCode.INVALID_EXCEL_FILE, "프로젝트 코드가 중복됩니다.");
         }
 
         if (project.getType() == null || project.getType().name().trim().isEmpty()) {

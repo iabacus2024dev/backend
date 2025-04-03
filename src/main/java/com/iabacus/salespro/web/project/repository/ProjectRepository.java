@@ -10,4 +10,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long>, CustomP
 
     Optional<Project> findByIdAndIsActivatedTrue(Long id);
 
+    boolean existsByCode(String code);
+
 }

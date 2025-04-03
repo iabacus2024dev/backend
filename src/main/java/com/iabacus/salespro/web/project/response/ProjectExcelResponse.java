@@ -24,9 +24,6 @@ public class ProjectExcelResponse {
     @ExcelColumn(headerName = "프로젝트 유형")
     private String type;
 
-    @ExcelColumn(headerName = "프로젝트 상태")
-    private String status;
-
     @ExcelColumn(headerName = "계약일자")
     private LocalDate contractDate;
 
@@ -70,14 +67,13 @@ public class ProjectExcelResponse {
     private BigDecimal contractAmount;
 
     @Builder
-    public ProjectExcelResponse(String name, String code, String type, String status, LocalDate contractDate,
+    public ProjectExcelResponse(String name, String code, String type, LocalDate contractDate,
                                 String ownerTeamName, LocalDate startDate, LocalDate endDate, String pmName, String pmPhone,
                                 String mainCompany, String mainCompanyRep, String mainCompanyRepPhone, String clientCompany,
                                 String clientCompanyRep, String clientCompanyRepPhone, BigDecimal expectedAmount, BigDecimal contractAmount) {
         this.name = name;
         this.code = code;
         this.type = type;
-        this.status = status;
         this.contractDate = contractDate;
         this.ownerTeamName = ownerTeamName;
         this.startDate = startDate;
@@ -99,7 +95,6 @@ public class ProjectExcelResponse {
             .name(project.getName())
             .code(project.getCode())
             .type(project.getType().name())
-            .status(project.getStatus().name())
             .contractDate(project.getContractDate())
             .ownerTeamName(department.getName())
             .startDate(project.getStartDate())
