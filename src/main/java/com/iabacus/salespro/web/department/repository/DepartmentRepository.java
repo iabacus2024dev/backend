@@ -12,9 +12,6 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     Optional<Department> findByIdAndIsActivatedTrue(Long departmentId);
 
-    @Query("SELECT d FROM Department d LEFT JOIN FETCH d.children")
-    List<Department> findTreeViewWithEmployees();
-
     Optional<Department> findByNameAndIsActivatedTrue(String name);
 
     @Query("select d from Department d where d.isActivated = true and d.type = '팀'")
