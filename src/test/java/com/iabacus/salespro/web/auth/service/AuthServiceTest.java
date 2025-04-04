@@ -8,27 +8,22 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.iabacus.salespro.core.error.BusinessException;
+import com.iabacus.salespro.core.error.ErrorCode;
+import com.iabacus.salespro.web.IntegrationTestSupport;
+import com.iabacus.salespro.web.auth.domain.Auth;
+import com.iabacus.salespro.web.auth.repository.AuthRepository;
 import com.iabacus.salespro.web.auth.request.MemberRegisterRequest;
 import com.iabacus.salespro.web.auth.request.PasswordFindRequest;
 import com.iabacus.salespro.web.auth.request.PasswordInitializeRequest;
-import com.iabacus.salespro.web.auth.domain.Auth;
-import com.iabacus.salespro.web.auth.repository.AuthRepository;
 import com.iabacus.salespro.web.employee.domain.Employee;
 import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
 import com.iabacus.salespro.web.member.domain.Member;
 import com.iabacus.salespro.web.member.repository.MemberRepository;
-import com.iabacus.salespro.core.error.BusinessException;
-import com.iabacus.salespro.core.error.ErrorCode;
 
-@ActiveProfiles("test")
-@Transactional
-@SpringBootTest
-class AuthServiceTest {
+class AuthServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private AuthService authService;
@@ -47,7 +42,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("이름과 이메일을 입력받아 회원을 등록하면 auth 테이블에 이메일과 토큰이 저장되고 메일이 전송된다.")
-    void registeremployee() {
+    void registerEmployee() {
         // given
         String name = "박상철";
         String email = "example@iabacus.co.kr";

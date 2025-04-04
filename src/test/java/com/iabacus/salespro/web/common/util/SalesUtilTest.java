@@ -1,20 +1,16 @@
 package com.iabacus.salespro.web.common.util;
 
-
 import static org.assertj.core.api.Assertions.*;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.iabacus.salespro.web.common.Money;
 import com.iabacus.salespro.web.common.Ratio;
 
-@SpringBootTest
 class SalesUtilTest {
 
     @Test
@@ -72,4 +68,5 @@ class SalesUtilTest {
         // then
         assertThat(ovheAmount.getAmount()).isEqualTo(BigDecimal.valueOf(288000));
     }
+
 }

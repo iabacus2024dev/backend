@@ -7,12 +7,10 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.iabacus.salespro.web.IntegrationTestSupport;
 import com.iabacus.salespro.web.common.Phone;
 import com.iabacus.salespro.web.department.domain.Department;
 import com.iabacus.salespro.web.department.domain.DepartmentType;
@@ -24,10 +22,7 @@ import com.iabacus.salespro.web.employee.response.EmployeeMyInfoResponse;
 import com.iabacus.salespro.web.member.domain.Member;
 import com.iabacus.salespro.web.member.repository.MemberRepository;
 
-@ActiveProfiles("test")
-@Transactional
-@SpringBootTest
-class EmployeeRepositoryImplTest {
+class EmployeeRepositoryImplTest extends IntegrationTestSupport {
 
     @Autowired
     private EmployeeRepository employeeRepository;

@@ -2,22 +2,16 @@ package com.iabacus.salespro.web.employee.service;
 
 import static org.assertj.core.api.Assertions.*;
 
-import jakarta.transaction.Transactional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-import com.iabacus.salespro.web.employee.response.EmployeeDetailResponse;
+import com.iabacus.salespro.web.IntegrationTestSupport;
 import com.iabacus.salespro.web.employee.domain.Employee;
 import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
+import com.iabacus.salespro.web.employee.response.EmployeeDetailResponse;
 
-@ActiveProfiles("test")
-@Transactional
-@SpringBootTest
-class EmployeeServiceTest {
+class EmployeeServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private EmployeeService employeeService;

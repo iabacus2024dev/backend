@@ -6,18 +6,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.transaction.Transactional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
+import com.iabacus.salespro.web.IntegrationTestSupport;
 import com.iabacus.salespro.web.aggregate.domain.MonthlyEmployeeCostAggregate;
 import com.iabacus.salespro.web.aggregate.repository.MonthlyEmployeeCostAggregateRepository;
-import com.iabacus.salespro.web.auth.domain.Auth;
-import com.iabacus.salespro.web.auth.service.AuthMailService;
 import com.iabacus.salespro.web.common.Money;
 import com.iabacus.salespro.web.common.Ratio;
 import com.iabacus.salespro.web.employee.domain.Employee;
@@ -35,10 +30,7 @@ import com.iabacus.salespro.web.project.repository.ProjectRepository;
 import com.iabacus.salespro.web.project.request.ContractCreateRequest;
 import com.iabacus.salespro.web.project.request.InputCreateRequest;
 
-@ActiveProfiles("test")
-@Transactional
-@SpringBootTest
-class ContractServiceTest {
+class ContractServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private EmployeeRepository employeeRepository;

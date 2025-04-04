@@ -6,12 +6,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
 class DateUtilTest {
 
     @Test
@@ -36,7 +33,7 @@ class DateUtilTest {
 
         // when
         List<Map<String, LocalDate>> splitPeriodByMonth = DateUtil.getSplitPeriodByMonth(startDate, endDate);
-        for (Map<String, LocalDate> period: splitPeriodByMonth) {
+        for (Map<String, LocalDate> period : splitPeriodByMonth) {
             System.out.println("결과: " + period.toString());
         }
 

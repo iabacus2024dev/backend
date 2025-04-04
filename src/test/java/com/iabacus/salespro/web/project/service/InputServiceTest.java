@@ -6,14 +6,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.transaction.Transactional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
+import com.iabacus.salespro.web.IntegrationTestSupport;
 import com.iabacus.salespro.web.aggregate.domain.MonthlyEmployeeCostAggregate;
 import com.iabacus.salespro.web.aggregate.repository.MonthlyEmployeeCostAggregateRepository;
 import com.iabacus.salespro.web.aggregate.service.SalesAggregateService;
@@ -33,10 +30,7 @@ import com.iabacus.salespro.web.project.repository.InputRepository;
 import com.iabacus.salespro.web.project.repository.ProjectRepository;
 import com.iabacus.salespro.web.project.request.InputCreateRequest;
 
-@ActiveProfiles("test")
-@Transactional
-@SpringBootTest
-class InputServiceTest {
+class InputServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private InputService inputService;
@@ -122,12 +116,10 @@ class InputServiceTest {
         List<Input> inputs = inputRepository.findByContractId(contract.getId());
         assertThat(inputs.size()).isEqualTo(2);
 
-
         // 집계 데이터 4개 생성
         // 이동욱 - 1월, 2월 / 이지수 - 1월, 2월
         List<MonthlyEmployeeCostAggregate> monthlyEmployeeCostAggregateList = monthlyEmployeeCostAggregateRepository.findAll();
         assertThat(monthlyEmployeeCostAggregateList.size()).isEqualTo(4); // todo: 월단위로 쪼개서 4로 변해야함
     }
-
 
 }

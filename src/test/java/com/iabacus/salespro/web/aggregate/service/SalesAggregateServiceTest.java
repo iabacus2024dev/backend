@@ -9,10 +9,8 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.iabacus.salespro.web.IntegrationTestSupport;
 import com.iabacus.salespro.web.aggregate.domain.MonthlyEmployeeCostAggregate;
 import com.iabacus.salespro.web.aggregate.repository.MonthlyEmployeeCostAggregateRepository;
 import com.iabacus.salespro.web.common.Money;
@@ -30,10 +28,7 @@ import com.iabacus.salespro.web.project.repository.ContractRepository;
 import com.iabacus.salespro.web.project.repository.InputRepository;
 import com.iabacus.salespro.web.project.repository.ProjectRepository;
 
-@ActiveProfiles("test")
-@Transactional
-@SpringBootTest
-class SalesAggregateServiceTest {
+class SalesAggregateServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private EmployeeRepository employeeRepository;
