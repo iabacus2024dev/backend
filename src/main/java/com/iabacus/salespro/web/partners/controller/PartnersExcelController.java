@@ -35,7 +35,7 @@ public class PartnersExcelController {
     private final PartnersService partnersService;
     private final PartnersExcelService partnersExcelService;
 
-    @PreAuthorize("hasAuthority('협력사 조회')")
+    @PreAuthorize("hasAnyAuthority('협력사 조회', '협력사 편집')")
     @GetMapping("/excel/download")
     public ResponseEntity<Void> downloadPartners(PartnersSearchCondition condition, Pageable pageable, HttpServletResponse response) {
         try {
@@ -47,7 +47,7 @@ public class PartnersExcelController {
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasAuthority('협력사 조회')")
+    @PreAuthorize("hasAnyAuthority('협력사 조회', '협력사 편집')")
     @GetMapping("/excel/sample")
     public ResponseEntity<Void> downloadPartnersSample(HttpServletResponse response) {
         try {

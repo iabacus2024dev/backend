@@ -39,7 +39,7 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
-    @PreAuthorize("hasAnyAuthority('구성원 조회')")
+    @PreAuthorize("hasAnyAuthority('구성원 조회', '구성원 편집')")
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeDetailResponse> getEmployeeDetail(@PathVariable Long id) {
         return ResponseEntity.ok(employeeService.getEmployeeDetail(id));
@@ -50,7 +50,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getMyInfo(userPrincipal.getMemberId()));
     }
 
-    @PreAuthorize("hasAuthority('구성원 조회')")
+    @PreAuthorize("hasAnyAuthority('구성원 조회', '구성원 편집')")
     @GetMapping
     public ResponseEntity<PageResponse<EmployeeSearchResponse>> searchEmployees(EmployeeSearchCondition condition, Pageable pageable) {
         return ResponseEntity.ok(employeeService.searchEmployees(condition, pageable));

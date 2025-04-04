@@ -35,13 +35,13 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
-    @PreAuthorize("hasAuthority('프로젝트 조회')")
+    @PreAuthorize("hasAnyAuthority('프로젝트 편집', '프로젝트 조회')")
     @GetMapping("/{id}")
     public ResponseEntity<ProjectDetailResponse> getProjectDetail(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.getProjectDetail(id));
     }
 
-    @PreAuthorize("hasAuthority('프로젝트 조회')")
+    @PreAuthorize("hasAnyAuthority('프로젝트 편집', '프로젝트 조회')")
     @GetMapping
     public ResponseEntity<PageResponse<ProjectSearchResponse>> searchProjects(ProjectSearchCondition condition, Pageable pageable) {
         return ResponseEntity.ok(projectService.searchProjects(condition, pageable));

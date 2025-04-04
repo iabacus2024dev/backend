@@ -35,7 +35,7 @@ public class ProjectExcelController {
     private final ProjectService projectService;
     private final ProjectExcelService projectExcelService;
 
-    @PreAuthorize("hasAuthority('프로젝트 조회')")
+    @PreAuthorize("hasAnyAuthority('프로젝트 조회', '프로젝트 편집')")
     @GetMapping("/excel/download")
     public ResponseEntity<Void> downloadProjects(ProjectSearchCondition condition, Pageable pageable, HttpServletResponse response) {
         try {
@@ -47,7 +47,7 @@ public class ProjectExcelController {
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasAuthority('프로젝트 조회')")
+    @PreAuthorize("hasAnyAuthority('프로젝트 조회', '프로젝트 편집')")
     @GetMapping("/excel/sample")
     public ResponseEntity<Void> downloadProjectsSample(HttpServletResponse response) {
         try {

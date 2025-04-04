@@ -33,19 +33,19 @@ public class PartnersController {
 
     private final PartnersService partnersService;
 
-    @PreAuthorize("hasAuthority('협력사 조회')")
+    @PreAuthorize("hasAnyAuthority('협력사 조회', '협력사 편집')")
     @GetMapping("/{id}")
     public ResponseEntity<PartnersDetailResponse> getPartnersDetail(@PathVariable Long id) {
         return ResponseEntity.ok(partnersService.getPartnersDetail(id));
     }
 
-    @PreAuthorize("hasAuthority('협력사 조회')")
+    @PreAuthorize("hasAnyAuthority('협력사 조회', '협력사 편집')")
     @GetMapping
     public ResponseEntity<PageResponse<PartnersSearchResponse>> searchPartners(PartnersSearchCondition condition, Pageable pageable) {
         return ResponseEntity.ok(partnersService.searchPartners(condition, pageable));
     }
 
-    @PreAuthorize("hasAuthority('협력사 편집')")
+    @PreAuthorize("hasAnyAuthority('협력사 조회', '협력사 편집')")
     @PostMapping
     public ResponseEntity<Void> createPartner(@Valid @RequestBody PartnersCreateRequest request) {
         partnersService.createPartners(request);
