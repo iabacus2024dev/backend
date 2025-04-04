@@ -31,12 +31,9 @@ public class Role extends BaseEntity {
     private List<RoleAuthority> roleAuthorities = new ArrayList<>();
 
     @Builder
-    private Role(String name, boolean isDefaultRole, List<RoleAuthority> roleAuthorities) {
+    private Role(String name, boolean isDefaultRole) {
         this.name = name;
         this.isDefaultRole = isDefaultRole;
-        if (roleAuthorities != null) {
-            addRoleAuthorities(roleAuthorities);
-        }
     }
 
     public static Role createRole(String name, boolean isDefaultRole, List<RoleAuthority> roleAuthorities) {
@@ -48,14 +45,9 @@ public class Role extends BaseEntity {
         return role;
     }
 
-    public static Role createRole(String name, boolean isDefaultRole) {
-        return Role.builder()
-            .name(name)
-            .isDefaultRole(isDefaultRole)
-            .build();
-    }
-
     public void addRoleAuthorities(List<RoleAuthority> roleAuthorities) {
+        if (roleAuthorities.isEmpty()) return;
+        this.roleAuthorities.clear();
         roleAuthorities.forEach(a -> {
             this.roleAuthorities.add(a);
             a.changeRole(this);

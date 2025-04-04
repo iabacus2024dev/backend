@@ -12,6 +12,7 @@ import com.iabacus.salespro.web.role.request.RoleAddRequest;
 import com.iabacus.salespro.web.role.response.AuthorityResponse;
 import com.iabacus.salespro.web.role.response.RoleResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,6 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import static com.iabacus.salespro.core.error.ErrorCode.AUTHORITY_NOT_FOUND;
-import static com.iabacus.salespro.core.error.ErrorCode.ROLE_ALREADY_REGISTERED;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -30,6 +30,7 @@ public class RoleService {
     private final RoleRepository roleRepository;
     private final AuthorityRepository authorityRepository;
     private final MemberRepository memberRepository;
+    private final UserDetailsService userDetailsService;
 
     public List<RoleResponse> getRoles() {
         return roleRepository.findRoles();
@@ -43,10 +44,22 @@ public class RoleService {
 
     @Transactional
     public Long addRole(RoleAddRequest roleAddRequest) {
-        if (roleRepository.existsByName(roleAddRequest.getRoleName())) throw new BusinessException(ROLE_ALREADY_REGISTERED);
-        Long roleId = roleRepository.save(getRole(roleAddRequest)).getId();
-        setRoleToMember(roleAddRequest, roleId);
-        return roleId;
+        final Long[] roleHolder = new Long[1];
+        setRole(roleAddRequest, roleHolder);
+        setRoleToMember(roleAddRequest, roleHolder[0]);
+        return roleHolder[0];
+    }
+
+    private void setRole(RoleAddRequest roleAddRequest, Long[] roleHolder) {
+        roleRepository.findByName(roleAddRequest.getRoleName())
+                .ifPresentOrElse(r -> {
+                    changeRoleAuthorities(roleAddRequest, r);
+                    roleHolder[0] = r.getId();
+                }, () -> roleHolder[0] = roleRepository.save(makeRole(roleAddRequest)).getId());
+    }
+
+    private void changeRoleAuthorities(RoleAddRequest roleAddRequest, Role r) {
+        r.addRoleAuthorities(makeRoleAuthorities(roleAddRequest));
     }
 
     private void setRoleToMember(RoleAddRequest roleAddRequest, Long roleId) {
@@ -56,11 +69,11 @@ public class RoleService {
                 .forEach(m -> m.setRoleId(roleId));
     }
 
-    private Role getRole(RoleAddRequest roleAddRequest) {
-        return Role.createRole(roleAddRequest.getRoleName(), roleAddRequest.getIsDefaultRole(), getRoleAuthorities(roleAddRequest));
+    private Role makeRole(RoleAddRequest roleAddRequest) {
+        return Role.createRole(roleAddRequest.getRoleName(), roleAddRequest.getIsDefaultRole(), makeRoleAuthorities(roleAddRequest));
     }
 
-    private List<RoleAuthority> getRoleAuthorities(RoleAddRequest roleAddRequest) {
+    private List<RoleAuthority> makeRoleAuthorities(RoleAddRequest roleAddRequest) {
         return roleAddRequest.getAuthorityList().stream()
                 .filter(this::checkAuthRequest)
                 .map(this::getAuthority)

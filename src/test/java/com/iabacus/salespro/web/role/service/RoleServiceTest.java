@@ -1,42 +1,30 @@
 package com.iabacus.salespro.web.role.service;
 
-import static com.iabacus.salespro.core.error.ErrorCode.*;
-import static com.iabacus.salespro.web.role.domain.AuthorityAction.*;
-import static com.iabacus.salespro.web.role.domain.Page.*;
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.web.IntegrationTestSupport;
 import com.iabacus.salespro.web.department.repository.DepartmentRepository;
 import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
 import com.iabacus.salespro.web.member.repository.MemberRepository;
-import com.iabacus.salespro.web.role.domain.Action;
-import com.iabacus.salespro.web.role.domain.Authority;
-import com.iabacus.salespro.web.role.domain.AuthorityAction;
-import com.iabacus.salespro.web.role.domain.AuthorityRange;
-import com.iabacus.salespro.web.role.domain.Page;
-import com.iabacus.salespro.web.role.domain.Range;
-import com.iabacus.salespro.web.role.domain.Role;
-import com.iabacus.salespro.web.role.repository.ActionRepository;
-import com.iabacus.salespro.web.role.repository.AuthorityActionRepository;
-import com.iabacus.salespro.web.role.repository.AuthorityRangeRepository;
-import com.iabacus.salespro.web.role.repository.AuthorityRepository;
-import com.iabacus.salespro.web.role.repository.RangeRepository;
-import com.iabacus.salespro.web.role.repository.RoleRepository;
+import com.iabacus.salespro.web.role.domain.*;
+import com.iabacus.salespro.web.role.repository.*;
 import com.iabacus.salespro.web.role.request.AuthorityRequest;
 import com.iabacus.salespro.web.role.request.RoleAddRequest;
 import com.iabacus.salespro.web.role.request.RoleMemberRequest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.iabacus.salespro.core.error.ErrorCode.AUTHORITY_NOT_FOUND;
+import static com.iabacus.salespro.web.role.domain.AuthorityAction.createAuthorityAction;
+import static com.iabacus.salespro.web.role.domain.Page.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class RoleServiceTest extends IntegrationTestSupport {
 
@@ -120,20 +108,6 @@ class RoleServiceTest extends IntegrationTestSupport {
         assertThat(foundRole.getName()).isEqualTo("관리자");
         assertThat(foundRole.isDefaultRole()).isEqualTo(true);
         assertThat(foundRole.getRoleAuthorities().size()).isEqualTo(6);
-    }
-
-    @Test
-    @DisplayName("이미 존재하는 역할을 추가할 경우 ROLE_ALREADY_REGISTERED 예외 발생")
-    void addDuplicatedRoleTest() {
-        // given
-        roleRepository.saveAndFlush(Role.createRole("관리자", true, new ArrayList<>()));
-
-        RoleAddRequest roleAddRequest = getRoleAddRequest();
-
-        // when & then
-        assertThatThrownBy(() -> roleService.addRole(roleAddRequest))
-            .isInstanceOf(BusinessException.class)
-            .hasFieldOrPropertyWithValue("errorCode", ROLE_ALREADY_REGISTERED);
     }
 
     @Test
