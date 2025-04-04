@@ -29,8 +29,7 @@ import com.iabacus.salespro.web.role.service.RoleService;
 public class RoleController {
 
     private final RoleService roleService;
-
-    @PreAuthorize("hasAnyAuthority('권한 조회', '권한 편집')")
+    
     @GetMapping("/my")
     public ResponseEntity<List<AuthorityResponse>> getRoleWithAuthorities(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(roleService.getRoleWithAuthorities(userPrincipal.getMemberId()));
