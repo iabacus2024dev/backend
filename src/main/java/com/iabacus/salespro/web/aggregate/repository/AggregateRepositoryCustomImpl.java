@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class AggregateRepositoryImpl implements AggregateRepositoryCustom {
+public class AggregateRepositoryCustomImpl implements AggregateRepositoryCustom {
 
     @PersistenceContext
     private EntityManager entityManager;

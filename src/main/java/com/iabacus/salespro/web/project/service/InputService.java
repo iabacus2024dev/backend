@@ -4,12 +4,11 @@ import java.util.List;
 
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
-import com.iabacus.salespro.web.aggregate.service.SalesAggregateService;
+import com.iabacus.salespro.web.aggregate.service.AggregateService;
 import com.iabacus.salespro.web.employee.domain.Employee;
 import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
 import com.iabacus.salespro.web.project.domain.Contract;
 import com.iabacus.salespro.web.project.domain.Input;
-import com.iabacus.salespro.web.project.domain.Project;
 import com.iabacus.salespro.web.project.repository.ContractRepository;
 import com.iabacus.salespro.web.project.repository.InputRepository;
 import com.iabacus.salespro.web.project.repository.ProjectRepository;
@@ -28,7 +27,7 @@ public class InputService {
   private final ContractRepository contractRepository;
   private final InputRepository inputRepository;
   private final EmployeeRepository employeeRepository;
-  private final SalesAggregateService salesAggregateService;
+  private final AggregateService aggregateService;
 
   protected void inputPersonnelByContract(Contract contract, List<InputCreateRequest> inputCreateRequestList) {
     inputCreateRequestList.forEach(inputCreateRequest -> {
@@ -50,10 +49,10 @@ public class InputService {
       inputRepository.save(input);
 
       // todo: 변경계약 생성 시 이전 집계 종료일자 수정
-      salesAggregateService.updatePreviousMonthlyEmployeeCostAggregate(contract.getProject(), contract);
+      aggregateService.updatePreviousMonthlyEmployeeCostAggregate(contract.getProject(), contract);
 
       // 집계 데이터 생성
-      salesAggregateService.createMonthlyEmployeeCostAggregate(contract.getProject(), contract, input);
+      aggregateService.createMonthlyEmployeeCostAggregate(contract.getProject(), contract, input);
     });
   }
 

@@ -2,7 +2,6 @@ package com.iabacus.salespro.web.aggregate.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 
@@ -56,7 +55,7 @@ import com.iabacus.salespro.web.project.domain.ProjectType;
                 }
         )
 )
-public class MonthlyEmployeeCostAggregate extends BaseEntity {
+public class Aggregate extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -142,7 +141,7 @@ public class MonthlyEmployeeCostAggregate extends BaseEntity {
     private Money totalCost;
 
     @Builder
-    private MonthlyEmployeeCostAggregate(Long contractId, Long id, Long inputId, Ratio manMonth, Money monthlyWage, Money ovheAmount, Ratio ovheRate, Long ownerDepartmentId, Long personnelDepartmentId, LocalDate personnelEndDate, Long personnelId, String personnelName, LocalDate personnelStartDate, EmployeeType personnelType, String projectCode, Money projectContractAmount, LocalDate projectEndDate, Long projectId, String projectName, LocalDate projectStartDate, ProjectType projectType, Money sgaeAmount, Ratio sgaeRate, Money teamSalesGoalAmountByYear, Money totalCost, Money unitPrice) {
+    private Aggregate(Long contractId, Long id, Long inputId, Ratio manMonth, Money monthlyWage, Money ovheAmount, Ratio ovheRate, Long ownerDepartmentId, Long personnelDepartmentId, LocalDate personnelEndDate, Long personnelId, String personnelName, LocalDate personnelStartDate, EmployeeType personnelType, String projectCode, Money projectContractAmount, LocalDate projectEndDate, Long projectId, String projectName, LocalDate projectStartDate, ProjectType projectType, Money sgaeAmount, Ratio sgaeRate, Money teamSalesGoalAmountByYear, Money totalCost, Money unitPrice) {
         this.contractId = contractId;
         this.id = id;
         this.inputId = inputId;
