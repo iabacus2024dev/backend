@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.iabacus.salespro.web.IntegrationTestSupport;
-import com.iabacus.salespro.web.aggregate.domain.MonthlyEmployeeCostAggregate;
-import com.iabacus.salespro.web.aggregate.repository.MonthlyEmployeeCostAggregateRepository;
+import com.iabacus.salespro.web.aggregate.domain.Aggregate;
+import com.iabacus.salespro.web.aggregate.repository.AggregateRepository;
 import com.iabacus.salespro.web.common.Money;
 import com.iabacus.salespro.web.common.Ratio;
 import com.iabacus.salespro.web.employee.domain.Employee;
@@ -40,13 +40,13 @@ class SalesAggregateServiceTest extends IntegrationTestSupport {
     private InputRepository inputRepository;
 
     @Autowired
-    private MonthlyEmployeeCostAggregateRepository monthlyEmployeeCostAggregateRepository;
+    private AggregateRepository aggregateRepository;
 
     @Autowired
     private ProjectRepository projectRepository;
 
     @Autowired
-    private SalesAggregateService salesAggregateService;
+    private AggregateService aggregateService;
 
     @Test
     @DisplayName("투입 정보에 따라 집계 데이터가 생성된다.")
@@ -91,10 +91,10 @@ class SalesAggregateServiceTest extends IntegrationTestSupport {
         inputRepository.save(input);
 
         // when
-        salesAggregateService.createMonthlyEmployeeCostAggregate(project, contract, input);
+        aggregateService.createMonthlyEmployeeCostAggregate(project, contract, input);
 
         // then
-        List<MonthlyEmployeeCostAggregate> monthlyEmployeeCostAggregateList = monthlyEmployeeCostAggregateRepository.findByInputId(input.getId());
+        List<Aggregate> monthlyEmployeeCostAggregateList = aggregateRepository.findByInputId(input.getId());
         assertThat(monthlyEmployeeCostAggregateList.size()).isEqualTo(2);
 
         assertThat(monthlyEmployeeCostAggregateList.get(0).getTotalCost().getAmount()).isEqualTo(BigDecimal.valueOf(4147200));
