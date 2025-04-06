@@ -5,6 +5,7 @@ import com.iabacus.salespro.web.aggregate.service.AggregateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class AggregateController {
 
     private final AggregateService aggregateService;
 
+    @PreAuthorize("hasAuthority('매출 조회')")
     @GetMapping
     public ResponseEntity<List<AggregateResponse>> getAggregate(
             @RequestParam(name = "year", defaultValue = "2025") String year) {
