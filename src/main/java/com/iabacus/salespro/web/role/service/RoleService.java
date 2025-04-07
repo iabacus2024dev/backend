@@ -2,17 +2,15 @@ package com.iabacus.salespro.web.role.service;
 
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.web.member.repository.MemberRepository;
-import com.iabacus.salespro.web.role.domain.Authority;
-import com.iabacus.salespro.web.role.domain.Role;
-import com.iabacus.salespro.web.role.domain.RoleAuthority;
+import com.iabacus.salespro.web.role.domain.*;
 import com.iabacus.salespro.web.role.repository.AuthorityRepository;
 import com.iabacus.salespro.web.role.repository.RoleRepository;
 import com.iabacus.salespro.web.role.request.AuthorityRequest;
 import com.iabacus.salespro.web.role.request.RoleAddRequest;
+import com.iabacus.salespro.web.role.response.SettingResponse;
 import com.iabacus.salespro.web.role.response.AuthorityResponse;
 import com.iabacus.salespro.web.role.response.RoleResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +28,6 @@ public class RoleService {
     private final RoleRepository roleRepository;
     private final AuthorityRepository authorityRepository;
     private final MemberRepository memberRepository;
-    private final UserDetailsService userDetailsService;
 
     public List<RoleResponse> getRoles() {
         return roleRepository.findRoles();
@@ -50,6 +47,10 @@ public class RoleService {
         return roleHolder[0];
     }
 
+    public List<SettingResponse> getActionsByRole(String roleName) {
+        return roleRepository.getActionsByRole(roleName);
+    }
+
     private void setRole(RoleAddRequest roleAddRequest, Long[] roleHolder) {
         roleRepository.findByName(roleAddRequest.getRoleName())
                 .ifPresentOrElse(r -> {
@@ -59,7 +60,7 @@ public class RoleService {
     }
 
     private void changeRoleAuthorities(RoleAddRequest roleAddRequest, Role r) {
-        r.addRoleAuthorities(makeRoleAuthorities(roleAddRequest));
+        r.changeRoleAuthorities(makeRoleAuthorities(roleAddRequest));
     }
 
     private void setRoleToMember(RoleAddRequest roleAddRequest, Long roleId) {

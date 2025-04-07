@@ -2,10 +2,7 @@ package com.iabacus.salespro.web.role.domain;
 
 import com.iabacus.salespro.web.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,26 +34,29 @@ public class Authority extends BaseEntity {
     private List<AuthorityRange> authorityRangeList = new ArrayList<>();
 
     @Builder
-    private Authority(String name, Page page, AuthorityAction authorityAction, List<AuthorityRange> authorityRangeList) {
+    private Authority(String name, Page page, AuthorityAction authorityAction, AuthorityRange authorityRange) {
         this.name = name;
         this.page = page;
+        addAuthorityAction(authorityAction);
+        addAuthorityRange(authorityRange);
+    }
+
+    private void addAuthorityRange(AuthorityRange authorityRange) {
+        this.authorityRangeList.add(authorityRange);
+        authorityRange.setAuthority(this);
+    }
+
+    private void addAuthorityAction(AuthorityAction authorityAction) {
         this.authorityActionList.add(authorityAction);
         authorityAction.setAuthority(this);
-        this.authorityRangeList.addAll(createList(authorityRangeList));
     }
 
-    private List<AuthorityRange> createList(List<AuthorityRange> authorityRangeList) {
-        return authorityRangeList.stream()
-                .peek(a -> a.setAuthority(this))
-                .toList();
-    }
-
-    public static Authority createAuthority(String name, Page page, AuthorityAction authorityAction, List<AuthorityRange> authorityRangeList) {
+    public static Authority createAuthority(String name, Page page, AuthorityAction authorityAction, AuthorityRange authorityRange) {
         return Authority.builder()
                 .name(name)
                 .page(page)
                 .authorityAction(authorityAction)
-                .authorityRangeList(authorityRangeList)
+                .authorityRange(authorityRange)
                 .build();
     }
 }

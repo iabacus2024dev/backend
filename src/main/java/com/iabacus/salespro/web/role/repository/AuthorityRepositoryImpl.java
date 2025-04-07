@@ -22,10 +22,10 @@ public class AuthorityRepositoryImpl implements AuthorityRepositoryCustom {
     public Optional<Authority> findByPageAndActionAndRange(String pageInput, String actionInput, String rangeInput) {
         return Optional.ofNullable(jpaQueryFactory
                 .selectFrom(authority)
-                .innerJoin(authorityAction).on(authority.id.eq(authorityAction.authority.id))
-                .innerJoin(action).on(authorityAction.action.id.eq(action.id))
-                .innerJoin(authorityRange).on(authority.id.eq(authorityRange.authority.id))
-                .innerJoin(range).on(authorityRange.range.id.eq(range.id))
+                .join(authority.authorityActionList,authorityAction)
+                .join(authorityAction.action,action)
+                .join(authority.authorityRangeList,authorityRange)
+                .join(authorityRange.range,range)
                 .where(authority.page.stringValue().eq(pageInput)
                         .and(action.name.eq(actionInput))
                         .and(range.name.eq(rangeInput)))

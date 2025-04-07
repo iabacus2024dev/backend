@@ -1,18 +1,23 @@
 package com.iabacus.salespro.web.role.repository;
 
-import static com.iabacus.salespro.web.member.domain.QMember.*;
-import static com.iabacus.salespro.web.role.domain.QRole.*;
+import com.iabacus.salespro.web.role.response.QRoleResponse;
+import com.iabacus.salespro.web.role.response.QSettingResponse;
+import com.iabacus.salespro.web.role.response.RoleResponse;
+import com.iabacus.salespro.web.role.response.SettingResponse;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
-
-import com.querydsl.jpa.impl.JPAQueryFactory;
-
-import lombok.RequiredArgsConstructor;
-
-import com.iabacus.salespro.web.role.response.QRoleResponse;
-import com.iabacus.salespro.web.role.response.RoleResponse;
+import static com.iabacus.salespro.web.member.domain.QMember.member;
+import static com.iabacus.salespro.web.role.domain.QAction.action;
+import static com.iabacus.salespro.web.role.domain.QAuthority.authority;
+import static com.iabacus.salespro.web.role.domain.QAuthorityAction.authorityAction;
+import static com.iabacus.salespro.web.role.domain.QAuthorityRange.authorityRange;
+import static com.iabacus.salespro.web.role.domain.QRange.range;
+import static com.iabacus.salespro.web.role.domain.QRole.role;
+import static com.iabacus.salespro.web.role.domain.QRoleAuthority.roleAuthority;
 
 @RequiredArgsConstructor
 @Repository
@@ -31,6 +36,18 @@ public class RoleRepositoryImpl implements CustomRoleRepository {
             )
             .groupBy(role.id)
             .fetch();
+    }
+
+    @Override
+    public List<SettingResponse> getActionsByRole(String roleName) {
+        return queryFactory
+                .select(new QSettingResponse(authority.page, action.name, range.name))
+                .from(role)
+                .join(role.roleAuthorities, roleAuthority).join(roleAuthority.authority, authority)
+                .join(authority.authorityActionList, authorityAction).join(authorityAction.action, action)
+                .join(authority.authorityRangeList, authorityRange).join(authorityRange.range, range)
+                .where(role.name.eq(roleName))
+                .fetch();
     }
 
 }

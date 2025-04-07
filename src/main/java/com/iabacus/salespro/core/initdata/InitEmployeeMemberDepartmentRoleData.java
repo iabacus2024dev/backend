@@ -1,8 +1,19 @@
 package com.iabacus.salespro.core.initdata;
 
-import java.time.LocalDate;
-import java.util.List;
-
+import com.iabacus.salespro.web.common.Money;
+import com.iabacus.salespro.web.common.Phone;
+import com.iabacus.salespro.web.department.domain.Department;
+import com.iabacus.salespro.web.department.domain.DepartmentType;
+import com.iabacus.salespro.web.department.repository.DepartmentRepository;
+import com.iabacus.salespro.web.employee.domain.*;
+import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
+import com.iabacus.salespro.web.member.domain.Member;
+import com.iabacus.salespro.web.member.repository.MemberRepository;
+import com.iabacus.salespro.web.role.domain.*;
+import com.iabacus.salespro.web.role.repository.ActionRepository;
+import com.iabacus.salespro.web.role.repository.RangeRepository;
+import com.iabacus.salespro.web.role.repository.RoleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
@@ -10,32 +21,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDate;
+import java.util.List;
 
-import com.iabacus.salespro.web.common.Money;
-import com.iabacus.salespro.web.common.Phone;
-import com.iabacus.salespro.web.department.domain.Department;
-import com.iabacus.salespro.web.department.domain.DepartmentType;
-import com.iabacus.salespro.web.department.repository.DepartmentRepository;
-import com.iabacus.salespro.web.employee.domain.Employee;
-import com.iabacus.salespro.web.employee.domain.EmployeeGrade;
-import com.iabacus.salespro.web.employee.domain.EmployeeRank;
-import com.iabacus.salespro.web.employee.domain.EmployeeStatus;
-import com.iabacus.salespro.web.employee.domain.EmployeeType;
-import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
-import com.iabacus.salespro.web.member.domain.Member;
-import com.iabacus.salespro.web.member.repository.MemberRepository;
-import com.iabacus.salespro.web.role.domain.Action;
-import com.iabacus.salespro.web.role.domain.Authority;
-import com.iabacus.salespro.web.role.domain.AuthorityAction;
-import com.iabacus.salespro.web.role.domain.AuthorityRange;
-import com.iabacus.salespro.web.role.domain.Page;
-import com.iabacus.salespro.web.role.domain.Range;
-import com.iabacus.salespro.web.role.domain.Role;
-import com.iabacus.salespro.web.role.domain.RoleAuthority;
-import com.iabacus.salespro.web.role.repository.ActionRepository;
-import com.iabacus.salespro.web.role.repository.RangeRepository;
-import com.iabacus.salespro.web.role.repository.RoleRepository;
+import static com.iabacus.salespro.web.role.domain.Authority.createAuthority;
+import static com.iabacus.salespro.web.role.domain.Page.*;
 
 @Profile("local")
 @RequiredArgsConstructor
@@ -98,18 +88,18 @@ public class InitEmployeeMemberDepartmentRoleData {
         actionRepository.saveAll(List.of(action1, action2));
 
         // 권한
-        Authority authority1 = createAuthority("프로젝트 조회", List.of(createAuthorityRange(range1), createAuthorityRange(range2), createAuthorityRange(range3), createAuthorityRange(range4)), AuthorityAction.createAuthorityAction(action1), Page.프로젝트);
-        Authority authority2 = createAuthority("프로젝트 편집", List.of(createAuthorityRange(range1), createAuthorityRange(range2), createAuthorityRange(range3), createAuthorityRange(range4)), AuthorityAction.createAuthorityAction(action2), Page.프로젝트);
-        Authority authority3 = createAuthority("구성원 조회", List.of(createAuthorityRange(range1), createAuthorityRange(range2), createAuthorityRange(range3), createAuthorityRange(range4)), AuthorityAction.createAuthorityAction(action1), Page.구성원);
-        Authority authority4 = createAuthority("구성원 편집", List.of(createAuthorityRange(range1), createAuthorityRange(range2), createAuthorityRange(range3), createAuthorityRange(range4)), AuthorityAction.createAuthorityAction(action2), Page.구성원);
-        Authority authority5 = createAuthority("협력사 조회", List.of(createAuthorityRange(range1), createAuthorityRange(range2), createAuthorityRange(range3), createAuthorityRange(range4)), AuthorityAction.createAuthorityAction(action1), Page.협력사);
-        Authority authority7 = createAuthority("협력사 편집", List.of(createAuthorityRange(range1), createAuthorityRange(range2), createAuthorityRange(range3), createAuthorityRange(range4)), AuthorityAction.createAuthorityAction(action2), Page.협력사);
-        Authority authority8 = createAuthority("매출 조회", List.of(createAuthorityRange(range1), createAuthorityRange(range2), createAuthorityRange(range3), createAuthorityRange(range4)), AuthorityAction.createAuthorityAction(action1), Page.매출);
-        Authority authority9 = createAuthority("매출 편집", List.of(createAuthorityRange(range1), createAuthorityRange(range2), createAuthorityRange(range3), createAuthorityRange(range4)), AuthorityAction.createAuthorityAction(action2), Page.매출);
-        Authority authority10 = createAuthority("권한 조회", List.of(createAuthorityRange(range1), createAuthorityRange(range2), createAuthorityRange(range3), createAuthorityRange(range4)), AuthorityAction.createAuthorityAction(action1), Page.권한);
-        Authority authority11 = createAuthority("권한 편집", List.of(createAuthorityRange(range1), createAuthorityRange(range2), createAuthorityRange(range3), createAuthorityRange(range4)), AuthorityAction.createAuthorityAction(action2), Page.권한);
-        Authority authority12 = createAuthority("휴가 조회", List.of(createAuthorityRange(range1), createAuthorityRange(range2), createAuthorityRange(range3), createAuthorityRange(range4)), AuthorityAction.createAuthorityAction(action1), Page.휴가);
-        Authority authority13 = createAuthority("휴가 편집", List.of(createAuthorityRange(range1), createAuthorityRange(range2), createAuthorityRange(range3), createAuthorityRange(range4)), AuthorityAction.createAuthorityAction(action2), Page.휴가);
+        Authority authority1 = createAuthority("프로젝트 조회", 프로젝트, AuthorityAction.createAuthorityAction(action1), createAuthorityRange(range1));
+        Authority authority2 = createAuthority("프로젝트 편집", 프로젝트, AuthorityAction.createAuthorityAction(action2),  createAuthorityRange(range2));
+        Authority authority3 = createAuthority("구성원 조회", 구성원, AuthorityAction.createAuthorityAction(action1),  createAuthorityRange(range3));
+        Authority authority4 = createAuthority("구성원 편집", 구성원, AuthorityAction.createAuthorityAction(action2),  createAuthorityRange(range4));
+        Authority authority5 = createAuthority("협력사 조회", 협력사, AuthorityAction.createAuthorityAction(action1), createAuthorityRange(range1));
+        Authority authority7 = createAuthority("협력사 편집", 협력사, AuthorityAction.createAuthorityAction(action2), createAuthorityRange(range2));
+        Authority authority8 = createAuthority("매출 조회", 매출, AuthorityAction.createAuthorityAction(action1), createAuthorityRange(range3));
+        Authority authority9 = createAuthority("매출 편집", 매출, AuthorityAction.createAuthorityAction(action2), createAuthorityRange(range4));
+        Authority authority10 = createAuthority("권한 조회", 권한, AuthorityAction.createAuthorityAction(action1), createAuthorityRange(range1));
+        Authority authority11 = createAuthority("권한 편집", 권한, AuthorityAction.createAuthorityAction(action2), createAuthorityRange(range2));
+        Authority authority12 = createAuthority("휴가 조회", 휴가, AuthorityAction.createAuthorityAction(action1), createAuthorityRange(range3));
+        Authority authority13 = createAuthority("휴가 편집", 휴가, AuthorityAction.createAuthorityAction(action2), createAuthorityRange(range4));
 
         // 역할
         Role admin = createRole("관리자");
@@ -162,15 +152,6 @@ public class InitEmployeeMemberDepartmentRoleData {
             .roleId(role.getId())
             .username(employee1.getEmail())
             .password(passwordEncoder.encode("Password!"))
-            .build();
-    }
-
-    private Authority createAuthority(String name, List<AuthorityRange> authorityRanges, AuthorityAction authorityAction, Page page) {
-        return Authority.builder()
-            .name(name)
-            .authorityRangeList(authorityRanges)
-            .authorityAction(authorityAction)
-            .page(page)
             .build();
     }
 

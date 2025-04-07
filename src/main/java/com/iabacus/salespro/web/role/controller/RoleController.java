@@ -1,26 +1,20 @@
 package com.iabacus.salespro.web.role.controller;
 
-import java.util.List;
-
-import jakarta.validation.Valid;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import com.iabacus.salespro.core.security.service.UserPrincipal;
 import com.iabacus.salespro.web.role.request.RoleAddRequest;
+import com.iabacus.salespro.web.role.response.SettingResponse;
 import com.iabacus.salespro.web.role.response.AuthorityResponse;
 import com.iabacus.salespro.web.role.response.RoleResponse;
 import com.iabacus.salespro.web.role.service.RoleService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -39,6 +33,12 @@ public class RoleController {
     @GetMapping
     public ResponseEntity<List<RoleResponse>> getRoles() {
         return ResponseEntity.ok(roleService.getRoles());
+    }
+
+    @PreAuthorize("hasAnyAuthority('권한 조회', '권한 편집')")
+    @GetMapping("/by-name")
+    public ResponseEntity<List<SettingResponse>> getActionsByRole(@RequestParam String name) {
+        return ResponseEntity.ok(roleService.getActionsByRole(name));
     }
 
     @PreAuthorize("hasAnyAuthority('권한 편집')")

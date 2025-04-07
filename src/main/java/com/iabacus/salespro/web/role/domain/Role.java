@@ -47,11 +47,18 @@ public class Role extends BaseEntity {
 
     public void addRoleAuthorities(List<RoleAuthority> roleAuthorities) {
         if (roleAuthorities.isEmpty()) return;
-        this.roleAuthorities.clear();
         roleAuthorities.forEach(a -> {
             this.roleAuthorities.add(a);
             a.changeRole(this);
         });
     }
 
+    public void changeRoleAuthorities(List<RoleAuthority> roleAuthorities) {
+        this.roleAuthorities.forEach(ra -> ra.changeRole(null));
+        this.roleAuthorities.clear();
+        roleAuthorities.forEach(a -> {
+            this.roleAuthorities.add(a);
+            a.changeRole(this);
+        });
+    }
 }

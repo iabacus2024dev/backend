@@ -10,18 +10,19 @@ import com.iabacus.salespro.web.role.repository.*;
 import com.iabacus.salespro.web.role.request.AuthorityRequest;
 import com.iabacus.salespro.web.role.request.RoleAddRequest;
 import com.iabacus.salespro.web.role.request.RoleMemberRequest;
+import com.iabacus.salespro.web.role.response.SettingResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.iabacus.salespro.core.error.ErrorCode.AUTHORITY_NOT_FOUND;
+import static com.iabacus.salespro.web.role.domain.Authority.createAuthority;
 import static com.iabacus.salespro.web.role.domain.AuthorityAction.createAuthorityAction;
+import static com.iabacus.salespro.web.role.domain.AuthorityRange.createAuthorityRange;
 import static com.iabacus.salespro.web.role.domain.Page.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -60,38 +61,32 @@ class RoleServiceTest extends IntegrationTestSupport {
 
     @BeforeEach
     public void init() {
-        Map<String, Action> actions = saveActions("조회", "편집");
-        List<Range> ranges = saveRanges();
+        List<Range> ranges = List.of("전체", "소속 팀", "투입 프로젝트", "본인")
+                .stream().map(Range::createRange).toList();
+        rangeRepository.saveAll(ranges);
+
+        List<Action> actions = List.of(Action.createAction("조회"), Action.createAction("편집"));
+        actionRepository.saveAll(actions);
+
+        List<Authority> allAuthorities = new ArrayList<>();
         List<Page> pages = List.of(프로젝트, 구성원, 협력사, 매출, 권한, 휴가);
 
-        pages.forEach(page -> {
-            saveAuthority(page + " 조회", page, ranges, createAuthorityAction(actions.get("조회")));
-            saveAuthority(page + " 편집", page, ranges, createAuthorityAction(actions.get("편집")));
-        });
-    }
+        for (Page page : pages) {
+            for (Action action : actions) {
+                String actionName = action.getName();
+                for (Range range : ranges) {
+                    Authority authority = createAuthority(
+                            page.name() + " " + actionName,
+                            page,
+                            createAuthorityAction(action),
+                            createAuthorityRange(range)
+                    );
+                    allAuthorities.add(authority);
+                }
+            }
+        }
 
-    private Map<String, Action> saveActions(String... actionNames) {
-        return Arrays.stream(actionNames)
-            .map(Action::createAction)
-            .map(actionRepository::save)
-            .collect(Collectors.toMap(Action::getName, a -> a));
-    }
-
-    private void saveAuthority(String authName, Page page, List<Range> rangeList, AuthorityAction authorityAction) {
-        authorityRepository.save(Authority.createAuthority(authName, page, authorityAction, saveAuthorityRanges(rangeList)));
-    }
-
-    private List<AuthorityRange> saveAuthorityRanges(List<Range> rangeList) {
-        return authorityRangeRepository.saveAll(rangeList.stream().map(AuthorityRange::createAuthorityRange).toList());
-    }
-
-    private List<Range> saveRanges() {
-        return rangeRepository.saveAll(List.of(
-            Range.createRange("전체"),
-            Range.createRange("소속 팀"),
-            Range.createRange("투입 프로젝트"),
-            Range.createRange("본인")
-        ));
+        authorityRepository.saveAll(allAuthorities);
     }
 
     @Test
@@ -122,6 +117,35 @@ class RoleServiceTest extends IntegrationTestSupport {
         assertThatThrownBy(() -> roleService.addRole(wrongRequest))
             .isInstanceOf(BusinessException.class)
             .hasFieldOrPropertyWithValue("errorCode", AUTHORITY_NOT_FOUND);
+    }
+
+    @Test
+    @DisplayName("action 권한 조회 성공")
+    void getActionSuccessTest() {
+        // given
+        RoleAddRequest roleAddRequest = getRoleAddRequest();
+        roleService.addRole(roleAddRequest);
+
+        // when
+        List<SettingResponse> settingResponseList = roleService.getActionsByRole("관리자");
+
+        // then
+        for (SettingResponse settingResponse : settingResponseList) {
+            System.out.println("settingResponse = " + settingResponse);
+        }
+        assertThat(settingResponseList.size()).isEqualTo(6);
+        assertThat(settingResponseList.get(0).getPage()).isEqualTo(프로젝트);
+        assertThat(settingResponseList.get(0).getActionName()).isEqualTo("조회");
+        assertThat(settingResponseList.get(1).getPage()).isEqualTo(구성원);
+        assertThat(settingResponseList.get(1).getActionName()).isEqualTo("조회");
+        assertThat(settingResponseList.get(2).getPage()).isEqualTo(협력사);
+        assertThat(settingResponseList.get(2).getActionName()).isEqualTo("편집");
+        assertThat(settingResponseList.get(3).getPage()).isEqualTo(매출);
+        assertThat(settingResponseList.get(3).getActionName()).isEqualTo("편집");
+        assertThat(settingResponseList.get(4).getPage()).isEqualTo(권한);
+        assertThat(settingResponseList.get(4).getActionName()).isEqualTo("편집");
+        assertThat(settingResponseList.get(5).getPage()).isEqualTo(휴가);
+        assertThat(settingResponseList.get(5).getActionName()).isEqualTo("조회");
     }
 
     private RoleAddRequest getRoleAddRequest() {
