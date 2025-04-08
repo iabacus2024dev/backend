@@ -37,8 +37,8 @@ public class RoleController {
 
     @PreAuthorize("hasAnyAuthority('권한 조회', '권한 편집')")
     @GetMapping("/by-name")
-    public ResponseEntity<List<SettingResponse>> getActionsByRole(@RequestParam String name) {
-        return ResponseEntity.ok(roleService.getActionsByRole(name));
+    public ResponseEntity<List<SettingResponse>> getSettingsByRole(@RequestParam String name) {
+        return ResponseEntity.ok(roleService.getSettingsByRole(name));
     }
 
     @PreAuthorize("hasAnyAuthority('권한 편집')")

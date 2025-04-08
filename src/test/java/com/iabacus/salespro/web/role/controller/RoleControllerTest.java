@@ -69,7 +69,7 @@ class RoleControllerTest {
     @Test
     @DisplayName("역할 액션 조회 테스트")
     @WithMockUser(authorities = {"권한 조회"})
-    void getActionsByRoleTest() throws Exception {
+    void getSettingsByRoleTest() throws Exception {
         // given
         List<SettingResponse> settingResponses = List.of(
                 new SettingResponse(프로젝트, "조회", "전체"),
@@ -80,7 +80,7 @@ class RoleControllerTest {
                 new SettingResponse(휴가, "조회", "투입 프로젝트")
         );
 
-        when(roleService.getActionsByRole("test")).thenReturn(settingResponses);
+        when(roleService.getSettingsByRole("test")).thenReturn(settingResponses);
 
         // when, then
         mockMvc.perform(get("/api/v1/roles/by-name?name=test").with(csrf()))

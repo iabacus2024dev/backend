@@ -127,12 +127,9 @@ class RoleServiceTest extends IntegrationTestSupport {
         roleService.addRole(roleAddRequest);
 
         // when
-        List<SettingResponse> settingResponseList = roleService.getActionsByRole("관리자");
+        List<SettingResponse> settingResponseList = roleService.getSettingsByRole("관리자");
 
         // then
-        for (SettingResponse settingResponse : settingResponseList) {
-            System.out.println("settingResponse = " + settingResponse);
-        }
         assertThat(settingResponseList.size()).isEqualTo(6);
         assertThat(settingResponseList.get(0).getPage()).isEqualTo(프로젝트);
         assertThat(settingResponseList.get(0).getActionName()).isEqualTo("조회");

@@ -47,8 +47,8 @@ public class RoleService {
         return roleHolder[0];
     }
 
-    public List<SettingResponse> getActionsByRole(String roleName) {
-        return roleRepository.getActionsByRole(roleName);
+    public List<SettingResponse> getSettingsByRole(String roleName) {
+        return roleRepository.getSettingsByRole(roleName);
     }
 
     private void setRole(RoleAddRequest roleAddRequest, Long[] roleHolder) {

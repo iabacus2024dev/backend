@@ -9,5 +9,5 @@ public interface CustomRoleRepository {
 
     List<RoleResponse> findRoles();
 
-    List<SettingResponse> getActionsByRole(String roleName);
+    List<SettingResponse> getSettingsByRole(String roleName);
 }

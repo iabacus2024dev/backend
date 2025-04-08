@@ -39,7 +39,7 @@ public class RoleRepositoryImpl implements CustomRoleRepository {
     }
 
     @Override
-    public List<SettingResponse> getActionsByRole(String roleName) {
+    public List<SettingResponse> getSettingsByRole(String roleName) {
         return queryFactory
                 .select(new QSettingResponse(authority.page, action.name, range.name))
                 .from(role)
