@@ -11,8 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.iabacus.salespro.web.IntegrationTestSupport;
-import com.iabacus.salespro.web.aggregate.domain.MonthlyEmployeeCostAggregate;
+import com.iabacus.salespro.web.aggregate.domain.Aggregate;
 import com.iabacus.salespro.web.aggregate.repository.AggregateRepository;
+import com.iabacus.salespro.web.aggregate.service.AggregateService;
 import com.iabacus.salespro.web.common.Money;
 import com.iabacus.salespro.web.common.Ratio;
 import com.iabacus.salespro.web.employee.domain.Employee;
@@ -50,7 +51,7 @@ class InputServiceTest extends IntegrationTestSupport {
     private AggregateRepository aggregateRepository;
 
     @Autowired
-    private SalesAggregateService salesAggregateService;
+    private AggregateService aggregateService;
 
     @Test
     @DisplayName("계약별 투입 시, 집계데이터 생성")
@@ -117,7 +118,7 @@ class InputServiceTest extends IntegrationTestSupport {
 
         // 집계 데이터 4개 생성
         // 이동욱 - 1월, 2월 / 이지수 - 1월, 2월
-        List<MonthlyEmployeeCostAggregate> monthlyEmployeeCostAggregateList = aggregateRepository.findAll();
+        List<Aggregate> monthlyEmployeeCostAggregateList = aggregateRepository.findAll();
         assertThat(monthlyEmployeeCostAggregateList.size()).isEqualTo(4); // todo: 월단위로 쪼개서 4로 변해야함
     }
 

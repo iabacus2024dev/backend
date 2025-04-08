@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.iabacus.salespro.web.IntegrationTestSupport;
-import com.iabacus.salespro.web.aggregate.domain.MonthlyEmployeeCostAggregate;
+import com.iabacus.salespro.web.aggregate.domain.Aggregate;
 import com.iabacus.salespro.web.aggregate.repository.AggregateRepository;
 import com.iabacus.salespro.web.common.Money;
 import com.iabacus.salespro.web.common.Ratio;
@@ -117,7 +117,7 @@ class ContractServiceTest extends IntegrationTestSupport {
         List<Input> inputs = inputRepository.findByContractId(contract.getId());
         assertThat(inputs.size()).isEqualTo(2);
 
-        List<MonthlyEmployeeCostAggregate> monthlyEmployeeCostAggregates = aggregateRepository.findAll();
+        List<Aggregate> monthlyEmployeeCostAggregates = aggregateRepository.findAll();
         assertThat(monthlyEmployeeCostAggregates.size()).isEqualTo(4);
     }
 
