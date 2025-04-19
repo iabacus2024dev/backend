@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
 import com.iabacus.salespro.core.excel.dto.ExcelSheetData;
@@ -25,6 +22,9 @@ import com.iabacus.salespro.web.employee.request.EmployeeSearchCondition;
 import com.iabacus.salespro.web.employee.response.EmployeeExcelResponse;
 import com.iabacus.salespro.web.employee.service.EmployeeExcelService;
 import com.iabacus.salespro.web.employee.service.EmployeeService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -63,6 +63,13 @@ public class EmployeeExcelController {
     @PostMapping("/excel/upload")
     public ResponseEntity<Void> uploadEmployees(MultipartFile file) throws IOException {
         employeeExcelService.uploadEmployees(file);
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasAuthority('구성원 편집')") // 연봉 편집
+    @PostMapping("/excel/upload/sales")
+    public ResponseEntity<Void> uploadEmployeesSales(MultipartFile file) throws IOException {
+        employeeExcelService.uploadEmployeesSales(file);
         return ResponseEntity.ok().build();
     }
 

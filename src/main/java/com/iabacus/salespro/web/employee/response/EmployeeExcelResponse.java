@@ -3,13 +3,13 @@ package com.iabacus.salespro.web.employee.response;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import lombok.Builder;
-import lombok.Data;
-
 import com.iabacus.salespro.core.excel.annotation.ExcelColumn;
 import com.iabacus.salespro.core.excel.annotation.ExcelSheet;
 import com.iabacus.salespro.web.department.domain.Department;
 import com.iabacus.salespro.web.employee.domain.Employee;
+
+import lombok.Builder;
+import lombok.Data;
 
 @Data
 @ExcelSheet(name = "구성원")
@@ -48,12 +48,12 @@ public class EmployeeExcelResponse {
     @ExcelColumn(headerName = "연봉")
     private BigDecimal salary;
 
-    @ExcelColumn(headerName = "월급")
-    private BigDecimal monthlyPay;
+    // @ExcelColumn(headerName = "월급")
+    // private BigDecimal monthlyPay;
 
     @Builder
     public EmployeeExcelResponse(String name, String email, String phone, LocalDate birthDate, String type, String rank,
-                                 String grade, String status, LocalDate joinDate, String departmentName, BigDecimal salary, BigDecimal monthlyPay) {
+                                 String grade, String status, LocalDate joinDate, String departmentName, BigDecimal salary) {
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -65,7 +65,8 @@ public class EmployeeExcelResponse {
         this.joinDate = joinDate;
         this.departmentName = departmentName;
         this.salary = salary;
-        this.monthlyPay = monthlyPay;
+        // this.monthlyPay = monthlyPay;
+        //, BigDecimal monthlyPay
     }
 
     public static EmployeeExcelResponse from(Employee employee, Department department) {
@@ -81,7 +82,7 @@ public class EmployeeExcelResponse {
             .joinDate(employee.getJoinDate())
             .departmentName(department != null ? department.getName() : null)
             .salary(employee.getAnnualSalary() != null ? employee.getAnnualSalary().getAmount() : null)
-            .monthlyPay(employee.getMonthlyPay() != null ? employee.getMonthlyPay().getAmount() : null)
+            //.monthlyPay(employee.getMonthlyPay() != null ? employee.getMonthlyPay().getAmount() : null)
             .build();
     }
 
