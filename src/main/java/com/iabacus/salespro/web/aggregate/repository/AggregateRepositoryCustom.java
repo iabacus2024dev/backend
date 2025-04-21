@@ -4,5 +4,5 @@ import com.iabacus.salespro.web.aggregate.response.AggregateResponse;
 import java.util.List;
 
 public interface AggregateRepositoryCustom {
-    List<AggregateResponse> getAggregateData(String inputYear);
+    List<AggregateResponse> getAggregate(String inputYear);
 }

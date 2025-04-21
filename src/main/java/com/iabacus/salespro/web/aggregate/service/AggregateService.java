@@ -31,7 +31,7 @@ public class AggregateService {
     private final TeamSalesGoalRepository teamSalesGoalRepository;
 
     public List<AggregateResponse> getAggregate(String year) {
-        return aggregateRepositoryCustom.getAggregateData(year);
+        return aggregateRepositoryCustom.getAggregate(year);
     }
 
     public void createMonthlyEmployeeCostAggregate(Project project, Contract contract, Input input) {
