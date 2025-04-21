@@ -12,7 +12,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/aggregate")
+@RequestMapping("/api/v1/sales")
 public class AggregateController {
 
     private final AggregateService aggregateService;
@@ -20,7 +20,7 @@ public class AggregateController {
     @PreAuthorize("hasAuthority('매출 조회')")
     @GetMapping
     public ResponseEntity<List<AggregateResponse>> getAggregate(
-            @RequestParam(name = "year", defaultValue = "2025") String year) {
+            @RequestParam(name = "year", required = false, defaultValue = "2025") String year) {
         List<AggregateResponse> response = aggregateService.getAggregate(year);
         return ResponseEntity.ok(response);
     }

@@ -34,6 +34,10 @@ public class AggregateResponse {
     private Long 외주인건비;
     private Long 프리랜서인건비;
 
+    // 계약 유형별 집계
+    private Long SI;
+    private Long SM;
+
     // 월별 매출액 (01월 ~ 12월)
     private Long sales_01;
     private Long sales_02;

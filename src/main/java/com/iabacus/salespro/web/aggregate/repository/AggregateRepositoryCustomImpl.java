@@ -14,7 +14,7 @@ public class AggregateRepositoryCustomImpl implements AggregateRepositoryCustom 
     private EntityManager entityManager;
 
     @Override
-    public List<AggregateResponse> getAggregateData(String inputYear) {
+    public List<AggregateResponse> getAggregate(String inputYear) {
         String sql = """
             WITH
             /**********
@@ -35,7 +35,10 @@ public class AggregateRepositoryCustomImpl implements AggregateRepositoryCustom 
                     -- 인력 유형별 인건비
                     SUM(CASE WHEN personnel_type = '정직원' THEN monthly_wage ELSE 0 END) AS fulltime_cost,
                     SUM(CASE WHEN personnel_type = '외주' THEN monthly_wage ELSE 0 END) AS outsource_cost,
-                    SUM(CASE WHEN personnel_type = '프리랜서' THEN monthly_wage ELSE 0 END) AS freelancer_cost
+                    SUM(CASE WHEN personnel_type = '프리랜서' THEN monthly_wage ELSE 0 END) AS freelancer_cost,
+                    -- 사업 유형별 매출
+                    SUM(CASE WHEN project_type = 'SI' THEN monthly_wage ELSE 0 END) AS si_cost,
+                    SUM(CASE WHEN project_type = 'SM' THEN monthly_wage ELSE 0 END) AS sm_cost
                 FROM tb_monthly_employee_cost_aggregate
                 WHERE YEAR(project_start_date) = :inputYear OR YEAR(project_end_date) = :inputYear
                 GROUP BY project_owner_department_id
@@ -86,7 +89,9 @@ public class AggregateRepositoryCustomImpl implements AggregateRepositoryCustom 
                     c.freelancer_count,
                     c.fulltime_cost,
                     c.outsource_cost,
-                    c.freelancer_cost
+                    c.freelancer_cost,
+                    c.si_cost,
+                    c.sm_cost
                 FROM dept_cost c
                 LEFT JOIN dept_contract d ON c.project_owner_department_id = d.project_owner_department_id
                 LEFT JOIN dept_sales s    ON c.project_owner_department_id = s.project_owner_department_id
@@ -122,14 +127,14 @@ public class AggregateRepositoryCustomImpl implements AggregateRepositoryCustom 
                         project_contract_amount,
                         DATEDIFF(project_end_date, project_start_date) + 1 AS total_project_days,
                         CASE 
-                        WHEN project_start_date < DATE(CONCAT(:inputYear, '-01-01')) 
-                        THEN DATE(CONCAT(:inputYear, '-01-01'))
-                        ELSE DATE(project_start_date)
+                            WHEN project_start_date < DATE(CONCAT(:inputYear, '-01-01')) 
+                            THEN DATE(CONCAT(:inputYear, '-01-01'))
+                            ELSE DATE(project_start_date)
                         END AS effective_start,
                         CASE 
-                        WHEN project_end_date > DATE(CONCAT(:inputYear, '-12-31')) 
-                        THEN DATE(CONCAT(:inputYear, '-12-31'))
-                        ELSE DATE(project_end_date)
+                            WHEN project_end_date > DATE(CONCAT(:inputYear, '-12-31')) 
+                            THEN DATE(CONCAT(:inputYear, '-12-31'))
+                            ELSE DATE(project_end_date)
                         END AS effective_end
                     FROM tb_monthly_employee_cost_aggregate
                     -- 프로젝트 기간이 입력 연도와 겹치는 것만 선택
@@ -158,7 +163,6 @@ public class AggregateRepositoryCustomImpl implements AggregateRepositoryCustom 
                         UNION ALL SELECT 10 UNION ALL SELECT 11
                     ) seqs
                     WHERE DATE_FORMAT(ADDDATE(pb.effective_start, INTERVAL seq MONTH), '%Y-%m')<= DATE_FORMAT(pb.effective_end, '%Y-%m')
-
                 ),
                 /**********
                 * 각 월별 실제 작업일수와 월별 계약금액 계산:
@@ -247,6 +251,8 @@ public class AggregateRepositoryCustomImpl implements AggregateRepositoryCustom 
                 a.fulltime_cost     AS 정직원인건비,
                 a.outsource_cost    AS 외주인건비,
                 a.freelancer_cost   AS 프리랜서인건비,
+                a.si_cost AS SI,
+                a.sm_cost AS SM,
                 p.sales_01,
                 p.sales_02,
                 p.sales_03,

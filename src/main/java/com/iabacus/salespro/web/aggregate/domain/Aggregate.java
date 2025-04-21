@@ -40,6 +40,8 @@ import com.iabacus.salespro.web.project.domain.ProjectType;
                         @ColumnResult(name = "정직원인건비", type = Long.class),
                         @ColumnResult(name = "외주인건비", type = Long.class),
                         @ColumnResult(name = "프리랜서인건비", type = Long.class),
+                        @ColumnResult(name = "SI", type = Long.class),
+                        @ColumnResult(name = "SM", type = Long.class),
                         @ColumnResult(name = "sales_01", type = Long.class),
                         @ColumnResult(name = "sales_02", type = Long.class),
                         @ColumnResult(name = "sales_03", type = Long.class),
@@ -86,7 +88,6 @@ public class Aggregate extends BaseEntity {
 
     @Column(name = "PROJECT_OWNER_DEPARTMENT_ID")
     private Long ownerDepartmentId;
-
 
     @Column(name = "CONTRACT_ID")
     private Long contractId;
