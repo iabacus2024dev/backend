@@ -23,6 +23,9 @@ public class Phone {
     }
 
     public static Phone of(String number) {
+        if (number == null || number.isEmpty()) {
+            return null;
+        }
         String num = number.replace("-", "");
         if (!num.matches("^(01[016789]\\d{7,8}|0[2-6]\\d{1,2}\\d{6,7}|0[7-9]\\d{8,9})$")) {
             throw new BusinessException(ErrorCode.INVALID_PHONE_NUMBER);

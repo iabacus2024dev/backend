@@ -20,17 +20,12 @@ import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
 import com.iabacus.salespro.core.excel.util.WorksheetUtil;
 import com.iabacus.salespro.web.common.Money;
-import com.iabacus.salespro.web.common.Phone;
 import com.iabacus.salespro.web.common.util.DateUtil;
 import com.iabacus.salespro.web.department.domain.Department;
 import com.iabacus.salespro.web.department.repository.DepartmentRepository;
 import com.iabacus.salespro.web.employee.domain.Employee;
-import com.iabacus.salespro.web.employee.domain.EmployeeGrade;
-import com.iabacus.salespro.web.employee.domain.EmployeeRank;
-import com.iabacus.salespro.web.employee.domain.EmployeeStatus;
-import com.iabacus.salespro.web.employee.domain.EmployeeType;
+import com.iabacus.salespro.web.employee.excel.EmployeeExcelModel;
 import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
-import com.iabacus.salespro.web.employee.validator.EmployeeExcelValidator;
 import com.iabacus.salespro.web.salary.domain.Salary;
 import com.iabacus.salespro.web.salary.repository.SalaryRepository;
 
@@ -45,7 +40,6 @@ public class EmployeeExcelService {
 
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
-    private final EmployeeExcelValidator employeeExcelValidator;
     private final SalaryRepository salaryRepository;
 
     @Transactional
@@ -58,8 +52,17 @@ public class EmployeeExcelService {
             XSSFRow row = worksheet.getRow(i);
 
             Department department = getDepartment(formatter, row);
-            Employee employee = getEmployee(formatter, row, department);
-            employeeExcelValidator.validate(employee);
+
+            // Use EmployeeExcelModel to parse the row
+            EmployeeExcelModel model = new EmployeeExcelModel(formatter, row, department);
+            Employee employee = model.parse();
+
+            // Check if employee with the same email already exists
+            String email = employee.getEmail();
+            if (employeeRepository.findByEmailAndIsActivatedTrue(email).isPresent()) {
+                throw new BusinessException(ErrorCode.INVALID_EXCEL_FILE, email + " 이메일은 이미 존재합니다.");
+            }
+
             employeeRepository.save(employee);
         }
     }
@@ -74,43 +77,30 @@ public class EmployeeExcelService {
             XSSFRow row = worksheet.getRow(i);
 
             Department department = getDepartment(formatter, row);
-            Employee newEmployee = getEmployee(formatter, row, department);
-            employeeExcelValidator.validate(newEmployee);
+
+            // Use EmployeeExcelModel to parse the row
+            EmployeeExcelModel model = new EmployeeExcelModel(formatter, row, department);
+            Employee newEmployee = model.parse();
 
             String email = newEmployee.getEmail();
             Optional<Employee> existingOpt = employeeRepository.findByEmailAndIsActivatedTrue(email);
-            Employee existing = existingOpt.get();
 
             if (existingOpt.isPresent()) {
+                Employee existing = existingOpt.get();
 
                 // 연봉 비교
-                if (!existing.getAnnualSalary().equals(newEmployee.getAnnualSalary())) {
+                if (existing.getAnnualSalary() != null && newEmployee.getAnnualSalary() != null && 
+                    !existing.getAnnualSalary().equals(newEmployee.getAnnualSalary())) {
                     existing.updateAnnualSalary(newEmployee.getAnnualSalary()); // 연봉만 업데이트
                     employeeRepository.save(existing); // save는 update도 처리 가능 (JPA)
                 }
 
                 createYearlySalaries(existing);
             } else {
-                employeeRepository.save(newEmployee); // 신규 등록
-                createYearlySalaries(existing);
+                Employee savedEmployee = employeeRepository.save(newEmployee); // 신규 등록
+                createYearlySalaries(savedEmployee);
             }
         }
-    }
-
-    private Employee getEmployee(DataFormatter formatter, XSSFRow row, Department department) {
-        return Employee.builder()
-            .name(formatter.formatCellValue(row.getCell(0)))
-            .email(formatter.formatCellValue(row.getCell(1)))
-            .phone(Phone.of(formatter.formatCellValue(row.getCell(2))))
-            .birthDate(LocalDate.parse(formatter.formatCellValue(row.getCell(3))))
-            .type(EmployeeType.valueOf(formatter.formatCellValue(row.getCell(4))))
-            .rank(EmployeeRank.valueOf(formatter.formatCellValue(row.getCell(5))))
-            .grade(EmployeeGrade.valueOf(formatter.formatCellValue(row.getCell(6))))
-            .hrStatus(EmployeeStatus.valueOf(formatter.formatCellValue(row.getCell(7))))
-            .joinDate(LocalDate.parse(formatter.formatCellValue(row.getCell(8))))
-            .departmentId(department.getId())
-            .annualSalary(Money.wons(Long.parseLong(formatter.formatCellValue(row.getCell(10)))))
-            .build();
     }
 
     private Department getDepartment(DataFormatter formatter, XSSFRow row) {
@@ -120,6 +110,11 @@ public class EmployeeExcelService {
     }
 
     private void createYearlySalaries(Employee employee) {
+        if (employee == null || employee.getAnnualSalary() == null) {
+            log.warn("Cannot create yearly salaries: employee or annual salary is null");
+            return;
+        }
+
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = startDate.plusMonths(11)
             .withDayOfMonth(YearMonth.from(startDate.plusMonths(11)).lengthOfMonth());
@@ -134,6 +129,11 @@ public class EmployeeExcelService {
             LocalDate periodStart = period.get("startDate");
             LocalDate periodEnd = period.get("endDate");
 
+            if (periodStart == null || periodEnd == null) {
+                log.warn("Invalid period: start or end date is null");
+                continue;
+            }
+
             long daysInPeriod = ChronoUnit.DAYS.between(periodStart, periodEnd) + 1;
             Money monthlyAmount = dailyPay.multiply(daysInPeriod);
 
@@ -147,5 +147,4 @@ public class EmployeeExcelService {
             salaryRepository.save(salary);
         }
     }
-
 }
