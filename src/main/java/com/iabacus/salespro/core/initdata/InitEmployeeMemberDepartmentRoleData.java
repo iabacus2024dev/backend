@@ -1,19 +1,12 @@
 package com.iabacus.salespro.core.initdata;
 
-import com.iabacus.salespro.web.common.Money;
-import com.iabacus.salespro.web.common.Phone;
-import com.iabacus.salespro.web.department.domain.Department;
-import com.iabacus.salespro.web.department.domain.DepartmentType;
-import com.iabacus.salespro.web.department.repository.DepartmentRepository;
-import com.iabacus.salespro.web.employee.domain.*;
-import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
-import com.iabacus.salespro.web.member.domain.Member;
-import com.iabacus.salespro.web.member.repository.MemberRepository;
-import com.iabacus.salespro.web.role.domain.*;
-import com.iabacus.salespro.web.role.repository.ActionRepository;
-import com.iabacus.salespro.web.role.repository.RangeRepository;
-import com.iabacus.salespro.web.role.repository.RoleRepository;
-import lombok.RequiredArgsConstructor;
+import static com.iabacus.salespro.web.role.domain.Authority.*;
+import static com.iabacus.salespro.web.role.domain.Page.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
@@ -21,11 +14,39 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
-import static com.iabacus.salespro.web.role.domain.Authority.createAuthority;
-import static com.iabacus.salespro.web.role.domain.Page.*;
+import com.iabacus.salespro.web.common.Money;
+import com.iabacus.salespro.web.common.Phone;
+import com.iabacus.salespro.web.department.domain.Department;
+import com.iabacus.salespro.web.department.domain.DepartmentType;
+import com.iabacus.salespro.web.department.repository.DepartmentRepository;
+import com.iabacus.salespro.web.employee.domain.Employee;
+import com.iabacus.salespro.web.employee.domain.EmployeeGrade;
+import com.iabacus.salespro.web.employee.domain.EmployeeRank;
+import com.iabacus.salespro.web.employee.domain.EmployeeStatus;
+import com.iabacus.salespro.web.employee.domain.EmployeeType;
+import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
+import com.iabacus.salespro.web.member.domain.Member;
+import com.iabacus.salespro.web.member.repository.MemberRepository;
+import com.iabacus.salespro.web.project.domain.Contract;
+import com.iabacus.salespro.web.project.domain.ContractType;
+import com.iabacus.salespro.web.project.domain.Input;
+import com.iabacus.salespro.web.project.domain.Project;
+import com.iabacus.salespro.web.project.domain.ProjectType;
+import com.iabacus.salespro.web.project.repository.ContractRepository;
+import com.iabacus.salespro.web.project.repository.InputRepository;
+import com.iabacus.salespro.web.project.repository.ProjectRepository;
+import com.iabacus.salespro.web.role.domain.Action;
+import com.iabacus.salespro.web.role.domain.Authority;
+import com.iabacus.salespro.web.role.domain.AuthorityAction;
+import com.iabacus.salespro.web.role.domain.AuthorityRange;
+import com.iabacus.salespro.web.role.domain.Range;
+import com.iabacus.salespro.web.role.domain.Role;
+import com.iabacus.salespro.web.role.domain.RoleAuthority;
+import com.iabacus.salespro.web.role.repository.ActionRepository;
+import com.iabacus.salespro.web.role.repository.RangeRepository;
+import com.iabacus.salespro.web.role.repository.RoleRepository;
 
 @Profile("local")
 @RequiredArgsConstructor
@@ -41,6 +62,10 @@ public class InitEmployeeMemberDepartmentRoleData {
     private final PasswordEncoder passwordEncoder;
     private final RangeRepository rangeRepository;
     private final ActionRepository actionRepository;
+
+    private final ContractRepository contractRepository;
+    private final InputRepository inputRepository;
+    private final ProjectRepository projectRepository;
 
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
@@ -89,9 +114,9 @@ public class InitEmployeeMemberDepartmentRoleData {
 
         // 권한
         Authority authority1 = createAuthority("프로젝트 조회", 프로젝트, AuthorityAction.createAuthorityAction(action1), createAuthorityRange(range1));
-        Authority authority2 = createAuthority("프로젝트 편집", 프로젝트, AuthorityAction.createAuthorityAction(action2),  createAuthorityRange(range2));
-        Authority authority3 = createAuthority("구성원 조회", 구성원, AuthorityAction.createAuthorityAction(action1),  createAuthorityRange(range3));
-        Authority authority4 = createAuthority("구성원 편집", 구성원, AuthorityAction.createAuthorityAction(action2),  createAuthorityRange(range4));
+        Authority authority2 = createAuthority("프로젝트 편집", 프로젝트, AuthorityAction.createAuthorityAction(action2), createAuthorityRange(range2));
+        Authority authority3 = createAuthority("구성원 조회", 구성원, AuthorityAction.createAuthorityAction(action1), createAuthorityRange(range3));
+        Authority authority4 = createAuthority("구성원 편집", 구성원, AuthorityAction.createAuthorityAction(action2), createAuthorityRange(range4));
         Authority authority5 = createAuthority("협력사 조회", 협력사, AuthorityAction.createAuthorityAction(action1), createAuthorityRange(range1));
         Authority authority7 = createAuthority("협력사 편집", 협력사, AuthorityAction.createAuthorityAction(action2), createAuthorityRange(range2));
         Authority authority8 = createAuthority("매출 조회", 매출, AuthorityAction.createAuthorityAction(action1), createAuthorityRange(range3));
@@ -134,6 +159,9 @@ public class InitEmployeeMemberDepartmentRoleData {
         Member member6 = createMember(employee6, admin);
         Member member7 = createMember(employee7, admin);
         memberRepository.saveAll(List.of(member1, member2, member3, member4, member5, member6, member7));
+
+        // 2. 테스트용 프로젝트 생성 (findMyProjects 테스트용)
+        createTestDataForFindMyProjects(employee1);
     }
 
     private AuthorityRange createAuthorityRange(Range range) {
@@ -185,6 +213,140 @@ public class InitEmployeeMemberDepartmentRoleData {
             .hrStatus(EmployeeStatus.재직)
             .comment("최근 입사한 신입사원")
             .build();
+    }
+
+    private void createTestDataForFindMyProjects(Employee employee) {
+
+        // 4. 프로젝트 생성 (활성 프로젝트)
+        Project project1 = Project.builder()
+            .name("테스트 프로젝트1")
+            .code("TEST001")
+            .type(ProjectType.SI)
+            .ownerTeamId(1L)
+            .startDate(LocalDate.now().minusDays(10))
+            .endDate(LocalDate.now().plusDays(20))
+            .expectedAmount(Money.wons(10000000L))
+            .contractAmount(Money.wons(12000000L))
+            .contractDate(LocalDate.now().minusDays(15))
+            .clientCompany("테스트 클라이언트")
+            .clientCompanyRep("클라이언트 담당자")
+            .clientCompanyRepPhone(Phone.of("01012341234"))
+            .mainCompany("테스트 메인회사")
+            .mainCompanyRep("메인회사 담당자")
+            .mainCompanyRepPhone(Phone.of("01012345678"))
+            .pmName("프로젝트 매니저")
+            .pmPhone(Phone.of("01098765432"))
+            .build();
+        projectRepository.save(project1);
+
+        Project project2 = Project.builder()
+            .name("테스트 프로젝트2")
+            .code("TEST002")
+            .type(ProjectType.SM)
+            .ownerTeamId(1L)
+            .startDate(LocalDate.now().minusDays(5))
+            .endDate(LocalDate.now().plusDays(15))
+            .expectedAmount(Money.wons(5000000L))
+            .contractAmount(Money.wons(6000000L))
+            .contractDate(LocalDate.now().minusDays(10))
+            .clientCompany("테스트 클라이언트2")
+            .clientCompanyRep("클라이언트 담당자2")
+            .clientCompanyRepPhone(Phone.of("01012341235"))
+            .mainCompany("테스트 메인회사2")
+            .mainCompanyRep("메인회사 담당자2")
+            .mainCompanyRepPhone(Phone.of("01012345679"))
+            .pmName("프로젝트 매니저2")
+            .pmPhone(Phone.of("01098765433"))
+            .build();
+        projectRepository.save(project2);
+
+        // 5. 비활성 프로젝트 생성
+        Project inactiveProject = Project.builder()
+            .name("비활성 테스트 프로젝트")
+            .code("TEST003")
+            .type(ProjectType.SI)
+            .ownerTeamId(1L)
+            .startDate(LocalDate.now().minusDays(30))
+            .endDate(LocalDate.now().minusDays(10))
+            .expectedAmount(Money.wons(3000000L))
+            .contractAmount(Money.wons(3500000L))
+            .contractDate(LocalDate.now().minusDays(35))
+            .clientCompany("테스트 클라이언트3")
+            .clientCompanyRep("클라이언트 담당자3")
+            .clientCompanyRepPhone(Phone.of("01012341236"))
+            .mainCompany("테스트 메인회사3")
+            .mainCompanyRep("메인회사 담당자3")
+            .mainCompanyRepPhone(Phone.of("01012345680"))
+            .pmName("프로젝트 매니저3")
+            .pmPhone(Phone.of("01098765434"))
+            .build();
+        projectRepository.save(inactiveProject);
+        inactiveProject.inactivate(LocalDateTime.now());
+
+        // 6. 계약 생성
+        Contract contract1 = Contract.builder()
+            .project(project1)
+            .projectCode(project1.getCode())
+            .index(1)
+            .type(ContractType.최초)
+            .startDate(project1.getStartDate())
+            .endDate(project1.getEndDate())
+            .build();
+        contractRepository.save(contract1);
+
+        Contract contract2 = Contract.builder()
+            .project(project2)
+            .projectCode(project2.getCode())
+            .index(1)
+            .type(ContractType.최초)
+            .startDate(project2.getStartDate())
+            .endDate(project2.getEndDate())
+            .build();
+        contractRepository.save(contract2);
+
+        Contract contract3 = Contract.builder()
+            .project(inactiveProject)
+            .projectCode(inactiveProject.getCode())
+            .index(1)
+            .type(ContractType.최초)
+            .startDate(inactiveProject.getStartDate())
+            .endDate(inactiveProject.getEndDate())
+            .build();
+        contractRepository.save(contract3);
+
+        // 7. 투입 생성
+        Input input1 = Input.builder()
+            .project(project1)
+            .contract(contract1)
+            .personnel(employee)
+            .type(EmployeeType.정직원)
+            .startDate(project1.getStartDate())
+            .endDate(project1.getEndDate())
+            .unitPrice(Money.wons(1000000L))
+            .build();
+        inputRepository.save(input1);
+
+        Input input2 = Input.builder()
+            .project(project2)
+            .contract(contract2)
+            .personnel(employee)
+            .type(EmployeeType.정직원)
+            .startDate(project2.getStartDate())
+            .endDate(project2.getEndDate())
+            .unitPrice(Money.wons(800000L))
+            .build();
+        inputRepository.save(input2);
+
+        Input input3 = Input.builder()
+            .project(inactiveProject)
+            .contract(contract3)
+            .personnel(employee)
+            .type(EmployeeType.정직원)
+            .startDate(inactiveProject.getStartDate())
+            .endDate(inactiveProject.getEndDate())
+            .unitPrice(Money.wons(700000L))
+            .build();
+        inputRepository.save(input3);
     }
 
 }

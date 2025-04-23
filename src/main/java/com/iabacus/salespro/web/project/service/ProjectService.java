@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,6 +81,15 @@ public class ProjectService {
                 return ProjectExcelResponse.from(project, department);
             })
             .toList();
+    }
+
+    public PageResponse<ProjectSearchResponse> getMyProject(Long memberId) {
+        List<Project> projects = projectRepository.findMyProjects(memberId);
+        List<ProjectSearchResponse> responses = projects.stream()
+            .map(ProjectSearchResponse::from)
+            .toList();
+        Page<ProjectSearchResponse> page = new PageImpl<>(responses);
+        return new PageResponse<>(page);
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +20,7 @@ import com.iabacus.salespro.web.project.repository.ProjectRepository;
 
 @Profile("local")
 @RequiredArgsConstructor
+@Transactional
 @Component
 public class InitProjectData {
 
@@ -26,6 +28,7 @@ public class InitProjectData {
 
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
+        // 1. 기본 프로젝트 생성
         List<Project> projects = new ArrayList<>();
         projects.add(createProject("P000123485", "(주)엘지유플러스_통신CB 데이터 개발", 50_000_000, 55_000_000, LocalDate.of(2025, 3, 10), LocalDate.of(2025, 3, 20), LocalDate.of(2025, 6, 11), ProjectType.SI));
         projects.add(createProject("P000123486", "(주)삼성전자_스마트홈 플랫폼 구축", 120_000_000, 130_000_000, LocalDate.of(2025, 4, 1), LocalDate.of(2025, 4, 15), LocalDate.of(2025, 8, 30), ProjectType.SI));

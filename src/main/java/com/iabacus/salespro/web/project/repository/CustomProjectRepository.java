@@ -14,4 +14,6 @@ public interface CustomProjectRepository {
 
     List<Project> searchWithoutPage(ProjectSearchCondition condition, Pageable pageable);
 
+    List<Project> findMyProjects(Long memberId);
+
 }

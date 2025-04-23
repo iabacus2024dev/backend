@@ -1,5 +1,9 @@
 package com.iabacus.salespro.web.project.repository;
 
+import static com.iabacus.salespro.web.employee.domain.QEmployee.*;
+import static com.iabacus.salespro.web.member.domain.QMember.*;
+import static com.iabacus.salespro.web.project.domain.QContract.*;
+import static com.iabacus.salespro.web.project.domain.QInput.*;
 import static com.iabacus.salespro.web.project.domain.QProject.*;
 import static io.micrometer.common.util.StringUtils.*;
 
@@ -129,6 +133,21 @@ public class ProjectRepositoryImpl implements CustomProjectRepository {
                 return null;
             }
         }
+    }
+
+    @Override
+    public List<Project> findMyProjects(Long memberId) {
+        return queryFactory
+            .selectFrom(project)
+            .join(member).on(member.id.eq(memberId))
+            .join(employee).on(employee.id.eq(member.employeeId))
+            .join(contract).on(contract.project.eq(project))
+            .join(input).on(input.contract.eq(contract))
+            .where(
+                input.personnel.id.eq(employee.id),
+                project.isActivated.isTrue()
+            )
+            .fetch();
     }
 
 }

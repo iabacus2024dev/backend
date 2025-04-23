@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.iabacus.salespro.core.security.service.UserPrincipal;
 import com.iabacus.salespro.web.common.PageResponse;
 import com.iabacus.salespro.web.project.request.ProjectCreateRequest;
 import com.iabacus.salespro.web.project.request.ProjectSearchCondition;
@@ -66,6 +68,11 @@ public class ProjectController {
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         projectService.deleteProject(id, LocalDateTime.now());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<PageResponse<ProjectSearchResponse>> getMyProjects(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return ResponseEntity.ok(projectService.getMyProject(userPrincipal.getMemberId()));
     }
 
 }
