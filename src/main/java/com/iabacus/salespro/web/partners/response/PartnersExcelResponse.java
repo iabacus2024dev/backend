@@ -62,7 +62,7 @@ public class PartnersExcelResponse {
             .name(partners.getName())
             .ceoName(partners.getCeoName())
             .salesRepName(partners.getSalesRepName())
-            .salesRepPhone(partners.getSalesRepPhone() != null ? partners.getSalesRepPhone().getWithHyphen() : null)
+            .salesRepPhone(partners.getSalesRepPhone() != null ? partners.getSalesRepPhone().getNumber() : null)
             .salesRepEmail(partners.getSalesRepEmail())
             .grade(partners.getGrade().name())
             .commissionRate(partners.getCommissionRate() != null ? partners.getCommissionRate().getRate() : null)
