@@ -39,7 +39,7 @@ public class PartnersSearchResponse {
             .name(partners.getName())
             .ceoName(partners.getCeoName())
             .salesRepName(partners.getSalesRepName())
-            .salesRepPhone(partners.getSalesRepPhone() != null ? partners.getSalesRepPhone().getWithHyphen() : null)
+            .salesRepPhone(partners.getSalesRepPhone() != null ? partners.getSalesRepPhone().getNumber() : null)
             .salesRepEmail(partners.getSalesRepEmail())
             .grade(partners.getGrade())
             .address(partners.getAddress() != null ? partners.getAddress().getFullAddress() : null)

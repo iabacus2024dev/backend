@@ -52,7 +52,7 @@ public class PartnersDetailResponse {
             .ceoName(partners.getCeoName())
             .salesRepEmail(partners.getSalesRepEmail())
             .salesRepName(partners.getSalesRepName())
-            .salesRepPhone(partners.getSalesRepPhone() != null ? partners.getSalesRepPhone().getWithHyphen() : null)
+            .salesRepPhone(partners.getSalesRepPhone() != null ? partners.getSalesRepPhone().getNumber() : null)
             .grade(partners.getGrade())
             .commissionRate(partners.getCommissionRate() != null ? partners.getCommissionRate().getRate() : null)
             .comment(partners.getComment())
