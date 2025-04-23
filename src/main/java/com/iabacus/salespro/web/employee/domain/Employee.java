@@ -12,15 +12,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import com.iabacus.salespro.web.common.BaseEntity;
-import com.iabacus.salespro.web.common.Money;
-import com.iabacus.salespro.web.common.Phone;
-import com.iabacus.salespro.web.employee.request.EmployeeUpdateRequest;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import com.iabacus.salespro.web.common.BaseEntity;
+import com.iabacus.salespro.web.common.Money;
+import com.iabacus.salespro.web.common.Phone;
+import com.iabacus.salespro.web.employee.request.EmployeeUpdateRequest;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -95,7 +95,7 @@ public class Employee extends BaseEntity {
         this.joinDate = joinDate;
         this.annualSalary = annualSalary;
         this.comment = comment;
-        this.HrStatus = hrStatus;
+        this.HrStatus = hrStatus != null ? hrStatus : EmployeeStatus.재직;
     }
 
     public void leave(LocalDate leaveDate) {

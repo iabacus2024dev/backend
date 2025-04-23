@@ -13,14 +13,12 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.iabacus.salespro.core.error.BusinessException;
+import com.iabacus.salespro.core.error.ErrorCode;
 import com.iabacus.salespro.core.excel.util.WorksheetUtil;
-import com.iabacus.salespro.web.common.Address;
-import com.iabacus.salespro.web.common.Phone;
-import com.iabacus.salespro.web.common.Ratio;
 import com.iabacus.salespro.web.partners.domain.Partners;
-import com.iabacus.salespro.web.partners.domain.PartnersGrade;
+import com.iabacus.salespro.web.partners.excel.PartnersExcelModel;
 import com.iabacus.salespro.web.partners.repository.PartnersRepository;
-import com.iabacus.salespro.web.partners.validator.PartnersExcelValidator;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,7 +27,6 @@ import com.iabacus.salespro.web.partners.validator.PartnersExcelValidator;
 public class PartnersExcelService {
 
     private final PartnersRepository partnersRepository;
-    private final PartnersExcelValidator partnersExcelValidator;
 
     @Transactional
     public void uploadPartners(MultipartFile file) throws IOException {
@@ -40,27 +37,16 @@ public class PartnersExcelService {
             DataFormatter formatter = new DataFormatter();
             XSSFRow row = worksheet.getRow(i);
 
-            Partners partners = getPartners(formatter, row);
-            partnersExcelValidator.validate(partners);
+            // Use PartnersExcelModel to parse the row
+            PartnersExcelModel model = new PartnersExcelModel(formatter, row);
+            Partners partners = model.parse();
+
+            // Check if partners with the same name already exists
+            if (partnersRepository.existsByName(partners.getName())) {
+                throw new BusinessException(ErrorCode.INVALID_EXCEL_FILE, partners.getName() + " 협력사 이름은 이미 존재합니다.");
+            }
+
             partnersRepository.save(partners);
         }
     }
-
-    private Partners getPartners(DataFormatter formatter, XSSFRow row) {
-        return Partners.builder()
-            .name(formatter.formatCellValue(row.getCell(0)))
-            .ceoName(formatter.formatCellValue(row.getCell(1)))
-            .salesRepName(formatter.formatCellValue(row.getCell(2)))
-            .salesRepPhone(Phone.of(formatter.formatCellValue(row.getCell(3))))
-            .salesRepEmail(formatter.formatCellValue(row.getCell(4)))
-            .grade(PartnersGrade.valueOf(formatter.formatCellValue(row.getCell(5))))
-            .commissionRate(Ratio.valueOf(Double.parseDouble(formatter.formatCellValue(row.getCell(6)))))
-            .address(Address.builder()
-                .street(formatter.formatCellValue(row.getCell(7)))
-                .detail(formatter.formatCellValue(row.getCell(8)))
-                .zipcode(formatter.formatCellValue(row.getCell(9)))
-                .build())
-            .build();
-    }
-
 }
