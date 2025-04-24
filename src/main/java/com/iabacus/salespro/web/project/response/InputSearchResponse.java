@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class InputResponse {
+public class InputSearchResponse {
 
   private Long id;
   private Long personnelId;
@@ -19,9 +19,8 @@ public class InputResponse {
   private Long contractId;
   private String projectCode;
 
-  public static InputResponse fromEntity(Input input) {
-
-        return InputResponse.builder()
+  public static InputSearchResponse from(Input input) {
+        return InputSearchResponse.builder()
             .id(input.getId())
             .personnelId(input.getPersonnel().getId())
             .employeeName(input.getPersonnel().getName())
@@ -32,4 +31,5 @@ public class InputResponse {
             .projectCode(input.getContract().getProjectCode())
             .build();
   }
+
 }

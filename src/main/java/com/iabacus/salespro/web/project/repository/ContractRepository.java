@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.iabacus.salespro.web.project.domain.Contract;
-import com.iabacus.salespro.web.project.domain.ContractType;
 
 public interface ContractRepository extends JpaRepository<Contract, Long> {
 
