@@ -13,6 +13,7 @@ import com.iabacus.salespro.web.project.repository.ContractRepository;
 import com.iabacus.salespro.web.project.repository.InputRepository;
 import com.iabacus.salespro.web.project.repository.ProjectRepository;
 import com.iabacus.salespro.web.project.request.InputCreateRequest;
+import com.iabacus.salespro.web.project.response.InputSearchResponse;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -56,5 +57,11 @@ public class InputService {
     });
   }
 
+  public List<InputSearchResponse> getInputsByContractId(Long contractId) {
+    return inputRepository.findByContractId(contractId)
+        .stream()
+        .map(InputSearchResponse::from)
+        .toList();
+  }
 
 }
