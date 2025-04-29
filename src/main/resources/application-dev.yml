@@ -12,3 +12,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+
+base:
+  url: ${DEV_BASE_URL}
