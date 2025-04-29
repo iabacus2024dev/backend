@@ -1,11 +1,14 @@
 package com.iabacus.salespro.web.aggregate.repository;
 
-import com.iabacus.salespro.web.aggregate.response.AggregateResponse;
+import java.util.List;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+
 import org.springframework.stereotype.Repository;
-import java.util.List;
+
+import com.iabacus.salespro.web.aggregate.response.AggregateResponse;
 
 @Repository
 public class AggregateRepositoryCustomImpl implements AggregateRepositoryCustom {
@@ -77,24 +80,26 @@ public class AggregateRepositoryCustomImpl implements AggregateRepositoryCustom 
             **********/
             agg_department AS (
                 SELECT
-                    c.project_owner_department_id,
+                    C.project_owner_department_id,
                     d.total_contract_amount,
                     s.team_sales_goal_amount_by_year,
-                    c.monthly_wage,
-                    c.sgae_amount,
-                    c.ovhe_amount,
-                    c.total_cost,
-                    c.fulltime_count,
-                    c.outsource_count,
-                    c.freelancer_count,
-                    c.fulltime_cost,
-                    c.outsource_cost,
-                    c.freelancer_cost,
-                    c.si_cost,
-                    c.sm_cost
-                FROM dept_cost c
-                LEFT JOIN dept_contract d ON c.project_owner_department_id = d.project_owner_department_id
-                LEFT JOIN dept_sales s    ON c.project_owner_department_id = s.project_owner_department_id
+                    C.monthly_wage,
+                    C.sgae_amount,
+                    C.ovhe_amount,
+                    C.total_cost,
+                    C.fulltime_count,
+                    C.outsource_count,
+                    C.freelancer_count,
+                    C.fulltime_cost,
+                    C.outsource_cost,
+                    C.freelancer_cost,
+                    C.si_cost,
+                    C.sm_cost,
+                    dept.DEPARTMENT_NAME AS department_name
+                FROM dept_cost C
+                LEFT JOIN dept_contract d ON C.project_owner_department_id = d.project_owner_department_id
+                LEFT JOIN dept_sales s    ON C.project_owner_department_id = s.project_owner_department_id
+                LEFT JOIN tb_department dept ON C.project_owner_department_id = dept.department_id
             ),
             /**********
             * 월별 실제 작업일 기반 계약금액 산출:
@@ -122,24 +127,24 @@ public class AggregateRepositoryCustomImpl implements AggregateRepositoryCustom 
                     SELECT DISTINCT
                         project_id,
                         project_owner_department_id,
-                        DATE(project_start_date) AS start_date,
-                        DATE(project_end_date)   AS end_date,
+                        CAST(project_start_date AS DATE) AS start_date,
+                        CAST(project_end_date AS DATE)   AS end_date,
                         project_contract_amount,
-                        DATEDIFF(project_end_date, project_start_date) + 1 AS total_project_days,
+                        DATEDIFF(CAST(project_end_date AS DATE), CAST(project_start_date AS DATE)) + 1 AS total_project_days,
                         CASE 
-                            WHEN project_start_date < DATE(CONCAT(:inputYear, '-01-01')) 
-                            THEN DATE(CONCAT(:inputYear, '-01-01'))
-                            ELSE DATE(project_start_date)
+                            WHEN project_start_date < CAST(CONCAT(:inputYear, '-01-01') AS DATE) 
+                            THEN CAST(CONCAT(:inputYear, '-01-01') AS DATE)
+                            ELSE CAST(project_start_date AS DATE)
                         END AS effective_start,
                         CASE 
-                            WHEN project_end_date > DATE(CONCAT(:inputYear, '-12-31')) 
-                            THEN DATE(CONCAT(:inputYear, '-12-31'))
-                            ELSE DATE(project_end_date)
+                            WHEN project_end_date > CAST(CONCAT(:inputYear, '-12-31') AS DATE) 
+                            THEN CAST(CONCAT(:inputYear, '-12-31') AS DATE)
+                            ELSE CAST(project_end_date AS DATE)
                         END AS effective_end
                     FROM tb_monthly_employee_cost_aggregate
                     -- 프로젝트 기간이 입력 연도와 겹치는 것만 선택
-                    WHERE project_end_date >= DATE(CONCAT(:inputYear, '-01-01'))
-                    AND project_start_date <= DATE(CONCAT(:inputYear, '-12-31'))
+                    WHERE project_end_date >= CAST(CONCAT(:inputYear, '-01-01') AS DATE)
+                    AND project_start_date <= CAST(CONCAT(:inputYear, '-12-31') AS DATE)
                 ),
                 /**********
                 * 각 프로젝트에 대해 지정 연도 내 월별 행 생성:
@@ -237,22 +242,24 @@ public class AggregateRepositoryCustomImpl implements AggregateRepositoryCustom 
             **********/
             SELECT
                 a.project_owner_department_id AS 부서범위,
+                a.project_owner_department_id AS 부서아이디,
+                a.department_name AS 부서이름,
                 a.total_contract_amount AS 매출합계,
                 a.team_sales_goal_amount_by_year AS 매출목표,
-                ROUND(a.total_contract_amount / a.team_sales_goal_amount_by_year * 100, 2) AS 달성률,
+                round(a.total_contract_amount / a.team_sales_goal_amount_by_year * 100, 2) AS 달성률,
                 a.monthly_wage       AS 인건비,
                 a.sgae_amount       AS 판관비,
                 a.ovhe_amount       AS 제경비,
                 (a.total_contract_amount - a.total_cost) AS 영업이익,
-                ROUND((a.total_contract_amount - a.total_cost) / a.total_contract_amount * 100, 2) AS 영업이익률,
+                round((a.total_contract_amount - a.total_cost) / a.total_contract_amount * 100, 2) AS 영업이익률,
                 a.fulltime_count    AS 정직원,
                 a.outsource_count   AS 외주,
                 a.freelancer_count  AS 프리랜서,
                 a.fulltime_cost     AS 정직원인건비,
                 a.outsource_cost    AS 외주인건비,
                 a.freelancer_cost   AS 프리랜서인건비,
-                a.si_cost AS SI,
-                a.sm_cost AS SM,
+                a.si_cost AS si,
+                a.sm_cost AS sm,
                 p.sales_01,
                 p.sales_02,
                 p.sales_03,
@@ -275,4 +282,5 @@ public class AggregateRepositoryCustomImpl implements AggregateRepositoryCustom 
         query.setParameter("inputYear", inputYear);
         return query.getResultList();
     }
+
 }

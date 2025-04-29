@@ -58,6 +58,8 @@ public enum ErrorCode {
 
     // EMPLOYEE,
     EMPLOYEE_NOT_FOUND(HttpStatus.BAD_REQUEST, "employee.not.found"),
+    EMPLOYEE_EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "employee.email.already.exists"),
+    EMPLOYEE_PHONE_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "employee.phone.already.exists"),
 
     // ROLE
     ROLE_NOT_FOUND(HttpStatus.BAD_REQUEST, "role.not.found"),

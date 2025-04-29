@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
 import com.iabacus.salespro.web.common.PageResponse;
+import com.iabacus.salespro.web.common.Phone;
 import com.iabacus.salespro.web.department.domain.Department;
 import com.iabacus.salespro.web.department.repository.DepartmentRepository;
 import com.iabacus.salespro.web.employee.domain.Employee;
@@ -26,6 +27,7 @@ import com.iabacus.salespro.web.employee.response.EmployeeDetailResponse;
 import com.iabacus.salespro.web.employee.response.EmployeeExcelResponse;
 import com.iabacus.salespro.web.employee.response.EmployeeMyInfoResponse;
 import com.iabacus.salespro.web.employee.response.EmployeeSearchResponse;
+import com.iabacus.salespro.web.employee.validator.EmployeeValidator;
 import com.iabacus.salespro.web.partners.domain.Partners;
 import com.iabacus.salespro.web.partners.repository.PartnersRepository;
 
@@ -38,6 +40,7 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
     private final PartnersRepository partnersRepository;
+    private final EmployeeValidator employeeValidator;
 
     public EmployeeDetailResponse getEmployeeDetail(Long id) {
         Employee employee = findEmployee(id);
@@ -60,6 +63,8 @@ public class EmployeeService {
 
     @Transactional
     public void createEmployee(EmployeeCreateRequest request) {
+        employeeValidator.validateEmail(request.getEmail());
+        employeeValidator.validatePhone(Phone.of(request.getPhone()));
         employeeRepository.save(request.toEntity());
     }
 

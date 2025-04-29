@@ -3,7 +3,18 @@ package com.iabacus.salespro.web.aggregate.domain;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import jakarta.persistence.*;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.ColumnResult;
+import jakarta.persistence.ConstructorResult;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SqlResultSetMapping;
+import jakarta.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -21,41 +32,43 @@ import com.iabacus.salespro.web.project.domain.ProjectType;
 @Entity
 @Table(name = "TB_MONTHLY_EMPLOYEE_COST_AGGREGATE")
 @SqlResultSetMapping(
-        name = "AggregateResponseMapping",
-        classes = @ConstructorResult(
-                targetClass = com.iabacus.salespro.web.aggregate.response.AggregateResponse.class,
-                columns = {
-                        @ColumnResult(name = "부서범위", type = String.class),
-                        @ColumnResult(name = "매출합계", type = Long.class),
-                        @ColumnResult(name = "매출목표", type = Long.class),
-                        @ColumnResult(name = "달성률", type = BigDecimal.class),
-                        @ColumnResult(name = "인건비", type = Long.class),
-                        @ColumnResult(name = "판관비", type = Long.class),
-                        @ColumnResult(name = "제경비", type = Long.class),
-                        @ColumnResult(name = "영업이익", type = Long.class),
-                        @ColumnResult(name = "영업이익률", type = BigDecimal.class),
-                        @ColumnResult(name = "정직원", type = Long.class),
-                        @ColumnResult(name = "외주", type = Long.class),
-                        @ColumnResult(name = "프리랜서", type = Long.class),
-                        @ColumnResult(name = "정직원인건비", type = Long.class),
-                        @ColumnResult(name = "외주인건비", type = Long.class),
-                        @ColumnResult(name = "프리랜서인건비", type = Long.class),
-                        @ColumnResult(name = "SI", type = Long.class),
-                        @ColumnResult(name = "SM", type = Long.class),
-                        @ColumnResult(name = "sales_01", type = Long.class),
-                        @ColumnResult(name = "sales_02", type = Long.class),
-                        @ColumnResult(name = "sales_03", type = Long.class),
-                        @ColumnResult(name = "sales_04", type = Long.class),
-                        @ColumnResult(name = "sales_05", type = Long.class),
-                        @ColumnResult(name = "sales_06", type = Long.class),
-                        @ColumnResult(name = "sales_07", type = Long.class),
-                        @ColumnResult(name = "sales_08", type = Long.class),
-                        @ColumnResult(name = "sales_09", type = Long.class),
-                        @ColumnResult(name = "sales_10", type = Long.class),
-                        @ColumnResult(name = "sales_11", type = Long.class),
-                        @ColumnResult(name = "sales_12", type = Long.class)
-                }
-        )
+    name = "AggregateResponseMapping",
+    classes = @ConstructorResult(
+        targetClass = com.iabacus.salespro.web.aggregate.response.AggregateResponse.class,
+        columns = {
+            @ColumnResult(name = "부서범위", type = String.class),
+            @ColumnResult(name = "부서아이디", type = Long.class),
+            @ColumnResult(name = "부서이름", type = String.class),
+            @ColumnResult(name = "매출합계", type = Long.class),
+            @ColumnResult(name = "매출목표", type = Long.class),
+            @ColumnResult(name = "달성률", type = BigDecimal.class),
+            @ColumnResult(name = "인건비", type = Long.class),
+            @ColumnResult(name = "판관비", type = Long.class),
+            @ColumnResult(name = "제경비", type = Long.class),
+            @ColumnResult(name = "영업이익", type = Long.class),
+            @ColumnResult(name = "영업이익률", type = BigDecimal.class),
+            @ColumnResult(name = "정직원", type = Long.class),
+            @ColumnResult(name = "외주", type = Long.class),
+            @ColumnResult(name = "프리랜서", type = Long.class),
+            @ColumnResult(name = "정직원인건비", type = Long.class),
+            @ColumnResult(name = "외주인건비", type = Long.class),
+            @ColumnResult(name = "프리랜서인건비", type = Long.class),
+            @ColumnResult(name = "SI", type = Long.class),
+            @ColumnResult(name = "SM", type = Long.class),
+            @ColumnResult(name = "sales_01", type = Long.class),
+            @ColumnResult(name = "sales_02", type = Long.class),
+            @ColumnResult(name = "sales_03", type = Long.class),
+            @ColumnResult(name = "sales_04", type = Long.class),
+            @ColumnResult(name = "sales_05", type = Long.class),
+            @ColumnResult(name = "sales_06", type = Long.class),
+            @ColumnResult(name = "sales_07", type = Long.class),
+            @ColumnResult(name = "sales_08", type = Long.class),
+            @ColumnResult(name = "sales_09", type = Long.class),
+            @ColumnResult(name = "sales_10", type = Long.class),
+            @ColumnResult(name = "sales_11", type = Long.class),
+            @ColumnResult(name = "sales_12", type = Long.class)
+        }
+    )
 )
 public class Aggregate extends BaseEntity {
 
@@ -88,6 +101,9 @@ public class Aggregate extends BaseEntity {
 
     @Column(name = "PROJECT_OWNER_DEPARTMENT_ID")
     private Long ownerDepartmentId;
+
+    @Column(name = "OWNER_DEPARTMENT_NAME")
+    private String ownerDepartmentName;
 
     @Column(name = "CONTRACT_ID")
     private Long contractId;

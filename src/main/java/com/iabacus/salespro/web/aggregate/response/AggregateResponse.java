@@ -13,6 +13,8 @@ import lombok.Data;
 public class AggregateResponse {
     // 부서 정보
     private String 부서범위;
+    private Long 부서아이디;
+    private String 부서이름;
 
     // 집계 관련 금액 (범위가 클 수 있으므로 Long 사용)
     private Long 매출합계;
