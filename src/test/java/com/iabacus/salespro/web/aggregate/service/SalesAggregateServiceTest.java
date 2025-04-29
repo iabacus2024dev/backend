@@ -15,6 +15,8 @@ import com.iabacus.salespro.web.aggregate.domain.Aggregate;
 import com.iabacus.salespro.web.aggregate.repository.AggregateRepository;
 import com.iabacus.salespro.web.common.Money;
 import com.iabacus.salespro.web.common.Ratio;
+import com.iabacus.salespro.web.department.repository.DepartmentRepository;
+import com.iabacus.salespro.web.department.repository.TeamSalesGoalRepository;
 import com.iabacus.salespro.web.employee.domain.Employee;
 import com.iabacus.salespro.web.employee.domain.EmployeeGrade;
 import com.iabacus.salespro.web.employee.domain.EmployeeType;
@@ -44,6 +46,12 @@ class SalesAggregateServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
+
+    @Autowired
+    private TeamSalesGoalRepository teamSalesGoalRepository;
 
     @Autowired
     private AggregateService aggregateService;

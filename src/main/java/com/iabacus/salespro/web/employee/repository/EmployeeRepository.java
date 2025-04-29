@@ -1,11 +1,13 @@
 package com.iabacus.salespro.web.employee.repository;
 
-import com.iabacus.salespro.web.employee.domain.Employee;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
-import java.util.Optional;
+import com.iabacus.salespro.web.common.Phone;
+import com.iabacus.salespro.web.employee.domain.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long>, CustomEmployeeRepository {
 
@@ -21,5 +23,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, Custo
     @Query("select e from Employee e inner join Member m on e.id = m.employeeId where e.isActivated = true")
     List<Employee> findEmployeesWithMember();
 
-    Optional<Employee> findByIdAndDepartmentIdAndName(Long id, Long departmentId, String name);
+    boolean existsByEmail(String email);
+
+    boolean existsByPhone(Phone phone);
+
 }
