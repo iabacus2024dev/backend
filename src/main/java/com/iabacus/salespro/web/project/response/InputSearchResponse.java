@@ -1,11 +1,8 @@
 package com.iabacus.salespro.web.project.response;
 
-import com.iabacus.salespro.web.common.Money;
-import com.iabacus.salespro.web.common.Ratio;
 import com.iabacus.salespro.web.employee.domain.EmployeeType;
 import com.iabacus.salespro.web.project.domain.Input;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,10 +19,7 @@ public class InputSearchResponse {
   private EmployeeType type;
   private LocalDate startDate;
   private LocalDate endDate;
-  private BigDecimal sgaeRate;
-  private BigDecimal ovheRate;
-  private BigDecimal unitprice;
-  private BigDecimal wage;
+
 
 
   public static InputSearchResponse from(Input input) {
@@ -38,10 +32,6 @@ public class InputSearchResponse {
             .type(input.getType())
             .contractId(input.getContract().getId())
             .projectCode(input.getContract().getProjectCode())
-            .sgaeRate(input.getSgaeRate().getRate())
-            .ovheRate(input.getOvheRate().getRate())
-            .unitprice(input.getUnitPrice().getAmount())
-            .wage(input.getWage().getAmount())
             .build();
   }
 

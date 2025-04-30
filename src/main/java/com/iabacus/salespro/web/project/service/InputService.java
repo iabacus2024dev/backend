@@ -58,6 +58,7 @@ public class InputService {
   }
 
   public List<InputSearchResponse> getInputsByContractId(Long contractId) {
+    // todo: personnelID로 aggregate 테이블에서 급여 정보 조회
     return inputRepository.findByContractId(contractId)
         .stream()
         .map(InputSearchResponse::from)

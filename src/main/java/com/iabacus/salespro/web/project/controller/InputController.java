@@ -20,4 +20,5 @@ public class InputController {
   public ResponseEntity<List<InputSearchResponse>> searchInput(@RequestParam("contractId") Long contractId) {
     return ResponseEntity.ok(inputService.getInputsByContractId(contractId));
   }
+
 }
