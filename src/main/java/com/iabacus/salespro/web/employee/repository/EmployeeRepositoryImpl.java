@@ -102,8 +102,6 @@ public class EmployeeRepositoryImpl implements CustomEmployeeRepository {
                 employee.isActivated.isTrue()
             )
             .orderBy(QuerydslUtils.getSort(pageable, employee))
-            .limit(pageable.getPageSize())
-            .offset(pageable.getOffset())
             .fetch();
     }
 
