@@ -9,7 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/personnels")
+@RequestMapping("/api/v1/inputs")
 @RequiredArgsConstructor
 public class InputController {
 
@@ -20,4 +20,5 @@ public class InputController {
   public ResponseEntity<List<InputSearchResponse>> searchInput(@RequestParam("contractId") Long contractId) {
     return ResponseEntity.ok(inputService.getInputsByContractId(contractId));
   }
+
 }

@@ -2,6 +2,7 @@ package com.iabacus.salespro.web.project.response;
 
 import com.iabacus.salespro.web.employee.domain.EmployeeType;
 import com.iabacus.salespro.web.project.domain.Input;
+
 import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,13 +12,15 @@ import lombok.Getter;
 public class InputSearchResponse {
 
   private Long id;
-  private Long personnelId;
-  private String employeeName;
-  private LocalDate startDate;
-  private LocalDate endDate;
-  private EmployeeType type;
   private Long contractId;
   private String projectCode;
+  private Long personnelId;
+  private String employeeName;
+  private EmployeeType type;
+  private LocalDate startDate;
+  private LocalDate endDate;
+
+
 
   public static InputSearchResponse from(Input input) {
         return InputSearchResponse.builder()
