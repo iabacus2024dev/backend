@@ -104,6 +104,9 @@ public class Aggregate extends BaseEntity {
     @Column(name = "PERSONNEL_DEPARTMENT_ID")
     private Long personnelDepartmentId;
 
+    @Column(name = "PERSONNEL_DEPARTMENT_NAME")
+    private String personnelDepartmentName;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "PERSONNEL_TYPE")
     private EmployeeType personnelType;
@@ -142,7 +145,7 @@ public class Aggregate extends BaseEntity {
     private Money totalCost;
 
     @Builder
-    private Aggregate(Long contractId, Long id, Long inputId, Ratio manMonth, Money monthlyWage, Money ovheAmount, Ratio ovheRate, Long ownerDepartmentId, Long personnelDepartmentId, LocalDate personnelEndDate, Long personnelId, String personnelName, LocalDate personnelStartDate, EmployeeType personnelType, String projectCode, Money projectContractAmount, LocalDate projectEndDate, Long projectId, String projectName, LocalDate projectStartDate, ProjectType projectType, Money sgaeAmount, Ratio sgaeRate, Money teamSalesGoalAmountByYear, Money totalCost, Money unitPrice) {
+    private Aggregate(Long contractId, Long id, Long inputId, Ratio manMonth, Money monthlyWage, Money ovheAmount, Ratio ovheRate, Long ownerDepartmentId, Long personnelDepartmentId, LocalDate personnelEndDate, Long personnelId, String personnelName, LocalDate personnelStartDate, EmployeeType personnelType, String projectCode, Money projectContractAmount, LocalDate projectEndDate, Long projectId, String projectName, LocalDate projectStartDate, ProjectType projectType, Money sgaeAmount, Ratio sgaeRate, Money teamSalesGoalAmountByYear, Money totalCost, Money unitPrice, String personnelDepartmentName) {
         this.contractId = contractId;
         this.id = id;
         this.inputId = inputId;
@@ -152,6 +155,7 @@ public class Aggregate extends BaseEntity {
         this.ovheRate = ovheRate;
         this.ownerDepartmentId = ownerDepartmentId;
         this.personnelDepartmentId = personnelDepartmentId;
+        this.personnelDepartmentName = personnelDepartmentName;
         this.personnelEndDate = personnelEndDate;
         this.personnelId = personnelId;
         this.personnelName = personnelName;
@@ -188,6 +192,7 @@ public class Aggregate extends BaseEntity {
             ", personnelId=" + personnelId +
             ", personnelName='" + personnelName + '\'' +
             ", personnelDepartmentId=" + personnelDepartmentId +
+            ", personnelDepartmentName=" + personnelDepartmentName +
             ", personnelType=" + personnelType +
             ", personnelStartDate=" + personnelStartDate +
             ", personnelEndDate=" + personnelEndDate +

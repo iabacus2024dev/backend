@@ -20,12 +20,13 @@ public class InputSearchResponse {
   private LocalDate endDate;
   private BigDecimal manMonth;
   private BigDecimal unitPrice;
-  private BigDecimal monthlyWage;
+  private BigDecimal wage;
   private BigDecimal sgaeRate;
   private BigDecimal ovheRate;
   private BigDecimal sgaeAmount;
   private BigDecimal ovheAmount;
   private BigDecimal cost;
+  private String department;
 
 
   @Builder
@@ -38,12 +39,13 @@ public class InputSearchResponse {
                              LocalDate endDate,
                              BigDecimal manMonth,
                              BigDecimal unitPrice,
-                             BigDecimal monthlyWage,
+                             BigDecimal wage,
                              BigDecimal sgaeRate,
                              BigDecimal ovheRate,
                              BigDecimal sgaeAmount,
                              BigDecimal ovheAmount,
-                             BigDecimal cost) {
+                             BigDecimal cost,
+                             String department) {
     this.id = id;
     this.contractId = contractId;
     this.personnelId = personnelId;
@@ -53,12 +55,13 @@ public class InputSearchResponse {
     this.endDate = endDate;
     this.manMonth = manMonth;
     this.unitPrice = unitPrice;
-    this.monthlyWage = monthlyWage;
+    this.wage = wage;
     this.sgaeRate = sgaeRate;
     this.ovheRate = ovheRate;
     this.sgaeAmount = sgaeAmount;
     this.ovheAmount = ovheAmount;
     this.cost = cost;
+    this.department = department;
   }
 
   public static InputSearchResponse from(Input input) {
