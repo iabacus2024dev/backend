@@ -10,4 +10,5 @@ public interface AggregateRepository extends JpaRepository<Aggregate, Long> {
 
     List<Aggregate> findByInputId(Long inputId);
     List<Aggregate> findByProjectId(Long projectId);
+    List<Aggregate> findByContractIdAndInputId(Long contractId, Long inputId);
 }

@@ -1,9 +1,12 @@
 package com.iabacus.salespro.web.project.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.iabacus.salespro.core.error.BusinessException;
 import com.iabacus.salespro.core.error.ErrorCode;
+import com.iabacus.salespro.web.aggregate.domain.Aggregate;
+import com.iabacus.salespro.web.aggregate.repository.AggregateRepository;
 import com.iabacus.salespro.web.aggregate.service.AggregateService;
 import com.iabacus.salespro.web.employee.domain.Employee;
 import com.iabacus.salespro.web.employee.repository.EmployeeRepository;
@@ -28,6 +31,7 @@ public class InputService {
   private final ContractRepository contractRepository;
   private final InputRepository inputRepository;
   private final EmployeeRepository employeeRepository;
+  private final AggregateRepository aggregateRepository;
   private final AggregateService aggregateService;
 
   protected void inputPersonnelByContract(Contract contract, List<InputCreateRequest> inputCreateRequestList) {
@@ -58,10 +62,50 @@ public class InputService {
   }
 
   public List<InputSearchResponse> getInputsByContractId(Long contractId) {
-    // todo: personnelID로 aggregate 테이블에서 급여 정보 조회
-    return inputRepository.findByContractId(contractId)
-        .stream()
-        .map(InputSearchResponse::from)
+    /* Step1: 계약별 투입 조회 */
+    List<Input> inputs = inputRepository.findByContractId(contractId);
+
+    return inputs.stream()
+        .map(input -> {
+            /* Step2: 투입별 집계 조회 */
+            List<Aggregate> aggregates = aggregateRepository.findByContractIdAndInputId(contractId, input.getId());
+
+            /* Step3: 전체 투입기간에 대해 계산 */
+            BigDecimal totalManMonth = aggregates.stream()
+                .map(aggregate -> aggregate.getManMonth().getRate())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            BigDecimal totalWage = aggregates.stream()
+                .map(aggregate -> aggregate.getMonthlyWage().getAmount())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            BigDecimal totalSgaeAmount = aggregates.stream()
+                .map(aggregate -> aggregate.getSgaeAmount().getAmount())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            BigDecimal totalOvheAmount = aggregates.stream()
+                .map(aggregate -> aggregate.getOvheAmount().getAmount())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            /* Step4: 반환 DTO에 매핑 */
+            return InputSearchResponse.builder()
+                .id(input.getId())
+                .contractId(contractId)
+                .personnelId(input.getPersonnel().getId())
+                .employeeName(input.getPersonnel().getName())
+                .type(input.getPersonnel().getType())
+                .startDate(input.getStartDate())
+                .endDate(input.getEndDate())
+                .manMonth(totalManMonth)
+                .unitPrice(input.getUnitPrice().getAmount())
+                .monthlyWage(totalWage)
+                .sgaeRate(input.getSgaeRate().getRate())
+                .ovheRate(input.getOvheRate().getRate())
+                .sgaeAmount(totalSgaeAmount)
+                .ovheAmount(totalOvheAmount)
+                .cost(totalWage.add(totalSgaeAmount).add(totalOvheAmount))
+                .build();
+        })
         .toList();
   }
 
