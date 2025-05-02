@@ -20,8 +20,13 @@ public class AggregateController {
     @PreAuthorize("hasAuthority('매출 조회')")
     @GetMapping
     public ResponseEntity<List<AggregateResponse>> getAggregate(
-            @RequestParam(name = "year", required = false, defaultValue = "2025") String year) {
-        List<AggregateResponse> response = aggregateService.getAggregate(year);
+            @RequestParam(name = "year", required = false) String year,
+            @RequestParam(name = "departmentType", defaultValue = "팀,담당,본부") String departmentType) {
+        // year가 null이면 현재 연도로 설정
+        if (year == null || year.isBlank()) {
+            year = String.valueOf(java.time.Year.now().getValue());
+        }
+        List<AggregateResponse> response = aggregateService.getAggregate(year, departmentType);
         return ResponseEntity.ok(response);
     }
 }
