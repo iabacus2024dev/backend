@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import com.iabacus.salespro.core.security.service.UserPrincipal;
 import com.iabacus.salespro.web.common.PageResponse;
 import com.iabacus.salespro.web.employee.request.EmployeeCreateRequest;
@@ -29,12 +32,14 @@ import com.iabacus.salespro.web.employee.request.EmployeeUpdateRequest;
 import com.iabacus.salespro.web.employee.response.EmployeeDetailResponse;
 import com.iabacus.salespro.web.employee.response.EmployeeMyInfoResponse;
 import com.iabacus.salespro.web.employee.response.EmployeeSearchResponse;
+import com.iabacus.salespro.web.employee.response.EmployeeStatsResponse;
 import com.iabacus.salespro.web.employee.service.EmployeeService;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/employees")
+@Tag(name = "직원 관리", description = "직원 관리 API")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -82,6 +87,14 @@ public class EmployeeController {
     public ResponseEntity<Void> leaveEmployee(@PathVariable Long id, @Valid @RequestBody EmployeeLeaveRequest request) {
         employeeService.leaveEmployee(id, request.getLeaveDate());
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "직원 통계 조회", description = "직원 관련 통계 정보를 조회합니다.")
+    @PreAuthorize("hasAnyAuthority('구성원 조회', '구성원 편집')")
+    @GetMapping("/stats")
+    public ResponseEntity<EmployeeStatsResponse> getEmployeeStats() {
+        EmployeeStatsResponse stats = employeeService.getEmployeeStats();
+        return ResponseEntity.ok(stats);
     }
 
 }

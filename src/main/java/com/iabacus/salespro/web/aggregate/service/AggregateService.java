@@ -3,6 +3,7 @@ package com.iabacus.salespro.web.aggregate.service;
 import com.iabacus.salespro.web.aggregate.domain.Aggregate;
 import com.iabacus.salespro.web.aggregate.repository.AggregateRepository;
 import com.iabacus.salespro.web.aggregate.response.AggregateResponse;
+import com.iabacus.salespro.web.aggregate.response.AggregateStatsResponse;
 import com.iabacus.salespro.web.aggregate.repository.AggregateRepositoryCustom;
 import com.iabacus.salespro.web.common.Money;
 import com.iabacus.salespro.web.common.Ratio;
@@ -16,6 +17,7 @@ import com.iabacus.salespro.web.project.domain.Project;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -108,5 +110,33 @@ public class AggregateService {
                     aggregate.inactivate(LocalDateTime.now()); // 비활성화 처리
                 }
             });
+    }
+
+    @Transactional(readOnly = true)
+    public AggregateStatsResponse getAggregateStats() {
+        // 활성화된 모든 매출 데이터 조회
+        List<Aggregate> allAggregates = aggregateRepository.findAllByIsActivatedTrueOrderByCreatedDateTimeDesc();
+        
+        // 총 매출액 (매출합계 기준)
+        long totalRevenue = allAggregates.stream()
+            .filter(agg -> agg.getProjectContractAmount() != null)
+            .mapToLong(agg -> agg.getProjectContractAmount().getAmount().longValue())
+            .sum();
+        
+        // 수금완료 매출 (임시로 총 매출의 80%로 가정)
+        long collectedRevenue = Math.round(totalRevenue * 0.8);
+        
+        // 미수금 (총 매출 - 수금완료 매출)
+        long outstandingAmount = totalRevenue - collectedRevenue;
+        
+        // 평균 수금 기간 (임시로 45일로 가정)
+        double averageCollectionPeriod = 45.0;
+        
+        return AggregateStatsResponse.builder()
+            .totalRevenue(totalRevenue)
+            .collectedRevenue(collectedRevenue)
+            .outstandingAmount(outstandingAmount)
+            .averageCollectionPeriod(averageCollectionPeriod)
+            .build();
     }
 }

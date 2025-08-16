@@ -27,4 +27,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, Custo
 
     boolean existsByPhone(Phone phone);
 
+    List<Employee> findAllByIsActivatedTrueOrderByCreatedDateTimeDesc();
+
 }

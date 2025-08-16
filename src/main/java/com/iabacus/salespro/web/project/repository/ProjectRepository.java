@@ -1,5 +1,6 @@
 package com.iabacus.salespro.web.project.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +12,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long>, CustomP
     Optional<Project> findByIdAndIsActivatedTrue(Long id);
 
     boolean existsByCode(String code);
+
+    List<Project> findAllByIsActivatedTrueOrderByCreatedDateTimeDesc();
 
 }

@@ -17,18 +17,23 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import com.iabacus.salespro.web.common.PageResponse;
 import com.iabacus.salespro.web.partners.request.PartnersCreateRequest;
 import com.iabacus.salespro.web.partners.request.PartnersSearchCondition;
 import com.iabacus.salespro.web.partners.request.PartnersUpdateRequest;
 import com.iabacus.salespro.web.partners.response.PartnersDetailResponse;
 import com.iabacus.salespro.web.partners.response.PartnersSearchResponse;
+import com.iabacus.salespro.web.partners.response.PartnersStatsResponse;
 import com.iabacus.salespro.web.partners.service.PartnersService;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/partners")
+@Tag(name = "협력사 관리", description = "협력사 관리 API")
 public class PartnersController {
 
     private final PartnersService partnersService;
@@ -64,6 +69,14 @@ public class PartnersController {
     public ResponseEntity<Void> deletePartners(@PathVariable Long id) {
         partnersService.deletePartners(id);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "협력사 통계 조회", description = "협력사 관련 통계 정보를 조회합니다.")
+    @PreAuthorize("hasAnyAuthority('협력사 조회', '협력사 편집')")
+    @GetMapping("/stats")
+    public ResponseEntity<PartnersStatsResponse> getPartnersStats() {
+        PartnersStatsResponse stats = partnersService.getPartnersStats();
+        return ResponseEntity.ok(stats);
     }
 
 }

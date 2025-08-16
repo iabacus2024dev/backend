@@ -2,6 +2,8 @@ package com.iabacus.salespro.web.employee.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -27,6 +29,7 @@ import com.iabacus.salespro.web.employee.response.EmployeeDetailResponse;
 import com.iabacus.salespro.web.employee.response.EmployeeExcelResponse;
 import com.iabacus.salespro.web.employee.response.EmployeeMyInfoResponse;
 import com.iabacus.salespro.web.employee.response.EmployeeSearchResponse;
+import com.iabacus.salespro.web.employee.response.EmployeeStatsResponse;
 import com.iabacus.salespro.web.employee.validator.EmployeeValidator;
 import com.iabacus.salespro.web.partners.domain.Partners;
 import com.iabacus.salespro.web.partners.repository.PartnersRepository;
@@ -95,6 +98,47 @@ public class EmployeeService {
                 return EmployeeExcelResponse.from(employee, department);
             })
             .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public EmployeeStatsResponse getEmployeeStats() {
+        LocalDate now = LocalDate.now();
+        YearMonth currentMonth = YearMonth.from(now);
+        LocalDate firstDayOfMonth = currentMonth.atDay(1);
+        
+        // 전체 직원 목록 조회 (활성화된 직원만)
+        List<Employee> allEmployees = employeeRepository.findAllByIsActivatedTrueOrderByCreatedDateTimeDesc();
+        
+        // 총 직원 수
+        long totalEmployees = allEmployees.size();
+        
+        // 재직중인 직원 수 (퇴사하지 않은 직원)
+        long activeEmployees = allEmployees.stream()
+            .filter(employee -> employee.getLeaveDate() == null)
+            .count();
+        
+        // 이번 달 신규 입사자 수
+        long newHires = allEmployees.stream()
+            .filter(employee -> employee.getJoinDate() != null && 
+                               !employee.getJoinDate().isBefore(firstDayOfMonth))
+            .count();
+        
+        // 평균 근속 기간 계산 (재직중인 직원 대상)
+        double averageTenure = allEmployees.stream()
+            .filter(employee -> employee.getLeaveDate() == null && employee.getJoinDate() != null)
+            .mapToDouble(employee -> {
+                long daysBetween = ChronoUnit.DAYS.between(employee.getJoinDate(), now);
+                return daysBetween / 365.0; // 년 단위로 변환
+            })
+            .average()
+            .orElse(0.0);
+        
+        return EmployeeStatsResponse.builder()
+            .totalEmployees(totalEmployees)
+            .activeEmployees(activeEmployees)
+            .newHires(newHires)
+            .averageTenure(Math.round(averageTenure * 10) / 10.0) // 소수점 첫째자리까지
+            .build();
     }
 
     private Employee findEmployee(Long id) {

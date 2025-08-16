@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import com.iabacus.salespro.core.security.service.UserPrincipal;
 import com.iabacus.salespro.web.common.PageResponse;
 import com.iabacus.salespro.web.project.request.ProjectCreateRequest;
@@ -27,12 +30,14 @@ import com.iabacus.salespro.web.project.request.ProjectSearchCondition;
 import com.iabacus.salespro.web.project.request.ProjectUpdateRequest;
 import com.iabacus.salespro.web.project.response.ProjectDetailResponse;
 import com.iabacus.salespro.web.project.response.ProjectSearchResponse;
+import com.iabacus.salespro.web.project.response.ProjectStatsResponse;
 import com.iabacus.salespro.web.project.service.ProjectService;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/projects")
+@Tag(name = "프로젝트 관리", description = "프로젝트 관리 API")
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -73,6 +78,14 @@ public class ProjectController {
     @GetMapping("/my")
     public ResponseEntity<PageResponse<ProjectSearchResponse>> getMyProjects(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         return ResponseEntity.ok(projectService.getMyProject(userPrincipal.getMemberId()));
+    }
+
+    @Operation(summary = "프로젝트 통계 조회", description = "프로젝트 관련 통계 정보를 조회합니다.")
+    @PreAuthorize("hasAnyAuthority('프로젝트 조회', '프로젝트 편집')")
+    @GetMapping("/stats")
+    public ResponseEntity<ProjectStatsResponse> getProjectStats() {
+        ProjectStatsResponse stats = projectService.getProjectStats();
+        return ResponseEntity.ok(stats);
     }
 
 }

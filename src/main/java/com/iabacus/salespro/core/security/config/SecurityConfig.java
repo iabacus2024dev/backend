@@ -63,10 +63,10 @@ public class SecurityConfig {
         http
                 .cors(corsConfig -> corsConfig.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of(baseUrl, "http://localhost:5173"));
-                    config.setAllowedMethods(Collections.singletonList("*"));
-                    config.setAllowedHeaders(Collections.singletonList("*"));
-                    config.setExposedHeaders(List.of("Authorization"));
+                    config.setAllowedOrigins(List.of(baseUrl, "http://localhost:5173", "http://localhost:5174", "http://localhost:3000"));
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+                    config.setAllowedHeaders(List.of("*"));
+                    config.setExposedHeaders(List.of("Authorization", "X-CSRF-TOKEN"));
                     config.setAllowCredentials(true);
                     config.setMaxAge(CORS_MAX_AGE);
                     return config;
